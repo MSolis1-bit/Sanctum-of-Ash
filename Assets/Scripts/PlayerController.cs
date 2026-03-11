@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
     [Header("Dash Unlock")]
     [SerializeField] private bool hasDash = false;
 
+    [Header("Health Settings")]
+    [SerializeField] private int maxHealth;
+
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius;
@@ -44,15 +47,43 @@ public class PlayerController : MonoBehaviour
     private bool canDash = true;
     private int facingDirection = 1;
 
+    private int currentHealth;
+    private bool isDead;
+
+    public int CurrentHealth => currentHealth;
+    public int MaxHealth => maxHealth;
+    public bool IsDead => isDead;
+
     private void Awake()
     {
         // Gets the parts needed for movement and visuals
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // Starts the player at full health
+        currentHealth = maxHealth;
+        isDead = false;
     }
 
     private void Update()
     {
+        // Temporary health testing
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            TakeDamage(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            Heal(1);
+        }
+
+        // Stops the rest of the player logic if the player is dead
+        if (isDead)
+        {
+            return;
+        }
+
         // Gets left and right input from the player
         moveInput = Input.GetAxisRaw("Horizontal");
 
@@ -120,6 +151,12 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Stops normal movement if the player is dead
+        if (isDead)
+        {
+            return;
+        }
+
         // Stops normal movement while dashing
         if (isDashing)
         {
@@ -195,6 +232,56 @@ public class PlayerController : MonoBehaviour
     {
         // Unlocks the dash ability for later progression
         hasDash = true;
+    }
+
+    public void TakeDamage(int damageAmount)
+    {
+        // Stops extra damage if the player is already dead
+        if (isDead)
+        {
+            return;
+        }
+
+        currentHealth -= damageAmount;
+
+        // Keeps health from going below 0
+        if (currentHealth < 0)
+        {
+            currentHealth = 0;
+        }
+
+        Debug.Log("Player took damage. Current health: " + currentHealth);
+
+        // Checks if the player has died
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Heal(int healAmount)
+    {
+        // Stops healing if the player is already dead
+        if (isDead)
+        {
+            return;
+        }
+
+        currentHealth += healAmount;
+
+        // Keeps health from going above max health
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+
+        Debug.Log("Player healed. Current health: " + currentHealth);
+    }
+
+    private void Die()
+    {
+        isDead = true;
+        Debug.Log("Player has died.");
     }
 
     private void OnDrawGizmosSelected()

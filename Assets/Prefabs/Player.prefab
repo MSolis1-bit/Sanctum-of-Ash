@@ -61,6 +61,7 @@ MonoBehaviour:
   dashDuration: 0.15
   dashCooldown: 0.75
   hasDash: 1
+  maxHealth: 5
   groundCheck: {fileID: 5021640786495442829}
   groundCheckRadius: 0.2
   groundLayer:
