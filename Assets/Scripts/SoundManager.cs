@@ -18,6 +18,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager instance;
 
     [SerializeField] Slider volumeSliderBGM;
+    [SerializeField] Slider volumeSliderSFX;
 
     [SerializeField] AudioClip[] soundList;
     [SerializeField] AudioSource audioSourceBGM;
@@ -44,9 +45,14 @@ public class SoundManager : MonoBehaviour
         audioSourceSFX.PlayOneShot(soundList[(int)sound], volume);
     }
 
-    public void ChangeVolume()
+    public void ChangeBGMVolume()
     {
         audioSourceBGM.volume = volumeSliderBGM.value;
+    }
+
+    public void ChangeSFXVolume()
+    {
+        audioSourceSFX.volume = volumeSliderSFX.value;
     }
 
     public void OnSceneLoad()
