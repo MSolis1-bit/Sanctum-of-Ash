@@ -17,7 +17,7 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
 
-    [SerializeField] Slider volumeSlider;
+    [SerializeField] Slider volumeSliderBGM;
 
     [SerializeField] AudioClip[] soundList;
     [SerializeField] AudioSource audioSourceBGM;
@@ -46,7 +46,7 @@ public class SoundManager : MonoBehaviour
 
     public void ChangeVolume()
     {
-        AudioListener.volume = volumeSlider.value;
+        audioSourceBGM.volume = volumeSliderBGM.value;
     }
 
     public void OnSceneLoad()
@@ -60,6 +60,5 @@ public class SoundManager : MonoBehaviour
                 audioSourceBGM.Play();
             }
         }
-
     }
 }
