@@ -24,4 +24,9 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    void UpdatePlayerUI()
+    {
+       
+    }
 }
