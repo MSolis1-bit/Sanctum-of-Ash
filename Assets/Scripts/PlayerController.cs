@@ -34,8 +34,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckRadius;
     [SerializeField] private LayerMask groundLayer;
 
+    [Header("Attack")]
+    [SerializeField] private float attackDuration = 0.2f;
+    [SerializeField] private float attackCooldown = 0.35f;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private GameObject attackHitbox;
+
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
 
     private float moveInput;
     private bool isGrounded;
@@ -50,6 +57,11 @@ public class PlayerController : MonoBehaviour
     private int currentHealth;
     private bool isDead;
 
+    private bool isAttacking;
+    private bool canAttack = true;
+
+    private Vector3 attackPointStartPosition;
+
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
     public bool IsDead => isDead;
@@ -59,10 +71,22 @@ public class PlayerController : MonoBehaviour
         // Gets the parts needed for movement and visuals
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         // Starts the player at full health
         currentHealth = maxHealth;
         isDead = false;
+
+        // Stores the attack point start position and disables the hitbox at the start
+        if (attackPoint != null)
+        {
+            attackPointStartPosition = attackPoint.localPosition;
+        }
+
+        if (attackHitbox != null)
+        {
+            attackHitbox.SetActive(false);
+        }
     }
 
     private void Update()
@@ -102,8 +126,29 @@ public class PlayerController : MonoBehaviour
             spriteRenderer.flipX = true;
         }
 
+        // Moves the attack point to the correct side of the player
+        if (attackPoint != null)
+        {
+            attackPoint.localPosition = new Vector3(
+                Mathf.Abs(attackPointStartPosition.x) * facingDirection,
+                attackPointStartPosition.y,
+                attackPointStartPosition.z
+            );
+        }
+
+        // Updates animator values
+        animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
+        animator.SetBool("IsGrounded", isGrounded);
+        animator.SetFloat("YVelocity", rb.linearVelocity.y);
+
         // Stops normal update logic while dashing
         if (isDashing)
+        {
+            return;
+        }
+
+        // Stops normal update logic while attacking
+        if (isAttacking)
         {
             return;
         }
@@ -147,6 +192,12 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(Dash());
         }
+
+        // Starts an attack if the player is allowed to attack
+        if (Input.GetMouseButtonDown(0) && canAttack)
+        {
+            StartCoroutine(Attack());
+        }
     }
 
     private void FixedUpdate()
@@ -159,6 +210,12 @@ public class PlayerController : MonoBehaviour
 
         // Stops normal movement while dashing
         if (isDashing)
+        {
+            return;
+        }
+
+        // Stops normal movement while attacking
+        if (isAttacking)
         {
             return;
         }
@@ -228,6 +285,39 @@ public class PlayerController : MonoBehaviour
         canDash = true;
     }
 
+    private IEnumerator Attack()
+    {
+        canAttack = false;
+        isAttacking = true;
+
+        // Stops horizontal movement during the attack
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+
+        // Plays the attack animation
+        animator.SetTrigger("Attack");
+
+        // Turns on the attack hitbox
+        if (attackHitbox != null)
+        {
+            attackHitbox.SetActive(true);
+        }
+
+        // Waits while the attack is active
+        yield return new WaitForSeconds(attackDuration);
+
+        // Turns the hitbox back off
+        if (attackHitbox != null)
+        {
+            attackHitbox.SetActive(false);
+        }
+
+        isAttacking = false;
+
+        // Waits before the player can attack again
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
+    }
+
     public void UnlockDash()
     {
         // Unlocks the dash ability for later progression
@@ -290,7 +380,7 @@ public class PlayerController : MonoBehaviour
         if (groundCheck == null)
             return;
 
-        Gizmos.color = Color.green;
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
 }
