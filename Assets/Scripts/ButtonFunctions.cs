@@ -1,16 +1,40 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class ButtonFunctions : MonoBehaviour
 {
-    public void OptionsButton()
+    [SerializeField] GameObject menuActive;
+    [SerializeField] GameObject mainMenu;
+    [SerializeField] GameObject optionsMenu;
+    [SerializeField] GameObject creditsMenu;
+
+    private void Start()
     {
-        GameManager.instance.ToggleOptionsMenu();
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            menuActive = mainMenu;
+        }
     }
 
-    public void BackButton()
+    public void ToggleMenu(Button button)
     {
-        GameManager.instance.BackButton();
+        menuActive.SetActive(false);
+
+        if (button.name == "CreditsButton")
+        {
+            menuActive = creditsMenu;
+        }
+        else if(button.name == "OptionsButton")
+        {
+            menuActive = optionsMenu;
+        }
+        else if(button.name == "BackButton")
+        {
+            menuActive = mainMenu;
+        }
+
+        menuActive.SetActive(true);
     }
 
     public void Exit()
