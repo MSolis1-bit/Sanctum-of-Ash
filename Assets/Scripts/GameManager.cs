@@ -9,12 +9,15 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public Image playerHPBar;
 
+    // For Checkpoints
+    public GameObject playerSpawnPos;
+
     private void Awake()
     {
         instance = this;
 
         player = GameObject.FindWithTag("Player");
-
+        playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
     }
     void Start()
     {
