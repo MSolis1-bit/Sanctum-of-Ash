@@ -21,9 +21,13 @@ public class SoundManager : MonoBehaviour
     [SerializeField] Slider volumeSliderBGM;
     [SerializeField] Slider volumeSliderSFX;
 
-    [SerializeField] SoundList[] soundList;
+    [SerializeField] AudioClip[] musicList;
+    [SerializeField] AudioClip[] sfxList;
     [SerializeField] AudioSource audioSourceBGM;
     [SerializeField] AudioSource audioSourceSFX;
+
+    public bool musicMute = false;
+    public bool sfxMute = false;
 
 
     private void Awake()
@@ -50,16 +54,18 @@ public class SoundManager : MonoBehaviour
         {
             LoadMusicPref();
         }
+
+        OnSceneLoad();
     }
 
     void Update()
     {
-        OnSceneLoad();
+
     }
 
     public void PlaySound(SoundType sound, float volume = 1)
     {
-        //audioSourceSFX.PlayOneShot(soundList[(int)sound], volume);
+        audioSourceSFX.PlayOneShot(sfxList[(int)sound], volume);
     }
 
     public void ChangeBGMVolume()
@@ -80,7 +86,7 @@ public class SoundManager : MonoBehaviour
         {
             if(audioSourceBGM.clip == null)
             {
-                //audioSourceBGM.clip = instance.soundList[0];
+                audioSourceBGM.clip = instance.musicList[0];
                 audioSourceBGM.loop = true;
                 audioSourceBGM.Play();
             }
@@ -99,12 +105,19 @@ public class SoundManager : MonoBehaviour
         volumeSliderSFX.value = PlayerPrefs.GetFloat("sfxVolume");
     }
 
+    public void Mute(Toggle toggle)
+    {
+        if(toggle.name == "MusicMute")
+        {
+            musicMute = true;
+            audioSourceBGM.volume = 0;
+            volumeSliderBGM.value = 0;
+        } 
+        else if(toggle.name == "SFXMute")
+        {
+            sfxMute = true;
+            audioSourceSFX.volume = 0;
+            volumeSliderSFX.value = 0;
+        }
+    }
 }
-
-[Serializable]
-public struct SoundList
-{
-    [HideInInspector] public string name;
-    [SerializeField] AudioClip[] sounds;
-}
-
