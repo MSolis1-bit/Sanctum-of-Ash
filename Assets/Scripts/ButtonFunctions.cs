@@ -38,6 +38,12 @@ public class ButtonFunctions : MonoBehaviour
                 {
                     Resume();
                 }
+                else
+                {
+                    menuActive.SetActive(false);
+                    menuActive = menuPrevious;
+                    menuActive.SetActive(true);
+                }
             }
         }
     }
