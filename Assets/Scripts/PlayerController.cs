@@ -35,8 +35,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Attack")]
-    [SerializeField] private float attackDuration = 0.2f;
-    [SerializeField] private float attackCooldown = 0.35f;
+    [SerializeField] private float attackDuration;
+    [SerializeField] private float attackCooldown;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject attackHitbox;
 
