@@ -6,15 +6,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameObject player;
+    [SerializeField] GameObject player;
     public Image playerHPBar;
 
     private void Awake()
     {
         instance = this;
-
-        player = GameObject.FindWithTag("Player");
-
     }
     void Start()
     {

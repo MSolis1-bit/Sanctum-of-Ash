@@ -158,10 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c166962a786dab4292ebbcd3377568c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  menuActive: {fileID: 0}
-  mainMenuButtons: {fileID: 0}
-  optionsMenu: {fileID: 0}
-  player: {fileID: 0}
+  player: {fileID: 4176842050411020851, guid: 90da2c01cb365614fb5c2a3b528d4806, type: 3}
   playerHPBar: {fileID: 0}
 --- !u!1 &6493554527789038368
 GameObject:
@@ -338,7 +335,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b937ce00a98d78345adcebf27285c581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  volumeSlider: {fileID: 0}
+  volumeSliderBGM: {fileID: 0}
+  volumeSliderSFX: {fileID: 0}
   soundList:
   - {fileID: 8300000, guid: cf4fb828c1e1fb74d844b71edb6313ad, type: 3}
   audioSourceBGM: {fileID: 8131273440150946972}
@@ -387,6 +385,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db0dea139d079c04cb5bfabee4dfbb91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFunctions
+  menuActive: {fileID: 0}
+  mainMenu: {fileID: 0}
+  optionsMenu: {fileID: 0}
+  creditsMenu: {fileID: 0}
 --- !u!1 &8480565289858955891
 GameObject:
   m_ObjectHideFlags: 0

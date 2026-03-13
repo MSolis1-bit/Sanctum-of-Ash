@@ -4551,13 +4551,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1522009560806252243, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
-      propertyPath: volumeSlider
-      value: 
-      objectReference: {fileID: 1270182877}
-    - target: {fileID: 1522009560806252243, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
       propertyPath: volumeSliderBGM
       value: 
       objectReference: {fileID: 1270182877}
+    - target: {fileID: 1522009560806252243, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
+      propertyPath: volumeSliderSFX
+      value: 
+      objectReference: {fileID: 536217854}
     - target: {fileID: 3159679954447307345, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
       propertyPath: m_Name
       value: UI
@@ -4574,10 +4574,6 @@ PrefabInstance:
       propertyPath: optionsMenu
       value: 
       objectReference: {fileID: 1885598723}
-    - target: {fileID: 5059033598988441940, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
-      propertyPath: mainMenuButtons
-      value: 
-      objectReference: {fileID: 2083694317}
     - target: {fileID: 6989535746454474277, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.51001
@@ -4619,17 +4615,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8863965207344850069, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
-      propertyPath: optionsMenu
-      value: 
-      objectReference: {fileID: 1885598723}
-    - target: {fileID: 8863965207344850069, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
       propertyPath: playerHPBar
       value: 
       objectReference: {fileID: 224449231}
-    - target: {fileID: 8863965207344850069, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
-      propertyPath: mainMenuButtons
-      value: 
-      objectReference: {fileID: 2083694317}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

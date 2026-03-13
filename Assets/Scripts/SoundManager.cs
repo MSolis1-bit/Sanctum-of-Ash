@@ -2,6 +2,7 @@ using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public enum SoundType
 { 
@@ -20,7 +21,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] Slider volumeSliderBGM;
     [SerializeField] Slider volumeSliderSFX;
 
-    [SerializeField] AudioClip[] soundList;
+    [SerializeField] SoundList[] soundList;
     [SerializeField] AudioSource audioSourceBGM;
     [SerializeField] AudioSource audioSourceSFX;
 
@@ -32,7 +33,23 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
+        if(!PlayerPrefs.HasKey("musicVolume"))
+        {
+            PlayerPrefs.SetFloat("musicVolume", 1);
+        }
+        else
+        {
+            LoadMusicPref();
+        }
 
+        if (!PlayerPrefs.HasKey("sfxVolume"))
+        {
+            PlayerPrefs.SetFloat("sfxVolume", 1);
+        }
+        else
+        {
+            LoadMusicPref();
+        }
     }
 
     void Update()
@@ -42,17 +59,19 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(SoundType sound, float volume = 1)
     {
-        audioSourceSFX.PlayOneShot(soundList[(int)sound], volume);
+        //audioSourceSFX.PlayOneShot(soundList[(int)sound], volume);
     }
 
     public void ChangeBGMVolume()
     {
         audioSourceBGM.volume = volumeSliderBGM.value;
+        SaveMusicPref();
     }
 
     public void ChangeSFXVolume()
     {
         audioSourceSFX.volume = volumeSliderSFX.value;
+        SaveMusicPref();
     }
 
     public void OnSceneLoad()
@@ -61,10 +80,31 @@ public class SoundManager : MonoBehaviour
         {
             if(audioSourceBGM.clip == null)
             {
-                audioSourceBGM.clip = instance.soundList[0];
+                //audioSourceBGM.clip = instance.soundList[0];
                 audioSourceBGM.loop = true;
                 audioSourceBGM.Play();
             }
         }
     }
+
+    private void SaveMusicPref()
+    {
+        PlayerPrefs.SetFloat("musicVolume", volumeSliderBGM.value);
+        PlayerPrefs.SetFloat("sfxVolume", volumeSliderSFX.value);
+    }
+
+    private void LoadMusicPref()
+    {
+        volumeSliderBGM.value = PlayerPrefs.GetFloat("musicVolume");
+        volumeSliderSFX.value = PlayerPrefs.GetFloat("sfxVolume");
+    }
+
 }
+
+[Serializable]
+public struct SoundList
+{
+    [HideInInspector] public string name;
+    [SerializeField] AudioClip[] sounds;
+}
+

@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class ButtonFunctions : MonoBehaviour
 {
+    [Header("Menu Objects")]
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject mainMenu;
     [SerializeField] GameObject optionsMenu;
@@ -11,12 +12,14 @@ public class ButtonFunctions : MonoBehaviour
 
     private void Start()
     {
+        
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             menuActive = mainMenu;
         }
     }
 
+    // takes in the name of the button to determine the menu to toggle
     public void ToggleMenu(Button button)
     {
         menuActive.SetActive(false);
