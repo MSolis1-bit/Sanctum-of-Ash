@@ -53,9 +53,18 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject attackHitbox;
 
+    [Header("Damage Feedback")]
+    [SerializeField] private float knockbackForceX = 10f;
+    [SerializeField] private float knockbackForceY = 6f;
+    [SerializeField] private float invincibilityTime = 1f;
+    [SerializeField] private float flashInterval = 0.1f;
+
+    private bool isInvincible;
+
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+    private Color originalColor;
 
     private float moveInput;
     private bool isGrounded;
@@ -89,6 +98,7 @@ public class PlayerController : MonoBehaviour, IDamage
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        originalColor = spriteRenderer.color;
 
         // Starts the player with full health
         currentHealth = maxHealth;
@@ -362,27 +372,20 @@ public class PlayerController : MonoBehaviour, IDamage
 
     public void TakeDamage(int damageAmount)
     {
-        // Stops extra damage if the player is already dead
-        if (isDead)
-        {
+        if (isDead || isInvincible)
             return;
-        }
 
         currentHealth -= damageAmount;
 
-        // Keeps health from going below 0
         if (currentHealth < 0)
-        {
             currentHealth = 0;
-        }
 
         Debug.Log("Player took damage. Current health: " + currentHealth);
 
-        // Checks if the player has died
+        StartCoroutine(DamageRoutine());
+
         if (currentHealth <= 0)
-        {
             Die();
-        }
     }
 
     public void Heal(int healAmount)
@@ -427,5 +430,27 @@ public class PlayerController : MonoBehaviour, IDamage
         }
     }
 
-   
+   IEnumerator DamageRoutine()
+    {
+        isInvincible = true;
+
+        // Apply knockback
+        rb.linearVelocity = new Vector2(-facingDirection * knockbackForceX, knockbackForceY);
+
+        float timer = 0f;
+
+        while (timer < invincibilityTime)
+        {
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(flashInterval);
+
+            spriteRenderer.color = originalColor;
+            yield return new WaitForSeconds(flashInterval);
+
+            timer += flashInterval * 2;
+        }
+
+        spriteRenderer.color = originalColor;
+        isInvincible = false;
+    }
 }
