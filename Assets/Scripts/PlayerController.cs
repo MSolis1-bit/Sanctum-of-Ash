@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamage
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
@@ -426,4 +426,6 @@ public class PlayerController : MonoBehaviour
             Gizmos.DrawWireSphere(wallCheck.position, wallCheckRadius);
         }
     }
+
+   
 }

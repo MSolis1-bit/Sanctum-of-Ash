@@ -5,8 +5,8 @@ public class damage : MonoBehaviour
 {
     enum damageType { moving, stationary, DOT }
     [SerializeField] damageType type;
-    [SerializeField] Rigidbody rb;
-
+    [SerializeField] Rigidbody2D rb;
+  
     [SerializeField] int damageAmount;
     [SerializeField] float damageRate;
     [SerializeField] int speed;
@@ -14,29 +14,29 @@ public class damage : MonoBehaviour
     [SerializeField] GameObject hitEffect;
 
     bool isDamaging;
+   
 
     void Start()
     {
         if (type == damageType.moving)
         {
-            rb.linearVelocity = transform.forward * speed;
+            rb.linearVelocity = transform.right * speed;
             Destroy(gameObject, destroyTime);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
 
         if (other.isTrigger)
         {
             return;
         }
-
         IDamage dmg = other.GetComponent<IDamage>();
 
         if (dmg != null && type != damageType.DOT)
         {
-            dmg.takeDamage(damageAmount);
+            dmg.TakeDamage(damageAmount);
         }
         if (type == damageType.moving)
         {
@@ -44,7 +44,7 @@ public class damage : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (other.isTrigger)
         {
@@ -63,7 +63,7 @@ public class damage : MonoBehaviour
     IEnumerator damageOther(IDamage d)
     {
         isDamaging = true;
-        d.takeDamage(damageAmount);
+        d.TakeDamage(damageAmount);
         yield return new WaitForSeconds(damageRate);
         isDamaging = false;
     }
