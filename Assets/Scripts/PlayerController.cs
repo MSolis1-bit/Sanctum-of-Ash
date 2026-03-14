@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
     [Header("Dash Unlock")]
     [SerializeField] private bool hasDash = false;
 
+    [Header("Double Jump Unlock")]
+    [SerializeField] private bool hasDoubleJump = false;
+
     [Header("Health Settings")]
     [SerializeField] private int maxHealth;
 
@@ -33,6 +36,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius;
     [SerializeField] private LayerMask groundLayer;
+
+    [Header("Wall Check")]
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private float wallCheckRadius;
+    [SerializeField] private LayerMask wallLayer;
+
+    [Header("Wall Jump Settings")]
+    [SerializeField] private int maxWallJumps;
+    [SerializeField] private float wallJumpForceX;
+    [SerializeField] private float wallJumpForceY;
 
     [Header("Attack")]
     [SerializeField] private float attackDuration;
@@ -46,6 +59,7 @@ public class PlayerController : MonoBehaviour
 
     private float moveInput;
     private bool isGrounded;
+    private bool isTouchingWall;
 
     private float coyoteTimeCounter;
     private float jumpBufferCounter;
@@ -60,6 +74,9 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking;
     private bool canAttack = true;
 
+    private bool canUseDoubleJump;
+    private int remainingWallJumps;
+
     private Vector3 attackPointStartPosition;
 
     public int CurrentHealth => currentHealth;
@@ -68,30 +85,34 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        // Gets the parts needed for movement and visuals
+        // Gets the components the player needs to move and animate
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
 
-        // Starts the player at full health
+        // Starts the player with full health
         currentHealth = maxHealth;
         isDead = false;
 
-        // Stores the attack point start position and disables the hitbox at the start
+        // Saves the starting position of the attack point
         if (attackPoint != null)
         {
             attackPointStartPosition = attackPoint.localPosition;
         }
 
+        // Turns the hitbox off when the game begins
         if (attackHitbox != null)
         {
             attackHitbox.SetActive(false);
         }
+
+        // Sets the number of wall jumps the player can perform
+        remainingWallJumps = maxWallJumps;
     }
 
     private void Update()
     {
-        // Temporary health testing
+        // Temporary testing keys for damage and healing
         if (Input.GetKeyDown(KeyCode.H))
         {
             TakeDamage(1);
@@ -102,19 +123,25 @@ public class PlayerController : MonoBehaviour
             Heal(1);
         }
 
-        // Stops the rest of the player logic if the player is dead
+        // Stops the rest of the logic if the player is dead
         if (isDead)
         {
             return;
         }
 
-        // Gets left and right input from the player
+        // Reads left and right movement input
         moveInput = Input.GetAxisRaw("Horizontal");
 
         // Checks if the player is touching the ground
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        // Keeps track of which way the player is facing
+        // Checks if the player is touching a wall
+        if (wallCheck != null)
+        {
+            isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
+        }
+
+        // Tracks which direction the player is facing
         if (moveInput > 0f)
         {
             facingDirection = 1;
@@ -136,34 +163,30 @@ public class PlayerController : MonoBehaviour
             );
         }
 
-        // Updates animator values
+        // Updates animation values
         animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("YVelocity", rb.linearVelocity.y);
 
-        // Stops normal update logic while dashing
-        if (isDashing)
+        // Stops movement logic while dashing or attacking
+        if (isDashing || isAttacking)
         {
             return;
         }
 
-        // Stops normal update logic while attacking
-        if (isAttacking)
-        {
-            return;
-        }
-
-        // Gives the player a small grace period after leaving the ground
+        // Resets jump abilities when touching the ground
         if (isGrounded)
         {
             coyoteTimeCounter = coyoteTime;
+            canUseDoubleJump = hasDoubleJump;
+            remainingWallJumps = maxWallJumps;
         }
         else
         {
             coyoteTimeCounter -= Time.deltaTime;
         }
 
-        // Saves jump input for a short moment
+        // Saves jump input for a short time window
         if (Input.GetButtonDown("Jump"))
         {
             jumpBufferCounter = jumpBufferTime;
@@ -173,7 +196,7 @@ public class PlayerController : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        // Lets the player jump if the timing window is still valid
+        // Normal jump
         if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
@@ -181,19 +204,35 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCounter = 0f;
         }
 
-        // Makes the jump shorter if the jump button is released early
+        // Double jump
+        else if (jumpBufferCounter > 0f && hasDoubleJump && canUseDoubleJump && !isGrounded)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            canUseDoubleJump = false;
+            jumpBufferCounter = 0f;
+        }
+
+        // Wall jump
+        else if (jumpBufferCounter > 0f && isTouchingWall && !isGrounded && remainingWallJumps > 0)
+        {
+            rb.linearVelocity = new Vector2(-facingDirection * wallJumpForceX, wallJumpForceY);
+            remainingWallJumps--;
+            jumpBufferCounter = 0f;
+        }
+
+        // Shortens the jump if the button is released early
         if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
         }
 
-        // Starts a dash only if the player has unlocked it
+        // Starts dash if the ability has been unlocked
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && hasDash)
         {
             StartCoroutine(Dash());
         }
 
-        // Starts an attack if the player is allowed to attack
+        // Starts an attack when clicking the mouse
         if (Input.GetMouseButtonDown(0) && canAttack)
         {
             StartCoroutine(Attack());
@@ -202,31 +241,19 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Stops normal movement if the player is dead
-        if (isDead)
+        // Stops movement if the player is dead, dashing, or attacking
+        if (isDead || isDashing || isAttacking)
         {
             return;
         }
 
-        // Stops normal movement while dashing
-        if (isDashing)
-        {
-            return;
-        }
-
-        // Stops normal movement while attacking
-        if (isAttacking)
-        {
-            return;
-        }
-
-        // Decides the speed the player is trying to reach
+        // Calculates the speed the player wants to move
         float targetSpeed = moveInput * moveSpeed;
 
-        // Finds the difference between current speed and target speed
+        // Calculates the difference between current and target speed
         float speedDifference = targetSpeed - rb.linearVelocity.x;
 
-        // Uses different movement strength depending on if the player is grounded
+        // Chooses acceleration depending on whether the player is grounded
         float accelRate;
 
         if (Mathf.Abs(targetSpeed) > 0.01f)
@@ -238,11 +265,11 @@ public class PlayerController : MonoBehaviour
             accelRate = deceleration;
         }
 
-        // Pushes the player toward the target speed
+        // Applies force to move the player
         float movement = speedDifference * accelRate;
         rb.AddForce(Vector2.right * movement);
 
-        // Keeps the player from moving faster than the max move speed
+        // Prevents the player from moving faster than the max speed
         if (Mathf.Abs(rb.linearVelocity.x) > moveSpeed)
         {
             rb.linearVelocity = new Vector2(Mathf.Sign(rb.linearVelocity.x) * moveSpeed, rb.linearVelocity.y);
@@ -253,7 +280,8 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1f) * Time.fixedDeltaTime;
         }
-        // Makes short jumps feel better when the jump button is released early
+
+        // Makes short jumps feel better
         else if (rb.linearVelocity.y > 0f && !Input.GetButton("Jump"))
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
@@ -262,7 +290,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Dash()
     {
-        // Prevents another dash until the cooldown is done
+        // Prevents another dash until cooldown finishes
         canDash = false;
         isDashing = true;
 
@@ -270,13 +298,13 @@ public class PlayerController : MonoBehaviour
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
 
-        // Launches the player in the direction they are facing
+        // Launches the player forward
         rb.linearVelocity = new Vector2(facingDirection * dashSpeed, 0f);
 
         // Waits for the dash to finish
         yield return new WaitForSeconds(dashDuration);
 
-        // Restores normal gravity and movement
+        // Restores gravity and movement
         rb.gravityScale = originalGravity;
         isDashing = false;
 
@@ -287,25 +315,26 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Attack()
     {
+        // Prevents attacking again until cooldown finishes
         canAttack = false;
         isAttacking = true;
 
-        // Stops horizontal movement during the attack
+        // Stops horizontal movement during attack
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
         // Plays the attack animation
         animator.SetTrigger("Attack");
 
-        // Turns on the attack hitbox
+        // Activates the attack hitbox
         if (attackHitbox != null)
         {
             attackHitbox.SetActive(true);
         }
 
-        // Waits while the attack is active
+        // Turns on the attack hitbox
         yield return new WaitForSeconds(attackDuration);
 
-        // Turns the hitbox back off
+        // Turns the hitbox off
         if (attackHitbox != null)
         {
             attackHitbox.SetActive(false);
@@ -320,8 +349,15 @@ public class PlayerController : MonoBehaviour
 
     public void UnlockDash()
     {
-        // Unlocks the dash ability for later progression
+        // Unlocks the dash ability later in the game
         hasDash = true;
+    }
+
+    public void UnlockDoubleJump()
+    {
+        // Unlocks the double jump ability later in the game
+        hasDoubleJump = true;
+        canUseDoubleJump = true;
     }
 
     public void TakeDamage(int damageAmount)
@@ -376,11 +412,18 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        // Draws the ground check in the editor so it is easier to place
-        if (groundCheck == null)
-            return;
+        // Draws helper circles in the editor for ground and wall checks
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+
+        if (wallCheck != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(wallCheck.position, wallCheckRadius);
+        }
     }
 }
