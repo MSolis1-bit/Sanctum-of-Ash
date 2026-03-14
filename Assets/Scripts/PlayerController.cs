@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] private float invincibilityTime = 1f;
     [SerializeField] private float flashInterval = 0.1f;
 
+    private bool isStunned;
     private bool isInvincible;
 
     private Rigidbody2D rb;
@@ -251,8 +252,8 @@ public class PlayerController : MonoBehaviour, IDamage
 
     private void FixedUpdate()
     {
-        // Stops movement if the player is dead, dashing, or attacking
-        if (isDead || isDashing || isAttacking)
+        // Stops movement if the player is stunned, dead, dashing, or attacking
+        if (isDead || isDashing || isAttacking || isStunned)
         {
             return;
         }
@@ -433,6 +434,7 @@ public class PlayerController : MonoBehaviour, IDamage
    IEnumerator DamageRoutine()
     {
         isInvincible = true;
+        isStunned = true;
 
         // Apply knockback
         rb.linearVelocity = new Vector2(-facingDirection * knockbackForceX, knockbackForceY);
@@ -450,7 +452,9 @@ public class PlayerController : MonoBehaviour, IDamage
             timer += flashInterval * 2;
         }
 
+
         spriteRenderer.color = originalColor;
+        isStunned = false;
         isInvincible = false;
     }
 }
