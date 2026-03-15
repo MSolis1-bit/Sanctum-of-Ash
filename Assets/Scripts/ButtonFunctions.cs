@@ -58,7 +58,7 @@ public class ButtonFunctions : MonoBehaviour
     // takes in the name of the button to determine the menu to toggle
     public void ToggleMenu(Button button)
     {
-        if(menuActive != null) { menuPrevious = menuActive; }
+        if(menuActive != null && button.name != "BackButton") { menuPrevious = menuActive; }
 
         menuActive.SetActive(false);
 

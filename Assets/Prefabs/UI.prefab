@@ -338,7 +338,7 @@ PrefabInstance:
     - target: {fileID: 4629986410562919399, guid: 03bc4e34a6a8b1146b552824892b509b, type: 3}
       propertyPath: mainMenu
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1509158027187117261, guid: 2cb0732eee74b74458a2068baf08a45f, type: 3}
     - target: {fileID: 4629986410562919399, guid: 03bc4e34a6a8b1146b552824892b509b, type: 3}
       propertyPath: menuPause
       value: 
@@ -346,11 +346,11 @@ PrefabInstance:
     - target: {fileID: 4629986410562919399, guid: 03bc4e34a6a8b1146b552824892b509b, type: 3}
       propertyPath: creditsMenu
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8819481849219438624, guid: bfa842737f3e3b9418b4c8bbb5347cdf, type: 3}
     - target: {fileID: 4629986410562919399, guid: 03bc4e34a6a8b1146b552824892b509b, type: 3}
       propertyPath: optionsMenu
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 3672863942156221716}
     - target: {fileID: 7640457918215787240, guid: 03bc4e34a6a8b1146b552824892b509b, type: 3}
       propertyPath: m_Name
       value: ButtonFunctions
@@ -1004,6 +1004,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
+--- !u!1 &3672863942156221716 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3212869475662505983, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
+  m_PrefabInstance: {fileID: 2192907257723804395}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8301786318115402082 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7879921812945480585, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
