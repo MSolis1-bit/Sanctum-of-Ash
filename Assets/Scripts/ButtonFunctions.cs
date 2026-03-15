@@ -73,6 +73,11 @@ public class ButtonFunctions : MonoBehaviour
     {
         SoundManager.instance.PlayRandomSound();
     }
+    public void NewGame()
+    {
+        GameManager.instance.NewGame();
+        SceneManager.LoadScene(1);
+    }
 
     public void QuitToMainMenu()
     {
