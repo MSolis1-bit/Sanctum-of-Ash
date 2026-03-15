@@ -29,13 +29,12 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-
+        UpdatePlayerUI();
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdatePlayerUI();
     }
 
     void UpdatePlayerUI()
