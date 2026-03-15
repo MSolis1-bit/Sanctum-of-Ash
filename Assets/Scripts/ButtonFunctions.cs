@@ -58,7 +58,7 @@ public class ButtonFunctions : MonoBehaviour
     // takes in the name of the button to determine the menu to toggle
     public void ToggleMenu(Button button)
     {
-        if(menuActive != null) { menuPrevious = menuActive; }
+        if(menuActive != null && button.name != "BackButton") { menuPrevious = menuActive; }
 
         menuActive.SetActive(false);
 
@@ -67,6 +67,16 @@ public class ButtonFunctions : MonoBehaviour
         else if(button.name == "BackButton") {menuActive = menuPrevious;}
 
         menuActive.SetActive(true);
+    }
+
+    public void SFXPreview()
+    {
+        SoundManager.instance.PlayRandomSound();
+    }
+    public void NewGame()
+    {
+        GameManager.instance.NewGame();
+        SceneManager.LoadScene(1);
     }
 
     public void QuitToMainMenu()
