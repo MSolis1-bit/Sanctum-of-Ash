@@ -2,17 +2,6 @@ using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System;
-
-public enum SoundType
-{ 
-    BGM,
-    MeleeAttack,
-    RangedAttack,
-    FootSteps,
-    Jump,
-    OpenDoor,
-}
 
 public class SoundManager : MonoBehaviour
 {
@@ -61,14 +50,21 @@ public class SoundManager : MonoBehaviour
         OnSceneLoad();
     }
 
-    void Update()
+    public void PlaySoundEffect(int index)
     {
-
+        audioSourceSFX.PlayOneShot(sfxList[index]);
     }
 
-    public void PlaySound(SoundType sound, float volume = 1)
+    public void PlayRandomSound()
     {
-        audioSourceSFX.PlayOneShot(sfxList[(int)sound], volume);
+        int randomIndex = Random.Range(0, sfxList.Length);
+        audioSourceSFX.PlayOneShot(sfxList[randomIndex]);
+    }
+
+    public void PlaySoundMusic(int index)
+    {
+        audioSourceBGM.clip = musicList[index];
+        audioSourceBGM.Play();
     }
 
     public void ChangeBGMVolume()

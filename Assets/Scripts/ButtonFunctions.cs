@@ -69,6 +69,11 @@ public class ButtonFunctions : MonoBehaviour
         menuActive.SetActive(true);
     }
 
+    public void SFXPreview()
+    {
+        SoundManager.instance.PlayRandomSound();
+    }
+
     public void QuitToMainMenu()
     {
         SceneManager.LoadScene(0);
