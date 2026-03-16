@@ -47,6 +47,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float wallJumpForceX;
     [SerializeField] private float wallJumpForceY;
 
+    [Header("Wall Slide Settings")]
+    [SerializeField] private float wallSlideSpeed = 2f;
+
+    [Header("Wall Jump Lockout")]
+    [SerializeField] private float wallJumpLockTime = 0.2f;
+
     [Header("Attack")]
     [SerializeField] private float attackDuration;
     [SerializeField] private float attackCooldown;
@@ -60,9 +66,17 @@ public class PlayerController : MonoBehaviour
     private float moveInput;
     private bool isGrounded;
     private bool isTouchingWall;
+    private bool isWallSliding;
+    private bool isWallJumping;
 
     private float coyoteTimeCounter;
     private float jumpBufferCounter;
+
+    private float wallJumpLockCounter;
+    private bool isPressingIntoWall;
+    private bool isTouchingWallLeft;
+    private bool isTouchingWallRight;
+    private int wallDirection;
 
     private bool isDashing;
     private bool canDash = true;
@@ -129,16 +143,56 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        // Counts down the short lockout after a wall jump
+        if (wallJumpLockCounter > 0f)
+        {
+            wallJumpLockCounter -= Time.deltaTime;
+        }
+        else
+        {
+            isWallJumping = false;
+        }
+
         // Reads left and right movement input
         moveInput = Input.GetAxisRaw("Horizontal");
 
         // Checks if the player is touching the ground
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        // Checks if the player is touching a wall
+        // Checks both sides of the player for a wall
         if (wallCheck != null)
         {
-            isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
+            Vector2 rightCheckPosition = wallCheck.position;
+
+            Vector2 leftCheckPosition = new Vector2(
+                transform.position.x - (wallCheck.position.x - transform.position.x),
+                wallCheck.position.y
+            );
+
+            isTouchingWallRight = Physics2D.OverlapCircle(rightCheckPosition, wallCheckRadius, wallLayer);
+            isTouchingWallLeft = Physics2D.OverlapCircle(leftCheckPosition, wallCheckRadius, wallLayer);
+
+            isTouchingWall = isTouchingWallLeft || isTouchingWallRight;
+
+            if (isTouchingWallRight)
+            {
+                wallDirection = 1;
+            }
+            else if (isTouchingWallLeft)
+            {
+                wallDirection = -1;
+            }
+            else
+            {
+                wallDirection = 0;
+            }
+        }
+        else
+        {
+            isTouchingWall = false;
+            isTouchingWallLeft = false;
+            isTouchingWallRight = false;
+            wallDirection = 0;
         }
 
         // Tracks which direction the player is facing
@@ -162,6 +216,12 @@ public class PlayerController : MonoBehaviour
                 attackPointStartPosition.z
             );
         }
+
+        // Checks if the player is pressing toward the wall
+        isPressingIntoWall = isTouchingWall && moveInput == wallDirection;
+
+        // Checks if the player should slide on the wall
+        isWallSliding = !isWallJumping && !isGrounded && isTouchingWall && isPressingIntoWall;
 
         // Updates animation values
         animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
@@ -204,19 +264,23 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCounter = 0f;
         }
 
+        // Wall jump
+        else if (jumpBufferCounter > 0f && isTouchingWall && !isGrounded && remainingWallJumps > 0)
+        {
+            rb.linearVelocity = new Vector2(-wallDirection * wallJumpForceX, wallJumpForceY);
+            remainingWallJumps--;
+            jumpBufferCounter = 0f;
+
+            // Gives the wall jump priority over other air jumps
+            isWallJumping = true;
+            wallJumpLockCounter = wallJumpLockTime;
+        }
+
         // Double jump
         else if (jumpBufferCounter > 0f && hasDoubleJump && canUseDoubleJump && !isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             canUseDoubleJump = false;
-            jumpBufferCounter = 0f;
-        }
-
-        // Wall jump
-        else if (jumpBufferCounter > 0f && isTouchingWall && !isGrounded && remainingWallJumps > 0)
-        {
-            rb.linearVelocity = new Vector2(-facingDirection * wallJumpForceX, wallJumpForceY);
-            remainingWallJumps--;
             jumpBufferCounter = 0f;
         }
 
@@ -245,6 +309,29 @@ public class PlayerController : MonoBehaviour
         if (isDead || isDashing || isAttacking)
         {
             return;
+        }
+
+        // Gives the wall jump time to push the player away cleanly
+        if (isWallJumping)
+        {
+            return;
+        }
+
+        // Makes the player slide down the wall instead of getting stuck on it
+        if (isWallSliding)
+        {
+            float clampedY = rb.linearVelocity.y;
+
+            // Stops the upward climb when the player presses into the wall
+            if (clampedY > 1f)
+            {
+                clampedY = 1f;
+            }
+
+            // Limits how fast the player falls while sliding
+            clampedY = Mathf.Max(clampedY, -wallSlideSpeed);
+
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);
         }
 
         // Calculates the speed the player wants to move
@@ -331,7 +418,7 @@ public class PlayerController : MonoBehaviour
             attackHitbox.SetActive(true);
         }
 
-        // Turns on the attack hitbox
+        // Waits while the attack is active
         yield return new WaitForSeconds(attackDuration);
 
         // Turns the hitbox off
@@ -413,7 +500,6 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         // Draws helper circles in the editor for ground and wall checks
-
         if (groundCheck != null)
         {
             Gizmos.color = Color.red;
@@ -424,6 +510,14 @@ public class PlayerController : MonoBehaviour
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(wallCheck.position, wallCheckRadius);
+
+            Vector2 leftCheckPosition = new Vector2(
+                transform.position.x - (wallCheck.position.x - transform.position.x),
+                wallCheck.position.y
+            );
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(leftCheckPosition, wallCheckRadius);
         }
     }
 }
