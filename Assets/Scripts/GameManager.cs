@@ -29,13 +29,12 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-
+        UpdatePlayerUI();
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdatePlayerUI();
     }
 
     void UpdatePlayerUI()
@@ -57,5 +56,10 @@ public class GameManager : MonoBehaviour
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void NewGame()
+    {
+
     }
 }
