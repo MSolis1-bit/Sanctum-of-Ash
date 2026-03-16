@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     private bool isPaused = false;
 
-    float timeScaleOriginal;
+    private float timeScaleOriginal;
 
     private void Awake()
     {
