@@ -13,6 +13,8 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject optionsMenu;
     [SerializeField] GameObject creditsMenu;
+    [SerializeField] GameObject menuLose;
+    [SerializeField] GameObject menuWin;
 
     [Header("Menu Buttons: ")]
     [SerializeField] GameObject mainMenuFirstButton;
@@ -20,7 +22,7 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject optionsFirstButton;
     [SerializeField] GameObject optionsClosedButton;
 
-    private GameObject menuActive;
+    public GameObject menuActive;
     private GameObject menuPrevious;
 
     void Start()
@@ -112,6 +114,12 @@ public class ButtonFunctions : MonoBehaviour
     public void QuitToMainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void ActivateLoseMenu()
+    {
+        menuActive = menuLose;
+        menuActive.SetActive(true);
     }
 
     public void Exit()
