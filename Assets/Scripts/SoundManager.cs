@@ -91,6 +91,19 @@ public class SoundManager : MonoBehaviour
     public void OnSceneLoad()
     {
         int currentSceneNumber = SceneManager.GetActiveScene().buildIndex;
+
+        if (musicList == null || musicList.Length == 0)
+        {
+            Debug.LogWarning("Music list is empty");
+            return;
+        }
+
+        if (currentSceneNumber < 0 || currentSceneNumber >= musicList.Length)
+        {
+            Debug.LogWarning("No music clip assigned for scene build index: " + currentSceneNumber);
+            return;
+        }
+
         audioSourceBGM.clip = musicList[currentSceneNumber];
         audioSourceBGM.loop = true;
         audioSourceBGM.Play();
