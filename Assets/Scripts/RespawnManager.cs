@@ -1,0 +1,61 @@
+using UnityEngine;
+
+public class RespawnManager : MonoBehaviour
+{
+    // Lets other scripts access this manager
+    public static RespawnManager instance;
+
+    // Stores the current respawn point
+    private Vector2 respawnPoint;
+
+    // Keeps track of whether a respawn point has been saved yet
+    private bool hasRespawnPoint = false;
+
+    private void Awake()
+    {
+        // Makes sure only one RespawnManager exists
+        if (instance == null)
+        {
+            instance = this;
+            Debug.Log("RespawnManager set to: " + gameObject.name + " | ID: " + GetInstanceID());
+        }
+        else
+        {
+            Debug.LogWarning("Duplicate RespawnManager found on: " + gameObject.name + " | ID: " + GetInstanceID());
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+    // Saves a new respawn point
+    public void SetRespawnPoint(Vector2 newRespawnPoint)
+    {
+        respawnPoint = newRespawnPoint;
+        hasRespawnPoint = true;
+
+        Debug.Log("Player Spawn Set on: " + gameObject.name +
+                  " | ID: " + GetInstanceID() +
+                  " | Point: " + respawnPoint);
+    }
+
+    // Sends the player back to the saved spawn point
+    public bool Respawn(Transform playerTransform)
+    {
+        Debug.Log("Respawn called on: " + gameObject.name +
+                  " | ID: " + GetInstanceID() +
+                  " | hasRespawnPoint: " + hasRespawnPoint);
+
+        // Stops the game from trying to respawn before a checkpoint is reached
+        if (!hasRespawnPoint)
+        {
+            Debug.LogWarning("No respawn point has been set yet");
+            return false;
+        }
+
+        // Moves the player back to the saved position
+        playerTransform.position = respawnPoint;
+        Debug.Log("Respawning player to: " + respawnPoint);
+
+        return true;
+    }
+}
