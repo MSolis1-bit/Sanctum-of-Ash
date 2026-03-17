@@ -2,21 +2,21 @@ using UnityEngine;
 
 public class FallDetectorDeathZone : MonoBehaviour
 {
-    private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player"))
+        if(!collision.CompareTag("Player"))
         {
-            Debug.Log("Player triggered respawn pit");
-            this.RespawnPlayer();
+            return;
         }
+
+        Debug.Log("Player entered death zone");
+        RespawnPlayer(collision.transform);
     }
 
-    public void RespawnPlayer()
+    // Sends the player back to the saved respawn point
+    private void RespawnPlayer(Transform playerTransform)
     {
-        // Damage Player?
-
-        // Reposition Player/Respawn Player
-        // GameManager.instance.player.SpawnPlayer();
+        RespawnManager.instance.Respawn(playerTransform);
         Debug.Log("Player position reset");
     }
 }
