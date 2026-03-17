@@ -6,10 +6,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [Header("Player UI: ")]
     [SerializeField] Image playerHPBar;
 
-    public GameObject player;
-    private PlayerController playerScript;
+    [HideInInspector] public GameObject player;
+    [HideInInspector] private PlayerController playerScript;
 
     // For Checkpoints
     public GameObject playerSpawnPos;

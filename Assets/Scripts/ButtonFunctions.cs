@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class ButtonFunctions : MonoBehaviour
 {
-    [Header("Menu Objects")]
+    [Header("Menu Objects: ")]
     [SerializeField] GameObject mainMenu;
     [SerializeField] GameObject mainMenuBackground;
     [SerializeField] GameObject creditsButton;
@@ -14,7 +14,7 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject optionsMenu;
     [SerializeField] GameObject creditsMenu;
 
-    [Header("Menu Buttons")]
+    [Header("Menu Buttons: ")]
     [SerializeField] GameObject mainMenuFirstButton;
     [SerializeField] GameObject pauseFirstButton;
     [SerializeField] GameObject optionsFirstButton;

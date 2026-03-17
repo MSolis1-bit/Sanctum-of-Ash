@@ -9,11 +9,11 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
 
-    [Header("Audio Sources")]
+    [Header("Audio Sources: ")]
     [SerializeField] AudioSource audioSourceBGM;
     [SerializeField] AudioSource audioSourceSFX;
 
-    [Header("Volume Settings")]
+    [Header("Volume Settings: ")]
     [SerializeField] Slider volumeSliderBGM;
     [SerializeField] Slider volumeSliderSFX;
     [SerializeField] Toggle musicMuteToggle;
@@ -91,9 +91,12 @@ public class SoundManager : MonoBehaviour
     public void OnSceneLoad()
     {
         int currentSceneNumber = SceneManager.GetActiveScene().buildIndex;
-        audioSourceBGM.clip = musicList[currentSceneNumber];
-        audioSourceBGM.loop = true;
-        audioSourceBGM.Play();
+        if(currentSceneNumber < 0)
+        {
+            audioSourceBGM.clip = musicList[currentSceneNumber];
+            audioSourceBGM.loop = true;
+            audioSourceBGM.Play();
+        }
     }
 
     private void SaveMusicPref()
