@@ -554,6 +554,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
 
     public void LoadData(GameData data)
     {
+        this.transform.position = data.playerPosition;
         this.maxHealth = data.maxHealth;
         this.hasDash = data.hasDash;
         this.hasDoubleJump = data.hasDoubleJump;
@@ -561,6 +562,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
+        data.playerPosition = this.transform.position;
         data.maxHealth = this.maxHealth;
         data.hasDash = this.hasDash;
         data.hasDoubleJump = this.hasDoubleJump;

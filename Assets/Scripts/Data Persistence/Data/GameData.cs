@@ -3,6 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
+    public Vector3 playerPosition;
     public int maxHealth;
     public bool hasDash;
     public bool hasDoubleJump;
@@ -11,6 +12,7 @@ public class GameData
 
     public GameData()
     {
+        playerPosition = Vector3.zero;
         this.maxHealth = 5;
         this.hasDash = false;
         this.hasDoubleJump = false;
