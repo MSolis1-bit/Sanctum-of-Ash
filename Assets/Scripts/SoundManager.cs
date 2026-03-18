@@ -1,5 +1,7 @@
+using System.Collections;
 using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -7,7 +9,11 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
 
-    [Header("Volume Settings")]
+    [Header("Audio Sources: ")]
+    [SerializeField] AudioSource audioSourceBGM;
+    [SerializeField] AudioSource audioSourceSFX;
+
+    [Header("Volume Settings: ")]
     [SerializeField] Slider volumeSliderBGM;
     [SerializeField] Slider volumeSliderSFX;
     [SerializeField] Toggle musicMuteToggle;
@@ -17,8 +23,6 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] AudioClip[] musicList;
     [SerializeField] AudioClip[] sfxList;
-    [SerializeField] AudioSource audioSourceBGM;
-    [SerializeField] AudioSource audioSourceSFX;
 
 
 
@@ -67,6 +71,11 @@ public class SoundManager : MonoBehaviour
         audioSourceBGM.Play();
     }
 
+    //IEnumerator PlayFootSteps()
+    //{
+        
+    //}
+
     public void ChangeBGMVolume()
     {
         audioSourceBGM.volume = volumeSliderBGM.value;
@@ -81,14 +90,12 @@ public class SoundManager : MonoBehaviour
 
     public void OnSceneLoad()
     {
-        if(SceneManager.GetActiveScene().name == "MainMenu")
+        int currentSceneNumber = SceneManager.GetActiveScene().buildIndex;
+        if(currentSceneNumber < 0)
         {
-            if(audioSourceBGM.clip == null)
-            {
-                audioSourceBGM.clip = instance.musicList[0];
-                audioSourceBGM.loop = true;
-                audioSourceBGM.Play();
-            }
+            audioSourceBGM.clip = musicList[currentSceneNumber];
+            audioSourceBGM.loop = true;
+            audioSourceBGM.Play();
         }
     }
 

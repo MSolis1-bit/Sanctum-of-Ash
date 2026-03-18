@@ -65,7 +65,7 @@ MonoBehaviour:
   dashCooldown: 0.75
   hasDash: 1
   hasDoubleJump: 1
-  maxHealth: 5
+  maxHealth: 10
   groundCheck: {fileID: 5021640786495442829}
   groundCheckRadius: 0.2
   groundLayer:
@@ -79,6 +79,8 @@ MonoBehaviour:
   maxWallJumps: 1
   wallJumpForceX: 6
   wallJumpForceY: 10
+  wallSlideSpeed: 2.5
+  wallJumpLockTime: 0.1
   attackDuration: 0.2
   attackCooldown: 0.35
   attackPoint: {fileID: 8344416736994268128}
