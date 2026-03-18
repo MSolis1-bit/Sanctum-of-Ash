@@ -9,11 +9,11 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
 
-    [Header("Audio Sources")]
+    [Header("Audio Sources: ")]
     [SerializeField] AudioSource audioSourceBGM;
     [SerializeField] AudioSource audioSourceSFX;
 
-    [Header("Volume Settings")]
+    [Header("Volume Settings: ")]
     [SerializeField] Slider volumeSliderBGM;
     [SerializeField] Slider volumeSliderSFX;
     [SerializeField] Toggle musicMuteToggle;
@@ -91,22 +91,12 @@ public class SoundManager : MonoBehaviour
     public void OnSceneLoad()
     {
         int currentSceneNumber = SceneManager.GetActiveScene().buildIndex;
-
-        if (musicList == null || musicList.Length == 0)
+        if(currentSceneNumber < 0)
         {
-            Debug.LogWarning("Music list is empty");
-            return;
+            audioSourceBGM.clip = musicList[currentSceneNumber];
+            audioSourceBGM.loop = true;
+            audioSourceBGM.Play();
         }
-
-        if (currentSceneNumber < 0 || currentSceneNumber >= musicList.Length)
-        {
-            Debug.LogWarning("No music clip assigned for scene build index: " + currentSceneNumber);
-            return;
-        }
-
-        audioSourceBGM.clip = musicList[currentSceneNumber];
-        audioSourceBGM.loop = true;
-        audioSourceBGM.Play();
     }
 
     private void SaveMusicPref()

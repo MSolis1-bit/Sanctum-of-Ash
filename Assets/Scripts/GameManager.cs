@@ -6,48 +6,41 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    [SerializeField] private Image playerHPBar;
+    [Header("Player UI: ")]
+    [SerializeField] Image playerHPBar;
 
-    public GameObject player;
-    private PlayerController playerScript;
+    [HideInInspector] public GameObject player;
+    [HideInInspector] private PlayerController playerScript;
 
-    // This is the object in the scene that marks the starting spawn position
+    // For Checkpoints
     public GameObject playerSpawnPos;
 
     private bool isPaused = false;
-    float timeScaleOriginal;
+
+    private float timeScaleOriginal;
 
     private void Awake()
     {
         instance = this;
         timeScaleOriginal = Time.timeScale;
 
+        playerScript = player.GetComponent<PlayerController>();
         player = GameObject.FindWithTag("Player");
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
-
-        if (player != null)
-        {
-            playerScript = player.GetComponent<PlayerController>();
-        }
-
-        // Moves the player to the starting spawn point when the scene begins
-        if (player != null && playerSpawnPos != null)
-        {
-            player.transform.position = playerSpawnPos.transform.position;
-        }
     }
-
-    private void Start()
+    void Start()
     {
         UpdatePlayerUI();
     }
 
-    private void UpdatePlayerUI()
+    // Update is called once per frame
+    void Update()
     {
-        if (playerScript != null && playerHPBar != null)
-        {
-            playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
-        }
+    }
+
+    void UpdatePlayerUI()
+    {
+       playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
     }
 
     public void StatePause()
@@ -68,5 +61,6 @@ public class GameManager : MonoBehaviour
 
     public void NewGame()
     {
+
     }
 }
