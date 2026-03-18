@@ -6,7 +6,6 @@ TagManager:
   tags:
   - FallSensor
   - Player Spawn Pos
-  - Ground
   layers:
   - Default
   - TransparentFX
