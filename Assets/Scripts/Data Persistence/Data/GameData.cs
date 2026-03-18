@@ -4,7 +4,6 @@ using UnityEngine;
 public class GameData
 {
     public int maxHealth;
-    public int currentLevel;
     public bool hasDash;
     public bool hasDoubleJump;
     // The values defined in this constructor will be the default values
@@ -13,7 +12,6 @@ public class GameData
     public GameData()
     {
         this.maxHealth = 5;
-        this.currentLevel = 1;
         this.hasDash = false;
         this.hasDoubleJump = false;
     }

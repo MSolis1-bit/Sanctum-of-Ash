@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour, IDamage
+public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
@@ -550,5 +550,20 @@ public class PlayerController : MonoBehaviour, IDamage
         spriteRenderer.color = originalColor;
         isStunned = false;
         isInvincible = false;
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.maxHealth = data.maxHealth;
+        this.hasDash = data.hasDash;
+        this.hasDoubleJump = data.hasDoubleJump;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.maxHealth = this.maxHealth;
+        data.hasDash = this.hasDash;
+        data.hasDoubleJump = this.hasDoubleJump;
+
     }
 }
