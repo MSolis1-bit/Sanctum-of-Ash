@@ -1563,6 +1563,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3496509591896313246, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1522009560806252243}
+    - target: {fileID: 3496509591896313246, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeSFXVolume
+      objectReference: {fileID: 0}
     - target: {fileID: 4782577537920301548, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -1610,6 +1618,14 @@ PrefabInstance:
     - target: {fileID: 6676485634513355005, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
       propertyPath: m_Color.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7879921812945480585, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1522009560806252243}
+    - target: {fileID: 7879921812945480585, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeBGMVolume
       objectReference: {fileID: 0}
     - target: {fileID: 8435552526676402016, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
       propertyPath: m_AnchorMax.x
