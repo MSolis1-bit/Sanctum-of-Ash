@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Image playerHPBar;
 
     [HideInInspector] public GameObject player;
-    [HideInInspector] private PlayerController playerScript;
+
+    private PlayerController playerScript;
 
     // For Checkpoints
     public GameObject playerSpawnPos;
@@ -62,5 +63,13 @@ public class GameManager : MonoBehaviour
     public void NewGame()
     {
 
+    }
+
+    public void PlayerLoses()
+    {
+        if(playerScript.IsDead == true)
+        {
+            StatePause();
+        }
     }
 }
