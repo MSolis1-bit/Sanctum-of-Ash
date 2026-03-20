@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
+public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
@@ -48,10 +48,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
     [SerializeField] private float wallJumpForceY;
 
     [Header("Wall Slide Settings")]
-    [SerializeField] private float wallSlideSpeed = 2f;
+    [SerializeField] private float wallSlideSpeed;
 
     [Header("Wall Jump Lockout")]
-    [SerializeField] private float wallJumpLockTime = 0.2f;
+    [SerializeField] private float wallJumpLockTime;
 
     [Header("Attack")]
     [SerializeField] private float attackDuration;
@@ -60,10 +60,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
     [SerializeField] private GameObject attackHitbox;
 
     [Header("Damage Feedback")]
-    [SerializeField] private float knockbackForceX = 10f;
-    [SerializeField] private float knockbackForceY = 6f;
-    [SerializeField] private float invincibilityTime = 1f;
-    [SerializeField] private float flashInterval = 0.1f;
+    [SerializeField] private float knockbackForceX;
+    [SerializeField] private float knockbackForceY;
+    [SerializeField] private float invincibilityTime;
+    [SerializeField] private float flashInterval;
+
+    [Header("Corner Correction")]
+    [SerializeField] private Transform ceilingCheck;
+    [SerializeField] private float ceilingCheckRadius;
+    [SerializeField] private LayerMask ceilingLayer;
+    [SerializeField] private float cornerCorrectionDistance;
+    [SerializeField] private float cornerCorrectionStep;
 
     private bool isStunned;
     private bool isInvincible;
@@ -97,11 +104,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
 
     private bool isAttacking;
     private bool canAttack = true;
+    private Vector3 attackHitboxStartPosition;
+    private Vector3 attackPointStartPosition;
+
+    private bool isTouchingCeilingLeft;
+    private bool isTouchingCeilingRight;
+    private bool isTouchingCeilingMiddle;
 
     private bool canUseDoubleJump;
     private int remainingWallJumps;
-
-    private Vector3 attackPointStartPosition;
 
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
@@ -119,10 +130,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
         currentHealth = maxHealth;
         isDead = false;
 
-        // Saves the starting position of the attack point
+        // Saves the starting position of the attack point and attack hitbox
         if (attackPoint != null)
         {
             attackPointStartPosition = attackPoint.localPosition;
+        }
+        if (attackHitbox != null)
+        {
+            attackHitboxStartPosition = attackHitbox.transform.localPosition;
         }
 
         // Turns the hitbox off when the game begins
@@ -218,13 +233,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
             spriteRenderer.flipX = true;
         }
 
-        // Moves the attack point to the correct side of the player
-        if (attackPoint != null)
+        // Moves the attack hitbox to the correct side of the player
+        if (attackHitbox != null)
         {
-            attackPoint.localPosition = new Vector3(
-                Mathf.Abs(attackPointStartPosition.x) * facingDirection,
-                attackPointStartPosition.y,
-                attackPointStartPosition.z
+            attackHitbox.transform.localPosition = new Vector3(
+                Mathf.Abs(attackHitboxStartPosition.x) * facingDirection,
+                attackHitboxStartPosition.y,
+                attackHitboxStartPosition.z
             );
         }
 
@@ -308,7 +323,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
         }
 
         // Starts an attack when clicking the mouse
-        if (Input.GetMouseButtonDown(0) && canAttack)
+        if (Input.GetKeyDown(KeyCode.K) && canAttack)
         {
             StartCoroutine(Attack());
         }
@@ -344,6 +359,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
 
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);
         }
+
+        HandleCornerCorrection();
 
         // Calculates the speed the player wants to move
         float targetSpeed = moveInput * moveSpeed;
@@ -501,6 +518,43 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
         Debug.Log("Player has died.");
     }
 
+    private void HandleCornerCorrection()
+    {
+        // Only try to correct the player while moving upward
+        if (rb.linearVelocity.y <= 0f)
+        {
+            return;
+        }
+
+        if (ceilingCheck == null)
+        {
+            return;
+        }
+
+        Vector2 middleCheck = ceilingCheck.position;
+        Vector2 leftCheck = new Vector2(ceilingCheck.position.x - cornerCorrectionDistance, ceilingCheck.position.y);
+        Vector2 rightCheck = new Vector2(ceilingCheck.position.x + cornerCorrectionDistance, ceilingCheck.position.y);
+
+        isTouchingCeilingMiddle = Physics2D.OverlapCircle(middleCheck, ceilingCheckRadius, ceilingLayer);
+        isTouchingCeilingLeft = Physics2D.OverlapCircle(leftCheck, ceilingCheckRadius, ceilingLayer);
+        isTouchingCeilingRight = Physics2D.OverlapCircle(rightCheck, ceilingCheckRadius, ceilingLayer);
+
+        // If the middle is blocked, but one side is open, nudge the player sideways
+        if (isTouchingCeilingMiddle)
+        {
+            // Left side blocked, right side open, move right
+            if (isTouchingCeilingLeft && !isTouchingCeilingRight)
+            {
+                transform.position += new Vector3(cornerCorrectionStep, 0f, 0f);
+            }
+            // Right side blocked, left side open, move left
+            else if (isTouchingCeilingRight && !isTouchingCeilingLeft)
+            {
+                transform.position += new Vector3(-cornerCorrectionStep, 0f, 0f);
+            }
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         // Draws helper circles in the editor for ground and wall checks
@@ -522,6 +576,24 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
 
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(leftCheckPosition, wallCheckRadius);
+        }
+
+        if (ceilingCheck != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(ceilingCheck.position, ceilingCheckRadius);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(
+                new Vector2(ceilingCheck.position.x - cornerCorrectionDistance, ceilingCheck.position.y),
+                ceilingCheckRadius
+            );
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(
+                new Vector2(ceilingCheck.position.x + cornerCorrectionDistance, ceilingCheck.position.y),
+                ceilingCheckRadius
+            );
         }
     }
 
@@ -552,20 +624,20 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
         isInvincible = false;
     }
 
-    public void LoadData(GameData data)
-    {
-        this.transform.position = data.playerPosition;
-        this.maxHealth = data.maxHealth;
-        this.hasDash = data.hasDash;
-        this.hasDoubleJump = data.hasDoubleJump;
-    }
+    //public void LoadData(GameData data)
+    //{
+    //    this.transform.position = data.playerPosition;
+    //    this.maxHealth = data.maxHealth;
+    //    this.hasDash = data.hasDash;
+    //    this.hasDoubleJump = data.hasDoubleJump;
+    //}
 
-    public void SaveData(ref GameData data)
-    {
-        data.playerPosition = this.transform.position;
-        data.maxHealth = this.maxHealth;
-        data.hasDash = this.hasDash;
-        data.hasDoubleJump = this.hasDoubleJump;
+    //public void SaveData(ref GameData data)
+    //{
+    //    data.playerPosition = this.transform.position;
+    //    data.maxHealth = this.maxHealth;
+    //    data.hasDash = this.hasDash;
+    //    data.hasDoubleJump = this.hasDoubleJump;
 
-    }
+    //}
 }
