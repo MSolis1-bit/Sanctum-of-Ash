@@ -88,7 +88,7 @@ public class ButtonFunctions : MonoBehaviour
         menuActive.SetActive(false);
 
         if (button.name == "CreditsButton") {menuActive = creditsMenu;}
-        else if (button.name == "SaveButton") { menuActive = saveMenu; }
+        else if (button.name == "SaveButton" || button.name == "LoadButton") { menuActive = saveMenu; }
         else if(button.name == "OptionsButton") {menuActive = optionsMenu; EventSystem.current.SetSelectedGameObject(optionsFirstButton); }
         else if(button.name == "BackButton") 
         {
@@ -101,6 +101,11 @@ public class ButtonFunctions : MonoBehaviour
         }
 
         menuActive.SetActive(true);
+    }
+
+    public void SaveSlotsMenu()
+    {
+
     }
 
     public void SFXPreview()

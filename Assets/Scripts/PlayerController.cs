@@ -117,6 +117,8 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
     public bool IsDead => isDead;
+    public bool HasDash => hasDash;
+    public bool HasDoubleJump => hasDoubleJump;
 
     private void Awake()
     {
@@ -624,20 +626,17 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
         isInvincible = false;
     }
 
-    //public void LoadData(GameData data)
-    //{
-    //    this.transform.position = data.playerPosition;
-    //    this.maxHealth = data.maxHealth;
-    //    this.hasDash = data.hasDash;
-    //    this.hasDoubleJump = data.hasDoubleJump;
-    //}
+    public void LoadData(GameData data)
+    {
+        maxHealth = data.maxHealth;
+        hasDash = data.hasDash;
+        hasDoubleJump = data.hasDoubleJump;
+    }
 
-    //public void SaveData(ref GameData data)
-    //{
-    //    data.playerPosition = this.transform.position;
-    //    data.maxHealth = this.maxHealth;
-    //    data.hasDash = this.hasDash;
-    //    data.hasDoubleJump = this.hasDoubleJump;
-
-    //}
+    public void SaveData(ref GameData data)
+    {
+        data.maxHealth = maxHealth;
+        data.hasDash = hasDash;
+        data.hasDoubleJump = hasDoubleJump;
+    }
 }

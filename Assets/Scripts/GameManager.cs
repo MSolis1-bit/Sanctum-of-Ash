@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour //IDataPersistence
 {
     public static GameManager instance;
 
@@ -11,9 +11,10 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public GameObject player;
 
-    private PlayerController playerScript;
+    [HideInInspector] public PlayerController playerScript;
 
     // For Checkpoints
+    [Header("Spawn Points: ")]
     public GameObject playerSpawnPos;
 
     private bool isPaused = false;
@@ -25,8 +26,8 @@ public class GameManager : MonoBehaviour
         instance = this;
         timeScaleOriginal = Time.timeScale;
 
-        playerScript = player.GetComponent<PlayerController>();
         player = GameObject.FindWithTag("Player");
+        playerScript = player.GetComponent<PlayerController>();
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
     }
     void Start()
@@ -72,4 +73,14 @@ public class GameManager : MonoBehaviour
             StatePause();
         }
     }
+
+    //public void LoadData(GameData data)
+    //{
+    //    playerSpawnPos = data.playerPosition;
+    //}
+
+    //public void SaveData(ref GameData data)
+    //{
+    //    data.playerPosition = playerSpawnPos;
+    //}
 }
