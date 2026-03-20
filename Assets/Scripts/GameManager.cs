@@ -38,9 +38,10 @@ public class GameManager : MonoBehaviour //IDataPersistence
     // Update is called once per frame
     void Update()
     {
+
     }
 
-    void UpdatePlayerUI()
+    public void UpdatePlayerUI()
     {
        playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
     }
