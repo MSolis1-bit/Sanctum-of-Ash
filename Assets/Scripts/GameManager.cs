@@ -6,9 +6,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [Header("Player UI: ")]
     [SerializeField] Image playerHPBar;
 
-    public GameObject player;
+    [HideInInspector] public GameObject player;
+
     private PlayerController playerScript;
 
     // For Checkpoints
@@ -16,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     private bool isPaused = false;
 
-    float timeScaleOriginal;
+    private float timeScaleOriginal;
 
     private void Awake()
     {
@@ -56,5 +58,18 @@ public class GameManager : MonoBehaviour
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void NewGame()
+    {
+
+    }
+
+    public void PlayerLoses()
+    {
+        if(playerScript.IsDead == true)
+        {
+            StatePause();
+        }
     }
 }

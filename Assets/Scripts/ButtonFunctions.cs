@@ -1,24 +1,45 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class ButtonFunctions : MonoBehaviour
 {
-    [Header("Menu Objects")]
+    [Header("Menu Objects: ")]
     [SerializeField] GameObject mainMenu;
+    [SerializeField] GameObject mainMenuBackground;
+    [SerializeField] GameObject creditsButton;
+    [SerializeField] GameObject gameTitle;
     [SerializeField] GameObject menuPause;
+    [SerializeField] GameObject saveMenu;
     [SerializeField] GameObject optionsMenu;
     [SerializeField] GameObject creditsMenu;
+    [SerializeField] GameObject menuLose;
+    [SerializeField] GameObject menuWin;
+
+    [Header("Menu Buttons: ")]
+    [SerializeField] GameObject mainMenuFirstButton;
+    [SerializeField] GameObject pauseFirstButton;
+    [SerializeField] GameObject optionsFirstButton;
+    [SerializeField] GameObject optionsClosedButton;
 
     private GameObject menuActive;
     private GameObject menuPrevious;
 
     void Start()
     {
-        
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
+            mainMenuBackground.SetActive(true);
+            mainMenu.SetActive(true);
+            creditsButton.SetActive(true);
+            gameTitle.SetActive(true);
             menuActive = mainMenu;
+            EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
+        }
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 
@@ -33,6 +54,9 @@ public class ButtonFunctions : MonoBehaviour
                     GameManager.instance.StatePause();
                     menuActive = menuPause;
                     menuActive.SetActive(true);
+
+                    // Clear current selected object
+                    EventSystem.current.SetSelectedGameObject(pauseFirstButton);
                 }
                 else if(menuActive == menuPause)
                 {
@@ -40,6 +64,7 @@ public class ButtonFunctions : MonoBehaviour
                 }
                 else
                 {
+                    EventSystem.current.SetSelectedGameObject(null);
                     menuActive.SetActive(false);
                     menuActive = menuPrevious;
                     menuActive.SetActive(true);
@@ -58,20 +83,45 @@ public class ButtonFunctions : MonoBehaviour
     // takes in the name of the button to determine the menu to toggle
     public void ToggleMenu(Button button)
     {
-        if(menuActive != null) { menuPrevious = menuActive; }
+        if(menuActive != null && button.name != "BackButton") { menuPrevious = menuActive; }
 
         menuActive.SetActive(false);
 
         if (button.name == "CreditsButton") {menuActive = creditsMenu;}
-        else if(button.name == "OptionsButton") {menuActive = optionsMenu;}
-        else if(button.name == "BackButton") {menuActive = menuPrevious;}
+        else if (button.name == "SaveButton") { menuActive = saveMenu; }
+        else if(button.name == "OptionsButton") {menuActive = optionsMenu; EventSystem.current.SetSelectedGameObject(optionsFirstButton); }
+        else if(button.name == "BackButton") 
+        {
+            menuActive = menuPrevious; 
+            if(SceneManager.GetActiveScene().name == "MainMenu")
+            {
+                EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
+            }
+            else { EventSystem.current.SetSelectedGameObject(pauseFirstButton);}
+        }
 
         menuActive.SetActive(true);
+    }
+
+    public void SFXPreview()
+    {
+        SoundManager.instance.PlayRandomSound();
+    }
+    public void NewGame()
+    {
+        GameManager.instance.NewGame();
+        SceneManager.LoadScene(1);
     }
 
     public void QuitToMainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void ActivateLoseMenu()
+    {
+        menuActive = menuLose;
+        menuActive.SetActive(true);
     }
 
     public void Exit()
