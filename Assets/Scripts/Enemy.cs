@@ -9,24 +9,24 @@ public class Enemy : MonoBehaviour
 
 
     [Header("Health")]
-    public float maxHealth = 100f;
+    public float maxHealth;
     private float currentHealth;
 
     [Header("Movement")]
-    [SerializeField] private float patrolSpeed = 2f;
-    [SerializeField] private float chaseSpeed = 4f;
-    [SerializeField] private float waypointTolerance = 0.2f;
-    [SerializeField] private float idleDuration = 1.5f;
+    [SerializeField] private float patrolSpeed;
+    [SerializeField] private float chaseSpeed;
+    [SerializeField] private float waypointTolerance;
+    [SerializeField] private float idleDuration;
 
     [Header("Detection")]
-    [SerializeField] private float detectionRange = 8f;
-    [SerializeField] private float attackRange = 3f;
+    [SerializeField] private float detectionRange;
+    [SerializeField] private float attackRange;
 
     [Header("Fireball")]
     public GameObject fireballPrefab;
     public Transform firePoint;
-    public float fireballDamage = 20f;
-    public float fireballCooldown = 2f;
+    public float fireballDamage;
+    public float fireballCooldown;
     private float fireballTimer;
 
     [Header("Patrol")]

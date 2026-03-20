@@ -48,10 +48,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
     [SerializeField] private float wallJumpForceY;
 
     [Header("Wall Slide Settings")]
-    [SerializeField] private float wallSlideSpeed = 2f;
+    [SerializeField] private float wallSlideSpeed;
 
     [Header("Wall Jump Lockout")]
-    [SerializeField] private float wallJumpLockTime = 0.2f;
+    [SerializeField] private float wallJumpLockTime;
 
     [Header("Attack")]
     [SerializeField] private float attackDuration;
@@ -60,10 +60,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
     [SerializeField] private GameObject attackHitbox;
 
     [Header("Damage Feedback")]
-    [SerializeField] private float knockbackForceX = 10f;
-    [SerializeField] private float knockbackForceY = 6f;
-    [SerializeField] private float invincibilityTime = 1f;
-    [SerializeField] private float flashInterval = 0.1f;
+    [SerializeField] private float knockbackForceX;
+    [SerializeField] private float knockbackForceY;
+    [SerializeField] private float invincibilityTime;
+    [SerializeField] private float flashInterval;
 
     private bool isStunned;
     private bool isInvincible;
@@ -97,11 +97,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
 
     private bool isAttacking;
     private bool canAttack = true;
+    private Vector3 attackHitboxStartPosition;
+    private Vector3 attackPointStartPosition;
 
     private bool canUseDoubleJump;
     private int remainingWallJumps;
-
-    private Vector3 attackPointStartPosition;
 
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
@@ -119,10 +119,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
         currentHealth = maxHealth;
         isDead = false;
 
-        // Saves the starting position of the attack point
+        // Saves the starting position of the attack point and attack hitbox
         if (attackPoint != null)
         {
             attackPointStartPosition = attackPoint.localPosition;
+        }
+        if (attackHitbox != null)
+        {
+            attackHitboxStartPosition = attackHitbox.transform.localPosition;
         }
 
         // Turns the hitbox off when the game begins
@@ -218,13 +222,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDataPersistence
             spriteRenderer.flipX = true;
         }
 
-        // Moves the attack point to the correct side of the player
-        if (attackPoint != null)
+        // Moves the attack hitbox to the correct side of the player
+        if (attackHitbox != null)
         {
-            attackPoint.localPosition = new Vector3(
-                Mathf.Abs(attackPointStartPosition.x) * facingDirection,
-                attackPointStartPosition.y,
-                attackPointStartPosition.z
+            attackHitbox.transform.localPosition = new Vector3(
+                Mathf.Abs(attackHitboxStartPosition.x) * facingDirection,
+                attackHitboxStartPosition.y,
+                attackHitboxStartPosition.z
             );
         }
 
