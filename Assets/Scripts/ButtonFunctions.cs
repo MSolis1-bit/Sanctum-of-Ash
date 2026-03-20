@@ -11,8 +11,11 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject creditsButton;
     [SerializeField] GameObject gameTitle;
     [SerializeField] GameObject menuPause;
+    [SerializeField] GameObject saveMenu;
     [SerializeField] GameObject optionsMenu;
     [SerializeField] GameObject creditsMenu;
+    [SerializeField] GameObject menuLose;
+    [SerializeField] GameObject menuWin;
 
     [Header("Menu Buttons: ")]
     [SerializeField] GameObject mainMenuFirstButton;
@@ -85,6 +88,7 @@ public class ButtonFunctions : MonoBehaviour
         menuActive.SetActive(false);
 
         if (button.name == "CreditsButton") {menuActive = creditsMenu;}
+        else if (button.name == "SaveButton") { menuActive = saveMenu; }
         else if(button.name == "OptionsButton") {menuActive = optionsMenu; EventSystem.current.SetSelectedGameObject(optionsFirstButton); }
         else if(button.name == "BackButton") 
         {
@@ -112,6 +116,12 @@ public class ButtonFunctions : MonoBehaviour
     public void QuitToMainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void ActivateLoseMenu()
+    {
+        menuActive = menuLose;
+        menuActive.SetActive(true);
     }
 
     public void Exit()
