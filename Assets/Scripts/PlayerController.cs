@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
+    private float originalMoveSpeed;
 
     [Header("Movement Feel")]
     [SerializeField] private float acceleration;
@@ -148,6 +150,8 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
 
         // Sets the number of wall jumps the player can perform
         remainingWallJumps = maxWallJumps;
+
+        originalMoveSpeed = moveSpeed;
     }
 
     private void Update()
@@ -488,7 +492,7 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
         Debug.Log("Player took damage. Current health: " + currentHealth);
 
         StartCoroutine(DamageRoutine());
-
+        GameManager.instance.UpdatePlayerUI();
         if (currentHealth <= 0)
             Die();
     }
@@ -508,7 +512,7 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
         {
             currentHealth = maxHealth;
         }
-
+        GameManager.instance.UpdatePlayerUI();
         Debug.Log("Player healed. Current health: " + currentHealth);
     }
 
@@ -622,6 +626,33 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
         spriteRenderer.color = originalColor;
         isStunned = false;
         isInvincible = false;
+    }
+
+    public void ApplyEffect<T>(float duration) where T : MonoBehaviour, IStatus
+    {
+        T existing = GetComponent<T>();
+        if (existing != null) 
+        { 
+            Destroy(existing); 
+        }
+
+        T effect = gameObject.AddComponent<T>();
+        effect.ApplyEffect(gameObject);
+    }
+
+    public void SetStunned(bool value)
+    {
+        isStunned = value;
+    }
+
+    public void ModifySpeed(float multiplier)
+    {
+        moveSpeed = originalMoveSpeed * multiplier;
+    }
+
+    public void ResetSpeed()
+    {
+        moveSpeed = originalMoveSpeed;
     }
 
     //public void LoadData(GameData data)
