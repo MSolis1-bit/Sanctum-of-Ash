@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour //IDataPersistence
+public class GameManager : MonoBehaviour, IDataPersistence
 {
     public static GameManager instance;
 
@@ -27,12 +27,19 @@ public class GameManager : MonoBehaviour //IDataPersistence
         timeScaleOriginal = Time.timeScale;
 
         player = GameObject.FindWithTag("Player");
-        playerScript = player.GetComponent<PlayerController>();
+        if(player != null )
+        {
+            playerScript = player.GetComponent<PlayerController>();
+        }
+
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
     }
     void Start()
     {
-        UpdatePlayerUI();
+        if(player != null)
+        {
+            UpdatePlayerUI();
+        }
     }
 
     // Update is called once per frame
@@ -75,13 +82,13 @@ public class GameManager : MonoBehaviour //IDataPersistence
         }
     }
 
-    //public void LoadData(GameData data)
-    //{
-    //    playerSpawnPos = data.playerPosition;
-    //}
+    public void LoadData(GameData data)
+    {
 
-    //public void SaveData(ref GameData data)
-    //{
-    //    data.playerPosition = playerSpawnPos;
-    //}
+    }
+
+    public void SaveData(ref GameData data)
+    {
+
+    }
 }

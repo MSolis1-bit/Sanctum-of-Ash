@@ -13,8 +13,8 @@ public class GameData
     public GameData()
     {
         //playerPosition = GameManager.instance.playerSpawnPos;
-        this.maxHealth = GameManager.instance.playerScript.MaxHealth;
-        this.hasDash = GameManager.instance.playerScript.HasDash;
-        this.hasDoubleJump = GameManager.instance.playerScript.HasDoubleJump;
+        this.maxHealth = 5;
+        this.hasDash = false;
+        this.hasDoubleJump = false;
     }
 }
