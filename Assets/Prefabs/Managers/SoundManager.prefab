@@ -175,6 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b937ce00a98d78345adcebf27285c581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+  audioSourceBGM: {fileID: 659216931986239812}
+  audioSourceSFX: {fileID: 2577321108609707064}
   volumeSliderBGM: {fileID: 0}
   volumeSliderSFX: {fileID: 0}
   musicMuteToggle: {fileID: 0}
@@ -183,9 +185,10 @@ MonoBehaviour:
   sfxMute: 0
   musicList:
   - {fileID: 8300000, guid: cf4fb828c1e1fb74d844b71edb6313ad, type: 3}
-  sfxList: []
-  audioSourceBGM: {fileID: 659216931986239812}
-  audioSourceSFX: {fileID: 2577321108609707064}
+  - {fileID: 8300000, guid: f2f3fae1733ba6441bc404d0c6678543, type: 3}
+  sfxList:
+  - {fileID: 8300000, guid: 32ce86776b59ceb4dabe167163a209ee, type: 3}
+  - {fileID: 8300000, guid: eae1a3b348e7cd74fa9f86922c718e3e, type: 3}
 --- !u!1 &2586096574825025272
 GameObject:
   m_ObjectHideFlags: 0

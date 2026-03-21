@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     [HideInInspector] public PlayerController playerScript;
 
+    private string currentScene = "";
+
     // For Checkpoints
     [Header("Spawn Points: ")]
     public GameObject playerSpawnPos;
@@ -23,7 +25,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void Awake()
     {
+        if (instance != null)
+        {
+            Debug.Log("Found more than one GameManager in the scene. Destroying the newest one.");
+            Destroy(this.gameObject);
+            return;
+        }
+
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
         timeScaleOriginal = Time.timeScale;
 
         player = GameObject.FindWithTag("Player");
@@ -71,7 +81,20 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void NewGame()
     {
+        // Create a new game - which will initialize our game data
+        currentScene = "Showcase";
+        DataPersistenceManager.instance.NewGame();
 
+        // Load the gameplay scene - which will in turn save the game because of
+        // OnSceneUnloaded() in the DataPersistenceManager
+        SceneManager.LoadSceneAsync(currentScene);
+    }
+
+    public void ContinueGame()
+    {
+        // Load the next scene - which will in turn load the game because of
+        // OnSceneLoaded() in DataPersistenceManager
+        SceneManager.LoadSceneAsync(currentScene);
     }
 
     public void PlayerLoses()
@@ -84,11 +107,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-
+        currentScene = data.currentScene;
     }
 
     public void SaveData(ref GameData data)
     {
-
+        data.currentScene = currentScene;
     }
 }

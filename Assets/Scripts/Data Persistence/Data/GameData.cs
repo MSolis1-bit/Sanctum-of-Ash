@@ -7,6 +7,7 @@ public class GameData
     public int maxHealth;
     public bool hasDash;
     public bool hasDoubleJump;
+    public string currentScene;
 
     // The values defined in this constructor will be the default values
     // What the game starts with when there's no data to load

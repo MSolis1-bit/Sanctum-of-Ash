@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using NUnit.Framework;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -21,13 +23,50 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Awake()
     {
+        if(instance != null)
+        {
+            Debug.Log("Found more than one DataPersistenceManager in the scene. Destroying the newest one.");
+            Destroy(this.gameObject);
+            return;
+        }
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
+
+        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
     }
 
-    private void Start()
+
+    private void OnEnable()
     {
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        LoadGame();
+
+    }
+
+    public void OnSceneUnloaded(Scene scene)
+    {
+        SaveGame();
+    }
+
+
+    public void ChangeSelectedProfileID(string newProfileID)
+    {
+        // Update the profile to use for saving and loading
+        this.selectedProfileID = newProfileID;
+
+        // Load the game, which will use the profile, updating our game data accordingly
         LoadGame();
     }
 

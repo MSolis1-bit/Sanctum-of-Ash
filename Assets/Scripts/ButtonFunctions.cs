@@ -10,18 +10,17 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject mainMenuBackground;
     [SerializeField] GameObject creditsButton;
     [SerializeField] GameObject gameTitle;
-    [SerializeField] GameObject menuPause;
+    [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject saveMenu;
     [SerializeField] GameObject optionsMenu;
     [SerializeField] GameObject creditsMenu;
-    [SerializeField] GameObject menuLose;
-    [SerializeField] GameObject menuWin;
+    [SerializeField] GameObject loseMenu;
+    [SerializeField] GameObject winMenu;
 
     [Header("Menu Buttons: ")]
     [SerializeField] GameObject mainMenuFirstButton;
     [SerializeField] GameObject pauseFirstButton;
     [SerializeField] GameObject optionsFirstButton;
-    [SerializeField] GameObject optionsClosedButton;
 
     private GameObject menuActive;
     private GameObject menuPrevious;
@@ -52,13 +51,13 @@ public class ButtonFunctions : MonoBehaviour
                 if(menuActive == null)
                 {
                     GameManager.instance.StatePause();
-                    menuActive = menuPause;
+                    menuActive = pauseMenu;
                     menuActive.SetActive(true);
 
                     // Clear current selected object
                     EventSystem.current.SetSelectedGameObject(pauseFirstButton);
                 }
-                else if(menuActive == menuPause)
+                else if(menuActive == pauseMenu)
                 {
                     Resume();
                 }
@@ -97,7 +96,6 @@ public class ButtonFunctions : MonoBehaviour
             {
                 EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
             }
-            else { EventSystem.current.SetSelectedGameObject(pauseFirstButton);}
         }
 
         menuActive.SetActive(true);
@@ -114,19 +112,35 @@ public class ButtonFunctions : MonoBehaviour
     }
     public void NewGame()
     {
+        DisableMenuButtons();
         GameManager.instance.NewGame();
-        SceneManager.LoadScene(1);
+    }
+
+    public void ContinueGame()
+    {
+        DisableMenuButtons();
+        GameManager.instance.ContinueGame();
     }
 
     public void QuitToMainMenu()
     {
+        DisableMenuButtons();
         SceneManager.LoadScene(0);
     }
 
     public void ActivateLoseMenu()
     {
-        menuActive = menuLose;
+        menuActive = loseMenu;
         menuActive.SetActive(true);
+    }
+
+    private void DisableMenuButtons()
+    {
+        Button[] buttonsInMenu = menuActive.GetComponentsInChildren<Button>();
+        foreach(Button button in buttonsInMenu) 
+        {
+            button.interactable = false;
+        }
     }
 
     public void Exit()
