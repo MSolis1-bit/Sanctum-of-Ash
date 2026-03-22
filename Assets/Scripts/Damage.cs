@@ -1,19 +1,22 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class damage : MonoBehaviour
 {
-    enum damageType { moving, stationary, DOT }
+    enum damageType { moving, stationary, DOT, seekingPlayer }
     enum statusType { NONE, burn, freeze, stun, invincibility, powered, speedUp, shielded }
 
     [SerializeField] damageType type;
     [SerializeField] statusType status;
     [Range(0, 5)][SerializeField] float effectDuration;
 
+    private Transform seekingTarget;
     [SerializeField] Rigidbody2D rb;
 
     [SerializeField] int damageAmount;
     [SerializeField] float damageRate;
+    [SerializeField] float rotateSpeed;
     [SerializeField] int speed;
     [SerializeField] int destroyTime;
     [SerializeField] GameObject hitEffect;
@@ -22,16 +25,39 @@ public class damage : MonoBehaviour
 
     void Start()
     {
-        if (type == damageType.moving)
+        if (type == damageType.moving || type == damageType.seekingPlayer)
         {
             rb.linearVelocity = transform.right * speed;
             Destroy(gameObject, destroyTime);
         }
+
+        seekingTarget = GameManager.instance.player.transform;
+
+
     }
 
+    void Update()
+    {
+        if (type != damageType.seekingPlayer && seekingTarget == null)
+            return;
+
+        if (rb == null)
+            return;
+
+        Vector2 direction = (Vector2)seekingTarget.position - rb.position;
+        direction.Normalize();
+
+        float rotateAmount = Vector3.Cross(direction, transform.right).z;
+
+        rb.angularVelocity = -rotateAmount * rotateSpeed;
+        rb.linearVelocity = transform.right * speed;
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
-     
+
+        if (other.isTrigger)
+            return;
+
         IDamage dmg = other.GetComponent<IDamage>();
         PlayerController player = other.GetComponent<PlayerController>();
 
@@ -48,7 +74,7 @@ public class damage : MonoBehaviour
         }
 
         // Destroy moving projectile
-        if (type == damageType.moving)
+        if (type == damageType.moving || type == damageType.seekingPlayer)
         {
             Destroy(gameObject);
         }
