@@ -10,10 +10,11 @@ public class SaveSlotsMenu : MonoBehaviour
 
     private SaveSlot[] saveSlots;
 
-    private bool isLoadingGame;
+    private bool isLoadingGame = false;
+
     private void Awake()
     {
-        saveSlots = GetComponentsInChildren<SaveSlot>();
+        saveSlots = this.GetComponentsInChildren<SaveSlot>();
     }
 
     public void OnSaveSlotClick(SaveSlot saveSlot)
@@ -24,20 +25,23 @@ public class SaveSlotsMenu : MonoBehaviour
         // Update the selected profile ID to be used for data persistence
         DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
 
-        // Create a new game - which will initialize our data to a clean slate
-        DataPersistenceManager.instance.NewGame();
+        if(isLoadingGame)
+        {
+            // Create a new game - which will initialize our data to a clean slate
+            DataPersistenceManager.instance.NewGame();
+        }
+
+        // Save the game anytime before loading a new scene
+        DataPersistenceManager.instance.SaveGame();
 
         // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
         SceneManager.LoadSceneAsync("Showcase");
     }
 
-    private void Start()
-    {
-        //ActivateMenu(); 
-    }
-
     public void ActivateMenu(bool isLoadingGame)
     {
+        this.gameObject.SetActive(true);
+
         this.isLoadingGame = isLoadingGame;
 
         // Load all of the profiles that exist
@@ -49,10 +53,15 @@ public class SaveSlotsMenu : MonoBehaviour
             GameData profileData = null;
             profilesGameData.TryGetValue(saveSlot.GetProfileID(), out profileData);
             saveSlot.SetData(profileData);
-            //if(profileData != null && isLoadingGame)
-            //{
-            //    saveSlot.inter
-            //}
+
+            if(profileData == null && isLoadingGame)
+            {
+                saveSlot.SetInteractable(false);
+            }
+            else
+            {
+                saveSlot.SetInteractable(true);
+            }
         }
     }
 

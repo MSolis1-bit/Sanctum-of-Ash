@@ -660,7 +660,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
     //    this.hasDoubleJump = data.hasDoubleJump;
     //}
 
-    //public void SaveData(ref GameData data)
+    //public void SaveData(GameData data)
     //{
     //    data.playerPosition = this.transform.position;
     //    data.maxHealth = this.maxHealth;

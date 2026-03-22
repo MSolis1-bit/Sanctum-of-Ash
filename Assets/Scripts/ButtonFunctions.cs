@@ -22,11 +22,14 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject pauseFirstButton;
     [SerializeField] GameObject optionsFirstButton;
 
+    private SaveSlotsMenu saveSlotsMenu;
     private GameObject menuActive;
     private GameObject menuPrevious;
 
     void Start()
     {
+        saveSlotsMenu = saveMenu.GetComponentInChildren<SaveSlotsMenu>();
+
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             mainMenuBackground.SetActive(true);
@@ -94,7 +97,7 @@ public class ButtonFunctions : MonoBehaviour
 
         if (button.name == "CreditsButton") {menuActive = creditsMenu;}
         else if (button.name == "SaveButton" || button.name == "LoadButton") { menuActive = saveMenu; }
-        else if(button.name == "NewGameButton") { menuActive = saveMenu; }
+        else if(button.name == "NewGameButton") { saveSlotsMenu.ActivateMenu(false); }
         else if(button.name == "OptionsButton") {menuActive = optionsMenu; EventSystem.current.SetSelectedGameObject(optionsFirstButton); }
         else if(button.name == "BackButton") 
         {

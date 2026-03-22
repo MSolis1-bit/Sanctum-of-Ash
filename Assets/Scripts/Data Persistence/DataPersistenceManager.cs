@@ -38,17 +38,14 @@ public class DataPersistenceManager : MonoBehaviour
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
     }
 
-
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -57,12 +54,6 @@ public class DataPersistenceManager : MonoBehaviour
         LoadGame();
 
     }
-
-    public void OnSceneUnloaded(Scene scene)
-    {
-        SaveGame();
-    }
-
 
     public void ChangeSelectedProfileID(string newProfileID)
     {
@@ -115,7 +106,7 @@ public class DataPersistenceManager : MonoBehaviour
         // Pass the data to other scripts so they can update it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
-            dataPersistenceObj.SaveData(ref gameData);
+            dataPersistenceObj.SaveData(gameData);
         }
 
         // Save that data to a file using the handler

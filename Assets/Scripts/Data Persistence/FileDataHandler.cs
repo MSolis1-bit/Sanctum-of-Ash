@@ -89,10 +89,11 @@ public class FileDataHandler
 
     public Dictionary<string, GameData> LoadAllProfiles()
     {
-        Dictionary<string, GameData> profileDictioonary = new Dictionary<string, GameData>();
+        Dictionary<string, GameData> profileDictionary = new Dictionary<string, GameData>();
 
         // Loop over all directory names in the directory path
         IEnumerable<DirectoryInfo> dirInfos = new DirectoryInfo(dataDirPath).EnumerateDirectories();
+
         foreach (DirectoryInfo dirInfo in dirInfos)
         {
             string profileID = dirInfo.Name;
@@ -112,7 +113,7 @@ public class FileDataHandler
             // Because if it is then something went wrong and we should let ourselves know
             if(profileData != null)
             {
-                profileDictioonary.Add(profileID, profileData);
+                profileDictionary.Add(profileID, profileData);
             }
             else
             {
@@ -120,7 +121,7 @@ public class FileDataHandler
             }
         }
 
-        return profileDictioonary;
+        return profileDictionary;
     }
 
     // The below is a simple implementation of XOR encryption

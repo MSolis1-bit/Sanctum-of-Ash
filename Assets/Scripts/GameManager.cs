@@ -93,7 +93,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void ContinueGame()
     {
         // Load the next scene - which will in turn load the game because of
-        // OnSceneLoaded() in DataPersistenceManager
+
+        // Save the game any time before loading a new scene
+        DataPersistenceManager.instance.SaveGame();
+
         if(currentScene == "")
         {
             SceneManager.LoadSceneAsync("Showcase");
@@ -117,7 +120,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         currentScene = data.currentScene;
     }
 
-    public void SaveData(ref GameData data)
+    public void SaveData(GameData data)
     {
         data.currentScene = currentScene;
     }

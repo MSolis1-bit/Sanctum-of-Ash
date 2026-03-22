@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
-    public GameObject playerPosition;
+    //public Vector2 playerPosition;
     public int maxHealth;
     public bool hasDash;
     public bool hasDoubleJump;
@@ -13,7 +13,6 @@ public class GameData
     // What the game starts with when there's no data to load
     public GameData()
     {
-        //playerPosition = GameManager.instance.playerSpawnPos;
         this.maxHealth = 5;
         this.hasDash = false;
         this.hasDoubleJump = false;
