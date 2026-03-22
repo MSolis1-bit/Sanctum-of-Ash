@@ -8,6 +8,9 @@ using Unity.VisualScripting;
 
 public class DataPersistenceManager : MonoBehaviour
 {
+    [Header("Debugging")]
+    [SerializeField] private bool initializeDataIfNull = false;
+
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
     [SerializeField] bool useEncryption;
@@ -80,10 +83,16 @@ public class DataPersistenceManager : MonoBehaviour
         // Load any saved data from a file using the data handler
         this.gameData = dataHandler.Load(selectedProfileID);
 
+        // Start a new game if the data is null and we're configured to initialize data for debugging purposes
+        if(this.gameData == null && initializeDataIfNull)
+        {
+            NewGame();
+        }
+
         // If no data can be loaded, initialize to a new game
         if(this.gameData == null)
         {
-            Debug.Log("No data was found. Initializing data to defaults.");
+            Debug.Log("No data was found. A new game needs to be started before data can be loaded.");
             NewGame(); 
         }
 
@@ -96,6 +105,13 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void SaveGame() 
     {
+        // If we don't have any data to save, log a warning here.
+        if(this.gameData == null) 
+        {
+            Debug.LogWarning("No data was found. A new game needs to be started before data can be saved.");
+            return;
+        }
+
         // Pass the data to other scripts so they can update it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
@@ -113,9 +129,14 @@ public class DataPersistenceManager : MonoBehaviour
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
     {
-        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<IDataPersistence>();
+        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>(true).OfType<IDataPersistence>();
 
         return new List<IDataPersistence>(dataPersistenceObjects);
+    }
+
+    public bool HasGameData()
+    {
+        return gameData != null;
     }
 
     public Dictionary<string, GameData> GetAllProfilesGameData()

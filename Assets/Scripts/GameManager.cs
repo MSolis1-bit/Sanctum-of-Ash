@@ -27,13 +27,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         if (instance != null)
         {
-            Debug.Log("Found more than one GameManager in the scene. Destroying the newest one.");
             Destroy(this.gameObject);
             return;
         }
 
         instance = this;
         DontDestroyOnLoad(this.gameObject);
+
         timeScaleOriginal = Time.timeScale;
 
         player = GameObject.FindWithTag("Player");
@@ -94,7 +94,14 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         // Load the next scene - which will in turn load the game because of
         // OnSceneLoaded() in DataPersistenceManager
-        SceneManager.LoadSceneAsync(currentScene);
+        if(currentScene == "")
+        {
+            SceneManager.LoadSceneAsync("Showcase");
+        }
+        else
+        {
+            SceneManager.LoadSceneAsync(currentScene);
+        }
     }
 
     public void PlayerLoses()

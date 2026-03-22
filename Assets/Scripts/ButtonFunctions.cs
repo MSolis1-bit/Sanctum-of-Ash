@@ -35,6 +35,12 @@ public class ButtonFunctions : MonoBehaviour
             gameTitle.SetActive(true);
             menuActive = mainMenu;
             EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
+
+            if (!DataPersistenceManager.instance.HasGameData())
+            {
+                Button continueButton = FindAttachedButton(menuActive.transform, "ContinueButton");
+                continueButton.interactable = false;
+            }
         }
         else
         {
@@ -88,6 +94,7 @@ public class ButtonFunctions : MonoBehaviour
 
         if (button.name == "CreditsButton") {menuActive = creditsMenu;}
         else if (button.name == "SaveButton" || button.name == "LoadButton") { menuActive = saveMenu; }
+        else if(button.name == "NewGameButton") { menuActive = saveMenu; }
         else if(button.name == "OptionsButton") {menuActive = optionsMenu; EventSystem.current.SetSelectedGameObject(optionsFirstButton); }
         else if(button.name == "BackButton") 
         {
@@ -141,6 +148,12 @@ public class ButtonFunctions : MonoBehaviour
         {
             button.interactable = false;
         }
+    }
+
+    public Button FindAttachedButton(Transform parent, string name)
+    {
+        Transform childTransform =  parent.Find(name);
+        return childTransform.GetComponent<Button>();
     }
 
     public void Exit()

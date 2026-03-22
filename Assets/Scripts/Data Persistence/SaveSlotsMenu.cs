@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SaveSlotsMenu : MonoBehaviour
 {
+    [Header("Menu Buttons: ")]
+    [SerializeField] private Button backButton;
+
     private SaveSlot[] saveSlots;
 
     private bool isLoadingGame;
@@ -14,6 +18,9 @@ public class SaveSlotsMenu : MonoBehaviour
 
     public void OnSaveSlotClick(SaveSlot saveSlot)
     {
+        // Disable all buttons
+        DisableMenuButtons();
+
         // Update the selected profile ID to be used for data persistence
         DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
 
@@ -21,7 +28,7 @@ public class SaveSlotsMenu : MonoBehaviour
         DataPersistenceManager.instance.NewGame();
 
         // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
-        SceneManager.LoadSceneAsync("MainMenu");
+        SceneManager.LoadSceneAsync("Showcase");
     }
 
     private void Start()
@@ -47,5 +54,14 @@ public class SaveSlotsMenu : MonoBehaviour
             //    saveSlot.inter
             //}
         }
+    }
+
+    private void DisableMenuButtons()
+    {
+        foreach(SaveSlot saveSlot in saveSlots)
+        {
+            saveSlot.SetInteractable(false);
+        }
+        backButton.interactable = false;
     }
 }
