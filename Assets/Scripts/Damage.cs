@@ -36,7 +36,7 @@ public class damage : MonoBehaviour
         PlayerController player = other.GetComponent<PlayerController>();
 
         // Instant damage
-        if (dmg != null && type != damageType.DOT)
+        if (dmg != null && type != damageType.DOT && damageAmount > 0)
         {
             dmg.TakeDamage(damageAmount);
         }
@@ -70,17 +70,20 @@ public class damage : MonoBehaviour
 
     IEnumerator damageOther(IDamage d, PlayerController player)
     {
-        isDamaging = true;
-
-        d.TakeDamage(damageAmount);
-
-        if (player != null && status != statusType.NONE)
+        if (damageAmount > 0)
         {
-            ApplyStatus(player);
-        }
+            isDamaging = true;
 
-        yield return new WaitForSeconds(damageRate);
-        isDamaging = false;
+            d.TakeDamage(damageAmount);
+
+            if (player != null && status != statusType.NONE)
+            {
+                ApplyStatus(player);
+            }
+
+            yield return new WaitForSeconds(damageRate);
+            isDamaging = false;
+        }
     }
 
     private void ApplyStatus(PlayerController player)
