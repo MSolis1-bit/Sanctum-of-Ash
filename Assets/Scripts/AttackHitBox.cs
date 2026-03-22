@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerAttackHitbox : MonoBehaviour
 {
-    [SerializeField] private float damage = 1f;
+    [SerializeField] public float damage = 1f;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

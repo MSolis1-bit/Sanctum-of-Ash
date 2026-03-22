@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
     [SerializeField] private float attackCooldown;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject attackHitbox;
+    private float origHBDamage;
 
     [Header("Damage Feedback")]
     [SerializeField] private float knockbackForceX;
@@ -76,6 +77,9 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
 
     private bool isStunned;
     private bool isInvincible;
+    private bool isShielded;
+    private bool isPowered;
+    private bool isSpedUp;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -108,6 +112,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
     private bool canAttack = true;
     private Vector3 attackHitboxStartPosition;
     private Vector3 attackPointStartPosition;
+    PlayerAttackHitbox HB;
 
     private bool isTouchingCeilingLeft;
     private bool isTouchingCeilingRight;
@@ -127,6 +132,10 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         originalColor = spriteRenderer.color;
+
+        //Sets the OriginalAttack so it can be modified
+        HB = GetComponent<PlayerAttackHitbox>();
+        origHBDamage = HB.damage;
 
         // Starts the player with full health
         currentHealth = maxHealth;
@@ -156,16 +165,6 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
 
     private void Update()
     {
-        // Temporary testing keys for damage and healing
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            TakeDamage(1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            Heal(1);
-        }
 
         // Stops the rest of the logic if the player is dead
         if (isDead)
@@ -484,6 +483,11 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
         if (isDead || isInvincible)
             return;
 
+        if (isShielded)
+        {
+            isShielded = false;
+            return;
+        }
         currentHealth -= damageAmount;
 
         if (currentHealth < 0)
@@ -646,6 +650,23 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
     public void ResetSpeed()
     {
         moveSpeed = originalMoveSpeed;
+    }
+
+    public void SetShielded(bool value)
+    {
+        isShielded = value;
+    }
+
+    public void ModifyAttack(float multiplier)
+    {
+        
+        HB.damage = multiplier * HB.damage;
+    }
+
+    public void ResetAttack()
+    {
+     
+        HB.damage = origHBDamage;
     }
 
     //public void LoadData(GameData data)
