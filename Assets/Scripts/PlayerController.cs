@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
         animator = GetComponent<Animator>();
         originalColor = spriteRenderer.color;
 
-        //Sets the OriginalAttack so it can be modified
+        //Sets the OriginalAttack so it can be modified and reset
         HB = GetComponent<PlayerAttackHitbox>();
         origHBDamage = HB.damage;
 
@@ -398,12 +398,8 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1f) * Time.fixedDeltaTime;
         }
-        // Makes full jumps less floaty even when jump is held
-        else if (rb.linearVelocity.y > 0f && Input.GetButton("Jump"))
-        {
-            rb.linearVelocity += Vector2.up * Physics2D.gravity.y * 0.5f * Time.fixedDeltaTime;
-        }
-        // Makes short jumps feel tighter when jump is released early
+
+        // Makes short jumps feel better
         else if (rb.linearVelocity.y > 0f && !Input.GetButton("Jump"))
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
