@@ -4,7 +4,7 @@ using System.Collections;
 public class damage : MonoBehaviour
 {
     enum damageType { moving, stationary, DOT }
-    enum statusType { NONE, burn, freeze, stun, invincibility }
+    enum statusType { NONE, burn, freeze, stun, invincibility, powered, speedUp }
 
     [SerializeField] damageType type;
     [SerializeField] statusType status;
@@ -114,6 +114,16 @@ public class damage : MonoBehaviour
                 effect = player.GetComponent<StatusInvincible>();
                 if (effect == null)
                     effect = player.gameObject.AddComponent<StatusInvincible>();
+                break;
+            case statusType.powered:
+                effect = player.GetComponent<StatusPowerUp>();
+                if (effect == null)
+                    effect = player.gameObject.AddComponent<StatusPowerUp>();
+                break;
+            case statusType.speedUp:
+                effect = player.GetComponent<StatusSpeedUp>();
+                if (effect == null)
+                    effect = player.gameObject.AddComponent<StatusSpeedUp>();
                 break;
         }
 
