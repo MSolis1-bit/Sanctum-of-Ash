@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
-public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
+public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistence*/
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
+    private float originalMoveSpeed;
 
     [Header("Movement Feel")]
     [SerializeField] private float acceleration;
@@ -117,8 +119,6 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
     public bool IsDead => isDead;
-    public bool HasDash => hasDash;
-    public bool HasDoubleJump => hasDoubleJump;
 
     private void Awake()
     {
@@ -150,6 +150,8 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
 
         // Sets the number of wall jumps the player can perform
         remainingWallJumps = maxWallJumps;
+
+        originalMoveSpeed = moveSpeed;
     }
 
     private void Update()
@@ -397,8 +399,12 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1f) * Time.fixedDeltaTime;
         }
-
-        // Makes short jumps feel better
+        // Makes full jumps less floaty even when jump is held
+        else if (rb.linearVelocity.y > 0f && Input.GetButton("Jump"))
+        {
+            rb.linearVelocity += Vector2.up * Physics2D.gravity.y * 0.5f * Time.fixedDeltaTime;
+        }
+        // Makes short jumps feel tighter when jump is released early
         else if (rb.linearVelocity.y > 0f && !Input.GetButton("Jump"))
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
@@ -490,7 +496,7 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
         Debug.Log("Player took damage. Current health: " + currentHealth);
 
         StartCoroutine(DamageRoutine());
-
+        GameManager.instance.UpdatePlayerUI();
         if (currentHealth <= 0)
             Die();
     }
@@ -510,7 +516,7 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
         {
             currentHealth = maxHealth;
         }
-
+        GameManager.instance.UpdatePlayerUI();
         Debug.Log("Player healed. Current health: " + currentHealth);
     }
 
@@ -626,17 +632,40 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
         isInvincible = false;
     }
 
-    public void LoadData(GameData data)
+    public void SetStunned(bool value)
     {
-        maxHealth = data.maxHealth;
-        hasDash = data.hasDash;
-        hasDoubleJump = data.hasDoubleJump;
+        isStunned = value;
     }
 
-    public void SaveData(ref GameData data)
+    public void SetInvincible(bool value)
     {
-        data.maxHealth = maxHealth;
-        data.hasDash = hasDash;
-        data.hasDoubleJump = hasDoubleJump;
+        isInvincible = value;
     }
+
+    public void ModifySpeed(float multiplier)
+    {
+        moveSpeed = originalMoveSpeed * multiplier;
+    }
+
+    public void ResetSpeed()
+    {
+        moveSpeed = originalMoveSpeed;
+    }
+
+    //public void LoadData(GameData data)
+    //{
+    //    this.transform.position = data.playerPosition;
+    //    this.maxHealth = data.maxHealth;
+    //    this.hasDash = data.hasDash;
+    //    this.hasDoubleJump = data.hasDoubleJump;
+    //}
+
+    //public void SaveData(ref GameData data)
+    //{
+    //    data.playerPosition = this.transform.position;
+    //    data.maxHealth = this.maxHealth;
+    //    data.hasDash = this.hasDash;
+    //    data.hasDoubleJump = this.hasDoubleJump;
+
+    //}
 }
