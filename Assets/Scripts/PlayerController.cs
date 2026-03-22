@@ -134,8 +134,11 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
         originalColor = spriteRenderer.color;
 
         //Sets the OriginalAttack so it can be modified and reset
-        HB = GetComponent<PlayerAttackHitbox>();
-        origHBDamage = HB.damage;
+        if (attackHitbox != null)
+        {
+            HB = GetComponent<PlayerAttackHitbox>();
+            origHBDamage = HB.damage;
+        }
 
         // Starts the player with full health
         currentHealth = maxHealth;
