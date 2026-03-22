@@ -4,9 +4,14 @@ using System.Collections;
 public class damage : MonoBehaviour
 {
     enum damageType { moving, stationary, DOT }
+    enum statusType { NONE, burn, freeze, stun, invincibility }
+
     [SerializeField] damageType type;
+    [SerializeField] statusType status;
+    [Range(0, 5)][SerializeField] float effectDuration;
+
     [SerializeField] Rigidbody2D rb;
-  
+
     [SerializeField] int damageAmount;
     [SerializeField] float damageRate;
     [SerializeField] int speed;
@@ -14,7 +19,6 @@ public class damage : MonoBehaviour
     [SerializeField] GameObject hitEffect;
 
     bool isDamaging;
-   
 
     void Start()
     {
@@ -27,17 +31,23 @@ public class damage : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        if (other.isTrigger)
-        {
-            return;
-        }
+     
         IDamage dmg = other.GetComponent<IDamage>();
+        PlayerController player = other.GetComponent<PlayerController>();
 
-        if (dmg != null && type != damageType.DOT)
+        // Instant damage
+        if (dmg != null && type != damageType.DOT && damageAmount > 0)
         {
             dmg.TakeDamage(damageAmount);
         }
+
+        // Apply status
+        if (player != null && status != statusType.NONE)
+        {
+            ApplyStatus(player);
+        }
+
+        // Destroy moving projectile
         if (type == damageType.moving)
         {
             Destroy(gameObject);
@@ -47,31 +57,72 @@ public class damage : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.isTrigger)
-        {
             return;
-        }
 
         IDamage dmg = other.GetComponent<IDamage>();
+        PlayerController player = other.GetComponent<PlayerController>();
 
         if (dmg != null && type == damageType.DOT && !isDamaging)
         {
-            StartCoroutine(damageOther(dmg));
+            StartCoroutine(damageOther(dmg, player));
+        }
+    }
+
+    IEnumerator damageOther(IDamage d, PlayerController player)
+    {
+        if (damageAmount > 0)
+        {
+            isDamaging = true;
+
+            d.TakeDamage(damageAmount);
+
+            if (player != null && status != statusType.NONE)
+            {
+                ApplyStatus(player);
+            }
+
+            yield return new WaitForSeconds(damageRate);
+            isDamaging = false;
+        }
+    }
+
+    private void ApplyStatus(PlayerController player)
+    {
+        StatusEffects effect = null;
+
+        switch (status)
+        {
+            case statusType.burn:
+                effect = player.GetComponent<StatusBurn>();
+                if (effect == null)
+                    effect = player.gameObject.AddComponent<StatusBurn>();
+                break;
+
+            case statusType.freeze:
+                effect = player.GetComponent<StatusFreeze>();
+                if (effect == null)
+                    effect = player.gameObject.AddComponent<StatusFreeze>();
+                break;
+
+            case statusType.stun:
+                effect = player.GetComponent<StatusStun>();
+                if (effect == null)
+                    effect = player.gameObject.AddComponent<StatusStun>();
+                break;
+
+            case statusType.invincibility:
+                effect = player.GetComponent<StatusInvincible>();
+                if (effect == null)
+                    effect = player.gameObject.AddComponent<StatusInvincible>();
+                break;
         }
 
-    }
 
-    IEnumerator damageOther(IDamage d)
-    {
-        isDamaging = true;
-        d.TakeDamage(damageAmount);
-        yield return new WaitForSeconds(damageRate);
-        isDamaging = false;
+
+        if (effect != null)
+        {
+            effect.duration = effectDuration;
+            effect.SetTarget(player.gameObject);
+        }
     }
 }
-
-
-
-
-
-
-
