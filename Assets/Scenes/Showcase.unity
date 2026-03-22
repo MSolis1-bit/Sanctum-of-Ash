@@ -23847,6 +23847,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
+    - target: {fileID: 5087274527556038187, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6160865638181668643, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6989535746454474277, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.9443
