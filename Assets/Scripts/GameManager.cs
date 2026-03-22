@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public GameObject player;
 
-    private PlayerController playerScript;
+    [HideInInspector] public PlayerController playerScript;
 
     // For Checkpoints
     public GameObject playerSpawnPos;
@@ -25,8 +25,8 @@ public class GameManager : MonoBehaviour
         instance = this;
         timeScaleOriginal = Time.timeScale;
 
-        playerScript = player.GetComponent<PlayerController>();
         player = GameObject.FindWithTag("Player");
+        playerScript = player.GetComponent<PlayerController>();
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
     }
     void Start()
@@ -39,9 +39,12 @@ public class GameManager : MonoBehaviour
     {
     }
 
-    void UpdatePlayerUI()
+    public void UpdatePlayerUI()
     {
-       playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+        if (playerHPBar != null)
+        {
+            playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+        }
     }
 
     public void StatePause()
