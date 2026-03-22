@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
+public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistence*/
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
@@ -628,21 +628,14 @@ public class PlayerController : MonoBehaviour, IDamage/*, IDataPersistence*/
         isInvincible = false;
     }
 
-    public void ApplyEffect<T>(float duration) where T : MonoBehaviour, IStatus
-    {
-        T existing = GetComponent<T>();
-        if (existing != null) 
-        { 
-            Destroy(existing); 
-        }
-
-        T effect = gameObject.AddComponent<T>();
-        effect.ApplyEffect(gameObject);
-    }
-
     public void SetStunned(bool value)
     {
         isStunned = value;
+    }
+
+    public void SetInvincible(bool value)
+    {
+        isInvincible = value;
     }
 
     public void ModifySpeed(float multiplier)

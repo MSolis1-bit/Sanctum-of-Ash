@@ -41,7 +41,10 @@ public class GameManager : MonoBehaviour
 
     public void UpdatePlayerUI()
     {
-       playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+        if (playerHPBar != null)
+        {
+            playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+        }
     }
 
     public void StatePause()
