@@ -16,6 +16,7 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject creditsMenu;
     [SerializeField] GameObject loseMenu;
     [SerializeField] GameObject winMenu;
+    [SerializeField] GameObject inventoryMenu;
 
     [Header("Menu Buttons: ")]
     [SerializeField] GameObject mainMenuFirstButton;
@@ -76,6 +77,20 @@ public class ButtonFunctions : MonoBehaviour
                     menuActive.SetActive(false);
                     menuActive = menuPrevious;
                     menuActive.SetActive(true);
+                }
+            }
+
+            if(Input.GetButtonDown("Inventory"))
+            {
+                if(menuActive == null)
+                {
+                    GameManager.instance.StatePause();
+                    menuActive = inventoryMenu;
+                    menuActive.SetActive(true);
+                }
+                else
+                {
+                    Resume();
                 }
             }
         }
