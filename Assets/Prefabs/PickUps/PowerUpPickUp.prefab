@@ -103,6 +103,8 @@ GameObject:
   - component: {fileID: 7811504958493280681}
   - component: {fileID: 4443430117037742154}
   - component: {fileID: 168978645989107789}
+  - component: {fileID: 9196679931862424445}
+  - component: {fileID: -487463102034410305}
   m_Layer: 0
   m_Name: PowerUpPickUp
   m_TagString: Untagged
@@ -243,12 +245,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6a57174d8597d47b1d21466c8bde6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::damage
-  type: 2
-  status: 4
+  type: 0
+  status: 5
   effectDuration: 5
-  rb: {fileID: 0}
+  rb: {fileID: 9196679931862424445}
   damageAmount: 0
   damageRate: 0
   speed: 0
-  destroyTime: 2
+  destroyTime: 10
   hitEffect: {fileID: 0}
+--- !u!50 &9196679931862424445
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606237839984607204}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!254 &-487463102034410305
+RelativeJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606237839984607204}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_MaxForce: 10000
+  m_MaxTorque: 10000
+  m_CorrectionScale: 0.3
+  m_AutoConfigureOffset: 1
+  m_LinearOffset: {x: 0, y: 0}
+  m_AngularOffset: 0

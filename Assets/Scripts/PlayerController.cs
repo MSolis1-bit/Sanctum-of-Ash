@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
         //Sets the OriginalAttack so it can be modified and reset
         if (attackHitbox != null)
         {
-            HB = GetComponent<PlayerAttackHitbox>();
+            HB = attackHitbox.GetComponent<PlayerAttackHitbox>();
             origHBDamage = HB.damage;
         }
 
@@ -663,7 +663,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
     public void ModifyAttack(float multiplier)
     {
         
-        HB.damage = multiplier * HB.damage;
+        HB.damage = multiplier * origHBDamage;
     }
 
     public void ResetAttack()
