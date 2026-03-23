@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IDataPersistence
 {
     public static GameManager instance;
 
@@ -13,7 +13,10 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public PlayerController playerScript;
 
+    private string currentScene = "";
+
     // For Checkpoints
+    [Header("Spawn Points: ")]
     public GameObject playerSpawnPos;
 
     private bool isPaused = false;
@@ -22,29 +25,42 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
+
         timeScaleOriginal = Time.timeScale;
 
         player = GameObject.FindWithTag("Player");
-        playerScript = player.GetComponent<PlayerController>();
+        if(player != null )
+        {
+            playerScript = player.GetComponent<PlayerController>();
+        }
+
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
     }
     void Start()
     {
-        UpdatePlayerUI();
+        if(player != null)
+        {
+            UpdatePlayerUI();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+
     }
 
     public void UpdatePlayerUI()
     {
-        if (playerHPBar != null)
-        {
-            playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
-        }
+       playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
     }
 
     public void StatePause()
@@ -65,7 +81,30 @@ public class GameManager : MonoBehaviour
 
     public void NewGame()
     {
+        // Create a new game - which will initialize our game data
+        currentScene = "Showcase";
+        DataPersistenceManager.instance.NewGame();
 
+        // Load the gameplay scene - which will in turn save the game because of
+        // OnSceneUnloaded() in the DataPersistenceManager
+        SceneManager.LoadSceneAsync(currentScene);
+    }
+
+    public void ContinueGame()
+    {
+        // Load the next scene - which will in turn load the game because of
+
+        // Save the game any time before loading a new scene
+        DataPersistenceManager.instance.SaveGame();
+
+        if(currentScene == "")
+        {
+            SceneManager.LoadSceneAsync("Showcase");
+        }
+        else
+        {
+            SceneManager.LoadSceneAsync(currentScene);
+        }
     }
 
     public void PlayerLoses()
@@ -74,5 +113,15 @@ public class GameManager : MonoBehaviour
         {
             StatePause();
         }
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.currentScene = data.currentScene;
+    }
+
+    public void SaveData(GameData data)
+    {
+        data.currentScene = currentScene;
     }
 }

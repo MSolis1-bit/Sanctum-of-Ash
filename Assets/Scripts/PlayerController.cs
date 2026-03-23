@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistence*/
+public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
@@ -655,37 +655,18 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal/*, IDataPersistenc
         moveSpeed = originalMoveSpeed;
     }
 
-    public void SetShielded(bool value)
+    public void LoadData(GameData data)
     {
-        isShielded = value;
+        this.maxHealth = data.maxHealth;
+        this.hasDash = data.hasDash;
+        this.hasDoubleJump = data.hasDoubleJump;
     }
 
-    public void ModifyAttack(float multiplier)
+    public void SaveData(GameData data)
     {
-        
-        HB.damage = multiplier * origHBDamage;
+        data.maxHealth = this.maxHealth;
+        data.hasDash = this.hasDash;
+        data.hasDoubleJump = this.hasDoubleJump;
+
     }
-
-    public void ResetAttack()
-    {
-     
-        HB.damage = origHBDamage;
-    }
-
-    //public void LoadData(GameData data)
-    //{
-    //    this.transform.position = data.playerPosition;
-    //    this.maxHealth = data.maxHealth;
-    //    this.hasDash = data.hasDash;
-    //    this.hasDoubleJump = data.hasDoubleJump;
-    //}
-
-    //public void SaveData(ref GameData data)
-    //{
-    //    data.playerPosition = this.transform.position;
-    //    data.maxHealth = this.maxHealth;
-    //    data.hasDash = this.hasDash;
-    //    data.hasDoubleJump = this.hasDoubleJump;
-
-    //}
 }
