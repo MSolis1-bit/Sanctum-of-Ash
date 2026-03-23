@@ -128,6 +128,10 @@ public class ButtonFunctions : MonoBehaviour
         }
 
         menuActive.SetActive(true);
+        if(menuActive == saveMenu)
+        {
+            saveSlotsMenuScript.ActivateMenu();
+        }
     }
 
     public void SaveSlotsMenu()

@@ -45,13 +45,11 @@ public class DataPersistenceManager : MonoBehaviour
 
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
 
-        this.selectedProfileID = dataHandler.GetMostRecentlyUpdatedProfileID();
-        if(overrideSelectedProfileID)
-        {
-            this.selectedProfileID = testSelectedProfileID;
-            Debug.LogWarning("Overrode selected profile ID with test ID: " + testSelectedProfileID);
-        }
+        InitializeSelectedProfileID();
+    }
 
+    private void Start()
+    {
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
     }
@@ -63,6 +61,28 @@ public class DataPersistenceManager : MonoBehaviour
 
         // Load the game, which will use the profile, updating our game data accordingly
         LoadGame();
+    }
+
+    public void DeleteProfileData(string profileID)
+    {
+        // Delete the data for this profileID
+        dataHandler.Delete(profileID);
+
+        // Initialize the selected profile ID
+        InitializeSelectedProfileID();
+
+        // Reload the game so that our data matches the newley selected profile ID
+        LoadGame();
+    }
+
+    private void InitializeSelectedProfileID()
+    {
+        this.selectedProfileID = dataHandler.GetMostRecentlyUpdatedProfileID();
+        if (overrideSelectedProfileID)
+        {
+            this.selectedProfileID = testSelectedProfileID;
+            Debug.LogWarning("Overrode selected profile ID with test ID: " + testSelectedProfileID);
+        }
     }
 
     public void NewGame()

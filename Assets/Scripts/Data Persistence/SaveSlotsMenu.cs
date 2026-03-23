@@ -38,12 +38,18 @@ public class SaveSlotsMenu : MonoBehaviour
         SceneManager.LoadSceneAsync("Showcase");
     }
 
+    public void OnDeleteClick(SaveSlot saveSlot)
+    {
+        DataPersistenceManager.instance.DeleteProfileData(saveSlot.GetProfileID());
+        ActivateMenu();
+    }
+
     private void Update()
     {
-        if(this.gameObject.activeSelf)
-        {
-            ActivateMenu();
-        }
+        //if(this.gameObject.activeSelf)
+        //{
+        //    ActivateMenu();
+        //}
     }
 
     public void ActivateMenu()

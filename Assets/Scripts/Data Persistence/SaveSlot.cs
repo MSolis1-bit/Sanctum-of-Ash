@@ -11,6 +11,7 @@ public class SaveSlot : MonoBehaviour
     [SerializeField] private GameObject noDataContent;
     [SerializeField] private GameObject hasDataContent;
     [SerializeField] private TextMeshProUGUI saveDateText;
+    [SerializeField] private Button deleteDataButton;
 
     private Button saveSlotButton;
 
@@ -26,13 +27,14 @@ public class SaveSlot : MonoBehaviour
         {
             noDataContent.SetActive(true);
             hasDataContent.SetActive(false);
+            deleteDataButton.gameObject.SetActive(false);
         }
         // There's data for this profileID
         else
         {
             noDataContent.SetActive(false);
             hasDataContent.SetActive(true);
-
+            deleteDataButton.gameObject.SetActive(true);
         }
     }
 
@@ -44,5 +46,6 @@ public class SaveSlot : MonoBehaviour
     public void SetInteractable(bool interactable) 
     {
         saveSlotButton.interactable = interactable;
+        deleteDataButton.interactable= interactable;
     }
 }
