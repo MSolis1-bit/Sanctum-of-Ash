@@ -10,7 +10,7 @@ public class SaveSlotsMenu : MonoBehaviour
 
     private SaveSlot[] saveSlots;
 
-    private bool isLoadingGame = false;
+    public bool isLoadingGame = false;
 
     private void Awake()
     {
@@ -38,12 +38,16 @@ public class SaveSlotsMenu : MonoBehaviour
         SceneManager.LoadSceneAsync("Showcase");
     }
 
-    public void ActivateMenu(bool isLoadingGame)
+    private void Update()
     {
-        this.gameObject.SetActive(true);
+        if(this.gameObject.activeSelf)
+        {
+            ActivateMenu();
+        }
+    }
 
-        this.isLoadingGame = isLoadingGame;
-
+    public void ActivateMenu()
+    {
         // Load all of the profiles that exist
         Dictionary<string, GameData> profilesGameData = DataPersistenceManager.instance.GetAllProfilesGameData();
 

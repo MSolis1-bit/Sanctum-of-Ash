@@ -20,6 +20,12 @@ public class FileDataHandler
 
     public GameData Load(string profileID)
     {
+        // Base case - if the profileID is null, return right away
+        if(profileID == null)
+        {
+            return null;
+        }
+
         // Use Path.Combine to account for different OS's having different path seperators
         string fullPath = Path.Combine(dataDirPath, profileID, dataFileName);
         GameData loadedData = null;
@@ -55,6 +61,12 @@ public class FileDataHandler
 
     public void Save(GameData data, string profileID) 
     {
+        // Base case - if the profileID is null, return right away
+        if (profileID == null)
+        {
+            return;
+        }
+
         // Use Path.Combine to account for different OS's having different path seperators
         string fullPath = Path.Combine(dataDirPath, profileID, dataFileName);
 
@@ -122,6 +134,40 @@ public class FileDataHandler
         }
 
         return profileDictionary;
+    }
+
+    public string GetMostRecentlyUpdatedProfileID()
+    {
+        string mostRecentProfileID = null;
+
+        Dictionary<string, GameData> profilesGameData = LoadAllProfiles();
+        foreach(KeyValuePair<string, GameData> pair in profilesGameData) 
+        {
+            string profileID = pair.Key;
+            GameData gameData = pair.Value;
+
+            // Skip the entry if the gamedata is null
+            if(gameData == null)
+            {
+                continue;
+            }
+
+            // If this is the first data we've come across that exists, it's the most recent so far
+            if(mostRecentProfileID == null) { mostRecentProfileID = profileID; }
+            // Otherwise, compare to see which date is the most recent
+            else 
+            { 
+                DateTime mostRecentDateTime = DateTime.FromBinary(profilesGameData[mostRecentProfileID].lastUpdated);
+                DateTime newDateTime = DateTime.FromBinary(gameData.lastUpdated);
+                // The greatest value is the most recent
+                if(newDateTime > mostRecentDateTime)
+                {
+                    mostRecentProfileID = profileID;
+                }
+            }
+        }
+
+        return mostRecentProfileID;
     }
 
     // The below is a simple implementation of XOR encryption

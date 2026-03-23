@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        currentScene = data.currentScene;
+        this.currentScene = data.currentScene;
     }
 
     public void SaveData(GameData data)

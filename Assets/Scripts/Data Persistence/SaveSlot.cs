@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class SaveSlot : MonoBehaviour
 {
-    [Header("Profile")]
+    [Header("Profile: ")]
     [SerializeField] private string profileID;
 
-    [Header("Content")]
+    [Header("Content: ")]
     [SerializeField] private GameObject noDataContent;
     [SerializeField] private GameObject hasDataContent;
     [SerializeField] private TextMeshProUGUI saveDateText;

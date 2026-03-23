@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 public class ButtonFunctions : MonoBehaviour
 {
@@ -17,19 +18,22 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject loseMenu;
     [SerializeField] GameObject winMenu;
     [SerializeField] GameObject inventoryMenu;
+    [SerializeField] GameObject saveSlots;
 
     [Header("Menu Buttons: ")]
+    [SerializeField] Button continueButton;
+    [SerializeField] Button loadButton;
     [SerializeField] GameObject mainMenuFirstButton;
     [SerializeField] GameObject pauseFirstButton;
     [SerializeField] GameObject optionsFirstButton;
 
-    private SaveSlotsMenu saveSlotsMenu;
+    private SaveSlotsMenu saveSlotsMenuScript;
     private GameObject menuActive;
     private GameObject menuPrevious;
 
     void Start()
     {
-        saveSlotsMenu = saveMenu.GetComponentInChildren<SaveSlotsMenu>();
+        saveSlotsMenuScript = saveSlots.GetComponent<SaveSlotsMenu>();
 
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
@@ -42,8 +46,8 @@ public class ButtonFunctions : MonoBehaviour
 
             if (!DataPersistenceManager.instance.HasGameData())
             {
-                Button continueButton = FindAttachedButton(menuActive.transform, "ContinueButton");
                 continueButton.interactable = false;
+                loadButton.interactable = false;
             }
         }
         else
@@ -111,12 +115,12 @@ public class ButtonFunctions : MonoBehaviour
         menuActive.SetActive(false);
 
         if (button.name == "CreditsButton") {menuActive = creditsMenu;}
-        else if (button.name == "SaveButton" || button.name == "LoadButton") { menuActive = saveMenu; }
-        else if(button.name == "NewGameButton") { saveSlotsMenu.ActivateMenu(false); }
+        else if (button.name == "LoadButton") { menuActive = saveMenu; saveSlotsMenuScript.isLoadingGame = true; }
+        else if(button.name == "NewGameButton" || button.name == "SaveButton") { menuActive = saveMenu; saveSlotsMenuScript.isLoadingGame = false; }
         else if(button.name == "OptionsButton") {menuActive = optionsMenu; EventSystem.current.SetSelectedGameObject(optionsFirstButton); }
         else if(button.name == "BackButton") 
         {
-            menuActive = menuPrevious; 
+            menuActive = menuPrevious;
             if(SceneManager.GetActiveScene().name == "MainMenu")
             {
                 EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
