@@ -15,6 +15,8 @@ public class SaveSlot : MonoBehaviour
 
     private Button saveSlotButton;
 
+    public bool hasData { get; private set; } = false;
+
     private void Awake()
     {
         saveSlotButton = GetComponent<Button>();
@@ -25,6 +27,7 @@ public class SaveSlot : MonoBehaviour
         // There's no data for this profileID
         if(data == null)
         {
+            hasData = false;
             noDataContent.SetActive(true);
             hasDataContent.SetActive(false);
             deleteDataButton.gameObject.SetActive(false);
@@ -32,8 +35,10 @@ public class SaveSlot : MonoBehaviour
         // There's data for this profileID
         else
         {
+            hasData = true;
             noDataContent.SetActive(false);
             hasDataContent.SetActive(true);
+            saveDateText.text = "Saved: " + data.timeStamp;
             deleteDataButton.gameObject.SetActive(true);
         }
     }
