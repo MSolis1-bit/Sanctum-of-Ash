@@ -28,7 +28,15 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null)
+        {
+            Debug.Log("Found more than one SoundManager in the scene. Destroying the newest one.");
+            Destroy(this.gameObject);
+            return;
+        }
+
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
 
     void Start()
