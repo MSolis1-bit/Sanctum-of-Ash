@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     [SerializeField] private float attackCooldown;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject attackHitbox;
+    private float origHBDamage;
 
     [Header("Damage Feedback")]
     [SerializeField] private float knockbackForceX;
@@ -76,6 +77,9 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     private bool isStunned;
     private bool isInvincible;
+    private bool isShielded;
+    private bool isPowered;
+    private bool isSpedUp;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -108,6 +112,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     private bool canAttack = true;
     private Vector3 attackHitboxStartPosition;
     private Vector3 attackPointStartPosition;
+    PlayerAttackHitbox HB;
 
     private bool isTouchingCeilingLeft;
     private bool isTouchingCeilingRight;
@@ -127,6 +132,13 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         originalColor = spriteRenderer.color;
+
+        //Sets the OriginalAttack so it can be modified and reset
+        if (attackHitbox != null)
+        {
+            HB = attackHitbox.GetComponent<PlayerAttackHitbox>();
+            origHBDamage = HB.damage;
+        }
 
         // Starts the player with full health
         currentHealth = maxHealth;
@@ -156,16 +168,6 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     private void Update()
     {
-        // Temporary testing keys for damage and healing
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            TakeDamage(1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            Heal(1);
-        }
 
         // Stops the rest of the logic if the player is dead
         if (isDead)
@@ -399,12 +401,8 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1f) * Time.fixedDeltaTime;
         }
-        // Makes full jumps less floaty even when jump is held
-        else if (rb.linearVelocity.y > 0f && Input.GetButton("Jump"))
-        {
-            rb.linearVelocity += Vector2.up * Physics2D.gravity.y * 0.5f * Time.fixedDeltaTime;
-        }
-        // Makes short jumps feel tighter when jump is released early
+
+        // Makes short jumps feel better
         else if (rb.linearVelocity.y > 0f && !Input.GetButton("Jump"))
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
@@ -488,6 +486,11 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         if (isDead || isInvincible)
             return;
 
+        if (isShielded)
+        {
+            isShielded = false;
+            return;
+        }
         currentHealth -= damageAmount;
 
         if (currentHealth < 0)
@@ -650,6 +653,23 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     public void ResetSpeed()
     {
         moveSpeed = originalMoveSpeed;
+    }
+
+    public void SetShielded(bool value)
+    {
+        isShielded = value;
+    }
+
+    public void ModifyAttack(float multiplier)
+    {
+
+        HB.damage = multiplier * origHBDamage;
+    }
+
+    public void ResetAttack()
+    {
+
+        HB.damage = origHBDamage;
     }
 
     public void LoadData(GameData data)
