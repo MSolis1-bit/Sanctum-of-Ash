@@ -18,13 +18,12 @@ public class SoundManager : MonoBehaviour
     [SerializeField] Slider volumeSliderSFX;
     [SerializeField] Toggle musicMuteToggle;
     [SerializeField] Toggle sfxMuteToggle;
-    public bool musicMute = false;
-    public bool sfxMute = false;
 
     [SerializeField] AudioClip[] musicList;
     [SerializeField] AudioClip[] sfxList;
 
-
+    private float musicBeforeMute = 1;
+    private float sfxBeforeMute = 1;
 
     private void Awake()
     {
@@ -79,11 +78,6 @@ public class SoundManager : MonoBehaviour
         audioSourceBGM.Play();
     }
 
-    //IEnumerator PlayFootSteps()
-    //{
-        
-    //}
-
     public void ChangeBGMVolume()
     {
         audioSourceBGM.volume = volumeSliderBGM.value;
@@ -115,7 +109,6 @@ public class SoundManager : MonoBehaviour
 
     private void LoadMusicPref()
     {
-        if(audioSourceBGM.volume == 0) { musicMute = true;  }
         volumeSliderBGM.value = PlayerPrefs.GetFloat("musicVolume");
         volumeSliderSFX.value = PlayerPrefs.GetFloat("sfxVolume");
     }
@@ -125,13 +118,13 @@ public class SoundManager : MonoBehaviour
 
         if (toggle.name == "MusicMute")
         {
-            if (musicMute == false) { musicMute = true; }
-            else { musicMute = false; }
+            if (toggle.isOn == true) { musicBeforeMute = audioSourceBGM.volume; audioSourceBGM.volume = 0; SaveMusicPref(); }
+            else { audioSourceBGM.volume = musicBeforeMute; SaveMusicPref(); }
         }
         else if (toggle.name == "SFXMute")
         {
-            if (sfxMute == false) { sfxMute = true; }
-            else { sfxMute = false; }
+            if (toggle.isOn == true) { sfxBeforeMute = audioSourceSFX.volume; audioSourceSFX.volume = 0; SaveMusicPref(); }
+            else { audioSourceSFX.volume = sfxBeforeMute; SaveMusicPref(); }
         }
     }
 }
