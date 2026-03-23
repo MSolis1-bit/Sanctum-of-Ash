@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 public class ButtonFunctions : MonoBehaviour
 {
@@ -10,24 +11,30 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject mainMenuBackground;
     [SerializeField] GameObject creditsButton;
     [SerializeField] GameObject gameTitle;
-    [SerializeField] GameObject menuPause;
+    [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject saveMenu;
     [SerializeField] GameObject optionsMenu;
     [SerializeField] GameObject creditsMenu;
-    [SerializeField] GameObject menuLose;
-    [SerializeField] GameObject menuWin;
+    [SerializeField] GameObject loseMenu;
+    [SerializeField] GameObject winMenu;
+    [SerializeField] GameObject inventoryMenu;
+    [SerializeField] GameObject saveSlots;
 
     [Header("Menu Buttons: ")]
+    [SerializeField] Button continueButton;
+    [SerializeField] Button loadButton;
     [SerializeField] GameObject mainMenuFirstButton;
     [SerializeField] GameObject pauseFirstButton;
     [SerializeField] GameObject optionsFirstButton;
-    [SerializeField] GameObject optionsClosedButton;
 
+    private SaveSlotsMenu saveSlotsMenuScript;
     private GameObject menuActive;
     private GameObject menuPrevious;
 
     void Start()
     {
+        saveSlotsMenuScript = saveSlots.GetComponent<SaveSlotsMenu>();
+
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             mainMenuBackground.SetActive(true);
@@ -36,6 +43,12 @@ public class ButtonFunctions : MonoBehaviour
             gameTitle.SetActive(true);
             menuActive = mainMenu;
             EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
+
+            if (!DataPersistenceManager.instance.HasGameData())
+            {
+                continueButton.interactable = false;
+                loadButton.interactable = false;
+            }
         }
         else
         {
@@ -52,13 +65,13 @@ public class ButtonFunctions : MonoBehaviour
                 if(menuActive == null)
                 {
                     GameManager.instance.StatePause();
-                    menuActive = menuPause;
+                    menuActive = pauseMenu;
                     menuActive.SetActive(true);
 
                     // Clear current selected object
                     EventSystem.current.SetSelectedGameObject(pauseFirstButton);
                 }
-                else if(menuActive == menuPause)
+                else if(menuActive == pauseMenu)
                 {
                     Resume();
                 }
@@ -68,6 +81,20 @@ public class ButtonFunctions : MonoBehaviour
                     menuActive.SetActive(false);
                     menuActive = menuPrevious;
                     menuActive.SetActive(true);
+                }
+            }
+
+            if(Input.GetButtonDown("Inventory"))
+            {
+                if(menuActive == null)
+                {
+                    GameManager.instance.StatePause();
+                    menuActive = inventoryMenu;
+                    menuActive.SetActive(true);
+                }
+                else
+                {
+                    Resume();
                 }
             }
         }
@@ -88,19 +115,24 @@ public class ButtonFunctions : MonoBehaviour
         menuActive.SetActive(false);
 
         if (button.name == "CreditsButton") {menuActive = creditsMenu;}
-        else if (button.name == "SaveButton") { menuActive = saveMenu; }
+        else if (button.name == "LoadButton") { menuActive = saveMenu; saveSlotsMenuScript.isLoadingGame = true; }
+        else if(button.name == "NewGameButton" || button.name == "SaveButton") { menuActive = saveMenu; saveSlotsMenuScript.isLoadingGame = false; }
         else if(button.name == "OptionsButton") {menuActive = optionsMenu; EventSystem.current.SetSelectedGameObject(optionsFirstButton); }
         else if(button.name == "BackButton") 
         {
-            menuActive = menuPrevious; 
+            menuActive = menuPrevious;
             if(SceneManager.GetActiveScene().name == "MainMenu")
             {
                 EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
             }
-            else { EventSystem.current.SetSelectedGameObject(pauseFirstButton);}
         }
 
         menuActive.SetActive(true);
+    }
+
+    public void SaveSlotsMenu()
+    {
+
     }
 
     public void SFXPreview()
@@ -109,19 +141,41 @@ public class ButtonFunctions : MonoBehaviour
     }
     public void NewGame()
     {
+        DisableMenuButtons();
         GameManager.instance.NewGame();
-        SceneManager.LoadScene(1);
+    }
+
+    public void ContinueGame()
+    {
+        DisableMenuButtons();
+        GameManager.instance.ContinueGame();
     }
 
     public void QuitToMainMenu()
     {
+        DisableMenuButtons();
         SceneManager.LoadScene(0);
     }
 
     public void ActivateLoseMenu()
     {
-        menuActive = menuLose;
+        menuActive = loseMenu;
         menuActive.SetActive(true);
+    }
+
+    private void DisableMenuButtons()
+    {
+        Button[] buttonsInMenu = menuActive.GetComponentsInChildren<Button>();
+        foreach(Button button in buttonsInMenu) 
+        {
+            button.interactable = false;
+        }
+    }
+
+    public Button FindAttachedButton(Transform parent, string name)
+    {
+        Transform childTransform =  parent.Find(name);
+        return childTransform.GetComponent<Button>();
     }
 
     public void Exit()
