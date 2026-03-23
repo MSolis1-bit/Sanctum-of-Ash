@@ -655,6 +655,23 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         moveSpeed = originalMoveSpeed;
     }
 
+    public void SetShielded(bool value)
+    {
+        isShielded = value;
+    }
+
+    public void ModifyAttack(float multiplier)
+    {
+
+        HB.damage = multiplier * origHBDamage;
+    }
+
+    public void ResetAttack()
+    {
+
+        HB.damage = origHBDamage;
+    }
+
     public void LoadData(GameData data)
     {
         this.maxHealth = data.maxHealth;
