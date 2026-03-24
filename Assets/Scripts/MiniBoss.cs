@@ -40,6 +40,8 @@ public class MiniBoss : MonoBehaviour, IDamage
     private int waypointIndex;
     private float idleTimer;
 
+    private bool isAttacking = false;
+
     private Animator anim;
     private Rigidbody2D rb;
     private Transform player;
@@ -127,6 +129,8 @@ public class MiniBoss : MonoBehaviour, IDamage
         float dist = Vector2.Distance(transform.position, player.position);
         if (dist > meleeRange) { EnterState(State.Chase); return; }
 
+        if (isAttacking) return;
+
         meleeTimer += Time.deltaTime;
         if (meleeTimer >= meleeCooldown / AttackSpeedMultiplier)
         {
@@ -157,15 +161,22 @@ public class MiniBoss : MonoBehaviour, IDamage
     private void PerformMelee()
     {
         anim?.SetTrigger("Attack");
+    }
+    public void StartMeleeHitbox()
+    {
         StartCoroutine(ActivateMeleeHitbox());
     }
 
     private System.Collections.IEnumerator ActivateMeleeHitbox()
     {
-        yield return new WaitForSeconds(0.1f);
-        if (meleeHitbox != null) meleeHitbox.SetActive(true);
+        isAttacking = true;
+
         yield return new WaitForSeconds(0.2f);
+        if (meleeHitbox != null) meleeHitbox.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
         if (meleeHitbox != null) meleeHitbox.SetActive(false);
+
+        isAttacking = false;
     }
 
     private void PerformRanged()

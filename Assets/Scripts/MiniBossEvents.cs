@@ -13,4 +13,9 @@ public class MiniBossEvents : MonoBehaviour
     {
         miniBoss?.SpawnClaw();
     }
+
+    public void ActivateHitbox()
+    {
+        miniBoss?.StartMeleeHitbox();
+    }
 }
