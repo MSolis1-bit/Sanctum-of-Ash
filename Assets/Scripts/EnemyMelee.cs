@@ -37,6 +37,11 @@ public class EnemyMelee : MonoBehaviour
     [SerializeField] private Color hitFlashColor = Color.red;
     [SerializeField] private float deathDelay;
 
+    [Header("Death FeedBack")]
+    [SerializeField] private float fadeDuration;
+    [SerializeField] private Color deathColor = Color.grey;
+
+
     private Color originalColor;
     private bool facingRight = true;
     private int waypointIndex;
@@ -286,10 +291,39 @@ public class EnemyMelee : MonoBehaviour
     private IEnumerator DieRoutine()
     {
         isDying = true;
+
+        // stop all movement
         rb.linearVelocity = Vector2.zero;
         sr.color = hitFlashColor;
 
         yield return new WaitForSeconds(deathDelay);
+
+        // turn off collider so it cannot be hit or collide anymore
+        Collider2D col = GetComponent<Collider2D>();
+        if(col != null)
+        {
+            col.enabled = false;
+        }
+
+        // Show a strong death color first
+        sr.color = deathColor;
+
+        // small pause so the hit registers visually
+        yield return new WaitForSeconds(deathDelay);
+
+        // fade out to the background 
+        float timer = 0f;
+        Color startColor = sr.color;
+        
+        while (timer < fadeDuration)
+        {
+            timer += Time.deltaTime;
+
+            float alpha = Mathf.Lerp(1f, 0f, timer / fadeDuration);
+            sr.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+
+            yield return null;
+        }
 
         Destroy(gameObject);
     }
