@@ -24,6 +24,7 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] Button continueButton;
     [SerializeField] Button loadButton;
     [SerializeField] GameObject mainMenuFirstButton;
+    [SerializeField] GameObject mainMenuAltFirstButton;
     [SerializeField] GameObject pauseFirstButton;
     [SerializeField] GameObject optionsFirstButton;
 
@@ -42,7 +43,14 @@ public class ButtonFunctions : MonoBehaviour
             creditsButton.SetActive(true);
             gameTitle.SetActive(true);
             menuActive = mainMenu;
-            EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
+            if(continueButton.isActiveAndEnabled)
+            {
+                EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(mainMenuAltFirstButton);
+            }
 
             if (!DataPersistenceManager.instance.HasGameData())
             {
@@ -128,6 +136,10 @@ public class ButtonFunctions : MonoBehaviour
         }
 
         menuActive.SetActive(true);
+        if(menuActive == saveMenu)
+        {
+            saveSlotsMenuScript.ActivateMenu();
+        }
     }
 
     public void SaveSlotsMenu()
