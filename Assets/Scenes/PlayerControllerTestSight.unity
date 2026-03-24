@@ -1876,7 +1876,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6570683692908009330, guid: 610354126c74a0e438e959a16d2485c5, type: 3}
       propertyPath: maxHealth
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6570683692908009330, guid: 610354126c74a0e438e959a16d2485c5, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
