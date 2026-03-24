@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public static GameManager instance;
 
     [Header("Player UI: ")]
+    [SerializeField] GameObject playerHUD;
     [SerializeField] Image playerHPBar;
 
     [HideInInspector] public GameObject player;
@@ -49,6 +50,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
         if(player != null)
         {
             UpdatePlayerUI();
+        }
+
+        if(SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            playerHUD.SetActive(true);
+        }
+        else
+        {
+            playerHUD.SetActive(false);
         }
     }
 

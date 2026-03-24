@@ -17,6 +17,7 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] GameObject creditsMenu;
     [SerializeField] GameObject loseMenu;
     [SerializeField] GameObject winMenu;
+    [SerializeField] GameObject inventoryBackground;
     [SerializeField] GameObject inventoryMenu;
     [SerializeField] GameObject saveSlots;
 
@@ -25,6 +26,7 @@ public class ButtonFunctions : MonoBehaviour
     [SerializeField] Button loadButton;
     [SerializeField] GameObject mainMenuFirstButton;
     [SerializeField] GameObject mainMenuAltFirstButton;
+    [SerializeField] GameObject inventoryFirstButton;
     [SerializeField] GameObject pauseFirstButton;
     [SerializeField] GameObject optionsFirstButton;
 
@@ -66,46 +68,7 @@ public class ButtonFunctions : MonoBehaviour
 
     void Update()
     {
-        if(SceneManager.GetActiveScene().name != "MainMenu")
-        {
-            if (Input.GetButtonDown("Cancel"))
-            {
-                if(menuActive == null)
-                {
-                    GameManager.instance.StatePause();
-                    menuActive = pauseMenu;
-                    menuActive.SetActive(true);
-
-                    // Clear current selected object
-                    EventSystem.current.SetSelectedGameObject(pauseFirstButton);
-                }
-                else if(menuActive == pauseMenu)
-                {
-                    Resume();
-                }
-                else
-                {
-                    EventSystem.current.SetSelectedGameObject(null);
-                    menuActive.SetActive(false);
-                    menuActive = menuPrevious;
-                    menuActive.SetActive(true);
-                }
-            }
-
-            if(Input.GetButtonDown("Inventory"))
-            {
-                if(menuActive == null)
-                {
-                    GameManager.instance.StatePause();
-                    menuActive = inventoryMenu;
-                    menuActive.SetActive(true);
-                }
-                else
-                {
-                    Resume();
-                }
-            }
-        }
+        KeyboardInput();
     }
 
     public void Resume()
@@ -140,11 +103,6 @@ public class ButtonFunctions : MonoBehaviour
         {
             saveSlotsMenuScript.ActivateMenu();
         }
-    }
-
-    public void SaveSlotsMenu()
-    {
-
     }
 
     public void SFXPreview()
@@ -188,6 +146,54 @@ public class ButtonFunctions : MonoBehaviour
     {
         Transform childTransform =  parent.Find(name);
         return childTransform.GetComponent<Button>();
+    }
+
+    public void KeyboardInput()
+    {
+        if (SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            if (Input.GetButtonDown("Cancel"))
+            {
+                if (menuActive == null)
+                {
+                    GameManager.instance.StatePause();
+                    menuActive = pauseMenu;
+                    menuActive.SetActive(true);
+
+                    // Clear current selected object
+                    EventSystem.current.SetSelectedGameObject(pauseFirstButton);
+                }
+                else if (menuActive == pauseMenu)
+                {
+                    Resume();
+                }
+                else
+                {
+                    EventSystem.current.SetSelectedGameObject(null);
+                    menuActive.SetActive(false);
+                    menuActive = menuPrevious;
+                    menuActive.SetActive(true);
+                }
+            }
+
+            // Open the inventory menu
+            if (Input.GetButtonDown("Inventory"))
+            {
+                if (menuActive == null)
+                {
+                    GameManager.instance.StatePause();
+                    menuActive = inventoryMenu;
+                    menuActive.SetActive(true);
+                    inventoryBackground.SetActive(true);
+                    EventSystem.current.SetSelectedGameObject(inventoryFirstButton);
+                }
+                else if (menuActive == inventoryMenu)
+                {
+                    Resume();
+                    inventoryBackground.SetActive(false);
+                }
+            }
+        }
     }
 
     public void Exit()

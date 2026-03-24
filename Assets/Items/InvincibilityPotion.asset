@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b6bb7618106388479fe21e0414dcfd1, type: 3}
+  m_Name: InvincibilityPotion
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  tile: {fileID: 0}
+  image: {fileID: -840435652041667842, guid: 6e35be2872520474e9959e0eea4a656f, type: 3}
+  type: 2
+  actionType: 1
+  stackable: 1
