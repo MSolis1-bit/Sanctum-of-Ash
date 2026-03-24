@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 942ce9c8b0902884599f7e97ba68fc4c
+guid: f354e3c17707db1499b35dc25f56fb37
 DefaultImporter:
   externalObjects: {}
   userData: 
@@ -7,8 +7,8 @@ DefaultImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 284501
-  packageName: Evil Wizard 2
+  productId: 195719
+  packageName: Bringer Of Death (free)
   packageVersion: 1.0
-  assetPath: Assets/Evil Wizard 2/Scene demo/Demo.unity
-  uploadId: 662692
+  assetPath: Assets/Bringer Of Death/Demo.unity
+  uploadId: 434405
