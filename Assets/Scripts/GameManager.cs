@@ -60,7 +60,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void UpdatePlayerUI()
     {
-       playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+        if (playerScript != null && playerHPBar != null)
+        {
+            playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+        }
     }
 
     public void StatePause()
