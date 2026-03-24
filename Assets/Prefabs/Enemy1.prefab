@@ -195,7 +195,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -203,7 +203,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &7490929274616975038
 GameObject:
@@ -255,21 +255,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352656db32b306c4588273c72e4eeb54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  sr: {fileID: 6275019282526899646}
   maxHealth: 20
   patrolSpeed: 2
   chaseSpeed: 4
   waypointTolerance: 0.2
   idleDuration: 1.5
-  detectionRange: 5.81
-  attackRange: 5.93
+  detectionRange: 10
+  attackRange: 7
   fireballPrefab: {fileID: 8558651359496412662, guid: d83a2a6c284bebc42ada4a527dca0805, type: 3}
   firePoint: {fileID: 577233149650784849}
-  fireballDamage: 20
+  fireballDamage: 10
   fireballCooldown: 2
   knockbackForceX: 4
   knockbackForceY: 2
   flashDuration: 0.1
-  hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   deathDelay: 0.15
   waypoints:
   - {fileID: 0}
@@ -373,7 +374,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.39}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -383,7 +384,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 2.36}
   m_EdgeRadius: 0
 --- !u!70 &4009432279541538926
 CapsuleCollider2D:
