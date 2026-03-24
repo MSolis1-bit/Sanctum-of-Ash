@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -7,6 +8,12 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D rb;
     [SerializeField] private SpriteRenderer sr;
     private Transform player;
+
+    [Header("UI")]
+    [SerializeField] private Slider enemyHPBar;
+    [SerializeField] private float enemyHPBarFadeTime = 1f;
+    [SerializeField] private Slider enemyEaseHPBar;
+    [SerializeField] private float hpLerpSpeed = 0.05f;
 
 
     [Header("Health")]
@@ -195,6 +202,7 @@ public class Enemy : MonoBehaviour
         currentHealth -= amount;
 
         StartCoroutine(HitFlash());
+        StartCoroutine(UpdateEnemyUI());
         ApplyKnockback();
 
         if (currentHealth <= 0)
@@ -241,5 +249,17 @@ public class Enemy : MonoBehaviour
         float direction = transform.position.x < player.position.x ? -1f : 1f;
 
         rb.linearVelocity = new Vector2(direction * knockbackForceX, knockbackForceY);
+    }
+
+    private IEnumerator UpdateEnemyUI()
+    {
+        enemyHPBar.gameObject.SetActive(true);
+        enemyHPBar.gameObject.SetActive(true);
+        float health = currentHealth / maxHealth;
+        enemyHPBar.value = health;
+        enemyEaseHPBar.value = Mathf.Lerp(enemyEaseHPBar.value, health, hpLerpSpeed);
+        yield return new WaitForSeconds(enemyHPBarFadeTime);
+        enemyHPBar.gameObject.SetActive(false);
+        enemyHPBar.gameObject.SetActive(false);
     }
 }
