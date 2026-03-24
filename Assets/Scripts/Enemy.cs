@@ -1,33 +1,43 @@
 using UnityEngine;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
     private Animator anim;
     private Rigidbody2D rb;
-    private SpriteRenderer sr;
+    [SerializeField] private SpriteRenderer sr;
     private Transform player;
 
 
     [Header("Health")]
-    public float maxHealth = 100f;
+    public float maxHealth;
     private float currentHealth;
 
     [Header("Movement")]
-    [SerializeField] private float patrolSpeed = 2f;
-    [SerializeField] private float chaseSpeed = 4f;
-    [SerializeField] private float waypointTolerance = 0.2f;
-    [SerializeField] private float idleDuration = 1.5f;
+    [SerializeField] private float patrolSpeed;
+    [SerializeField] private float chaseSpeed;
+    [SerializeField] private float waypointTolerance;
+    [SerializeField] private float idleDuration;
 
     [Header("Detection")]
-    [SerializeField] private float detectionRange = 8f;
-    [SerializeField] private float attackRange = 3f;
+    [SerializeField] private float detectionRange;
+    [SerializeField] private float attackRange;
 
     [Header("Fireball")]
     public GameObject fireballPrefab;
     public Transform firePoint;
-    public float fireballDamage = 20f;
-    public float fireballCooldown = 2f;
+    public float fireballDamage;
+    public float fireballCooldown;
     private float fireballTimer;
+
+    [Header("Damage Feedback")]
+    [SerializeField] private float knockbackForceX;
+    [SerializeField] private float knockbackForceY;
+    [SerializeField] private float flashDuration;
+    [SerializeField] private Color hitFlashColor = Color.red;
+    [SerializeField] private float deathDelay;
+    
+
 
     [Header("Patrol")]
     [SerializeField] private Transform[] waypoints;
@@ -37,6 +47,10 @@ public class Enemy : MonoBehaviour
     private int waypointIndex;
     private float idleTimer;
 
+    private Color originalColor;
+    private bool isDying;
+    
+
     public enum State { Idle, Patrol, Chase, Attack }
     public State currentState = State.Idle;
 
@@ -44,11 +58,11 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
         anim = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         currentHealth = maxHealth;
 
+        originalColor = sr.color;
     }
 
     private void Update()
@@ -173,16 +187,35 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float amount) 
     {
+        if (isDying)
+        {
+            return;
+        }
+
         currentHealth -= amount;
 
+        StartCoroutine(HitFlash());
+        ApplyKnockback();
+
         if (currentHealth <= 0)
-            Die();
+        {
+            StartCoroutine(DieRoutine());
+        }
     }
 
-    void Die()
+    private IEnumerator DieRoutine()
     {
+        isDying = true;
+
+        rb.linearVelocity = Vector2.zero;
+
+        sr.color = hitFlashColor;
+
+        yield return new WaitForSeconds(deathDelay);
+
         Destroy(gameObject);
     }
+
 
     private void OnDrawGizmos()  //  <----   THIS JUST CHANGES THE COLOR FOR BOTH RANGES <-- Yellow is Detection Range:  Red <--- red is the fireball range might change this to one later
     {
@@ -190,5 +223,23 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, detectionRange);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+    private IEnumerator HitFlash()
+    {
+        sr.color = hitFlashColor;
+        yield return new WaitForSeconds(flashDuration);
+        sr.color = originalColor;
+    }
+
+    private void ApplyKnockback()
+    {
+        if (player == null)
+        {
+            return;
+        }
+
+        float direction = transform.position.x < player.position.x ? -1f : 1f;
+
+        rb.linearVelocity = new Vector2(direction * knockbackForceX, knockbackForceY);
     }
 }

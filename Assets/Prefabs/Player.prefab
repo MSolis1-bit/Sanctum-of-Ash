@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4156246214424628810
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1854767847430359550}
+  m_Layer: 0
+  m_Name: CeilingCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1854767847430359550
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156246214424628810}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.033, y: 0.152, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2117762507172098767}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4176842050411020851
 GameObject:
   m_ObjectHideFlags: 0
@@ -16,7 +47,7 @@ GameObject:
   - component: {fileID: 5559876598759489469}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35,8 +66,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5021640786495442829}
-  - {fileID: 8344416736994268128}
   - {fileID: 4905671250760457964}
+  - {fileID: 1854767847430359550}
+  - {fileID: 8344416736994268128}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2857968321667956119
@@ -72,7 +104,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   wallCheck: {fileID: 4905671250760457964}
-  wallCheckRadius: 1.2
+  wallCheckRadius: 0.3
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -85,6 +117,17 @@ MonoBehaviour:
   attackCooldown: 0.35
   attackPoint: {fileID: 8344416736994268128}
   attackHitbox: {fileID: 5153018698788608276}
+  knockbackForceX: 10
+  knockbackForceY: 6
+  invincibilityTime: 1
+  flashInterval: 0.1
+  ceilingCheck: {fileID: 0}
+  ceilingCheckRadius: 0.1
+  ceilingLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  cornerCorrectionDistance: 0.2
+  cornerCorrectionStep: 0.05
 --- !u!212 &7158640586027432769
 SpriteRenderer:
   serializedVersion: 2
@@ -154,7 +197,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c6ad822e4ccc63643b813df9b8cd5d51, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -240,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4905671250760457964}
   m_Layer: 0
-  m_Name: Wall Check
+  m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,8 +297,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4613084150005029883}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.14699994, y: 0.015000001, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -270,6 +313,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9187312686604761386}
+  - component: {fileID: 671789452776045046}
   - component: {fileID: 1963772009955420024}
   m_Layer: 0
   m_Name: AttackHitBox
@@ -287,12 +331,25 @@ Transform:
   m_GameObject: {fileID: 5153018698788608276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.38, y: -0.041, z: 0}
+  m_LocalPosition: {x: 0.5, y: -0.041, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8344416736994268128}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &671789452776045046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5153018698788608276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c5b6f3c6344604c901f16be320bb5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
+  damage: 5
 --- !u!61 &1963772009955420024
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -364,7 +421,7 @@ Transform:
   m_GameObject: {fileID: 6276708869065688445}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.007, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -381,7 +438,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5021640786495442829}
   m_Layer: 0
-  m_Name: Ground Check
+  m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

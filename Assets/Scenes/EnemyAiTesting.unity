@@ -332,7 +332,7 @@ MonoBehaviour:
   spellSpawnOffsetY: 1
   rangedCooldown: 2
   meleeHitbox: {fileID: 197524179}
-  meleeCooldown: 0.5
+  meleeCooldown: 1
   waypoints:
   - {fileID: 549300337}
   - {fileID: 1350604051}

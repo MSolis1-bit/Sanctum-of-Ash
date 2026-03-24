@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
-public class PlayerController : MonoBehaviour, IDamage
+public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
+    private float originalMoveSpeed;
 
     [Header("Movement Feel")]
     [SerializeField] private float acceleration;
@@ -48,25 +50,36 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] private float wallJumpForceY;
 
     [Header("Wall Slide Settings")]
-    [SerializeField] private float wallSlideSpeed = 2f;
+    [SerializeField] private float wallSlideSpeed;
 
     [Header("Wall Jump Lockout")]
-    [SerializeField] private float wallJumpLockTime = 0.2f;
+    [SerializeField] private float wallJumpLockTime;
 
     [Header("Attack")]
     [SerializeField] private float attackDuration;
     [SerializeField] private float attackCooldown;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject attackHitbox;
+    private float origHBDamage;
 
     [Header("Damage Feedback")]
-    [SerializeField] private float knockbackForceX = 10f;
-    [SerializeField] private float knockbackForceY = 6f;
-    [SerializeField] private float invincibilityTime = 1f;
-    [SerializeField] private float flashInterval = 0.1f;
+    [SerializeField] private float knockbackForceX;
+    [SerializeField] private float knockbackForceY;
+    [SerializeField] private float invincibilityTime;
+    [SerializeField] private float flashInterval;
+
+    [Header("Corner Correction")]
+    [SerializeField] private Transform ceilingCheck;
+    [SerializeField] private float ceilingCheckRadius;
+    [SerializeField] private LayerMask ceilingLayer;
+    [SerializeField] private float cornerCorrectionDistance;
+    [SerializeField] private float cornerCorrectionStep;
 
     private bool isStunned;
     private bool isInvincible;
+    private bool isShielded;
+    private bool isPowered;
+    private bool isSpedUp;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -97,11 +110,16 @@ public class PlayerController : MonoBehaviour, IDamage
 
     private bool isAttacking;
     private bool canAttack = true;
+    private Vector3 attackHitboxStartPosition;
+    private Vector3 attackPointStartPosition;
+    PlayerAttackHitbox HB;
+
+    private bool isTouchingCeilingLeft;
+    private bool isTouchingCeilingRight;
+    private bool isTouchingCeilingMiddle;
 
     private bool canUseDoubleJump;
     private int remainingWallJumps;
-
-    private Vector3 attackPointStartPosition;
 
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
@@ -115,14 +133,25 @@ public class PlayerController : MonoBehaviour, IDamage
         animator = GetComponent<Animator>();
         originalColor = spriteRenderer.color;
 
+        //Sets the OriginalAttack so it can be modified and reset
+        if (attackHitbox != null)
+        {
+            HB = attackHitbox.GetComponent<PlayerAttackHitbox>();
+            origHBDamage = HB.damage;
+        }
+
         // Starts the player with full health
         currentHealth = maxHealth;
         isDead = false;
 
-        // Saves the starting position of the attack point
+        // Saves the starting position of the attack point and attack hitbox
         if (attackPoint != null)
         {
             attackPointStartPosition = attackPoint.localPosition;
+        }
+        if (attackHitbox != null)
+        {
+            attackHitboxStartPosition = attackHitbox.transform.localPosition;
         }
 
         // Turns the hitbox off when the game begins
@@ -133,20 +162,12 @@ public class PlayerController : MonoBehaviour, IDamage
 
         // Sets the number of wall jumps the player can perform
         remainingWallJumps = maxWallJumps;
+
+        originalMoveSpeed = moveSpeed;
     }
 
     private void Update()
     {
-        // Temporary testing keys for damage and healing
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            TakeDamage(1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            Heal(1);
-        }
 
         // Stops the rest of the logic if the player is dead
         if (isDead)
@@ -218,13 +239,13 @@ public class PlayerController : MonoBehaviour, IDamage
             spriteRenderer.flipX = true;
         }
 
-        // Moves the attack point to the correct side of the player
-        if (attackPoint != null)
+        // Moves the attack hitbox to the correct side of the player
+        if (attackHitbox != null)
         {
-            attackPoint.localPosition = new Vector3(
-                Mathf.Abs(attackPointStartPosition.x) * facingDirection,
-                attackPointStartPosition.y,
-                attackPointStartPosition.z
+            attackHitbox.transform.localPosition = new Vector3(
+                Mathf.Abs(attackHitboxStartPosition.x) * facingDirection,
+                attackHitboxStartPosition.y,
+                attackHitboxStartPosition.z
             );
         }
 
@@ -308,7 +329,7 @@ public class PlayerController : MonoBehaviour, IDamage
         }
 
         // Starts an attack when clicking the mouse
-        if (Input.GetMouseButtonDown(0) && canAttack)
+        if (Input.GetKeyDown(KeyCode.K) && canAttack)
         {
             StartCoroutine(Attack());
         }
@@ -344,6 +365,8 @@ public class PlayerController : MonoBehaviour, IDamage
 
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);
         }
+
+        HandleCornerCorrection();
 
         // Calculates the speed the player wants to move
         float targetSpeed = moveInput * moveSpeed;
@@ -463,6 +486,11 @@ public class PlayerController : MonoBehaviour, IDamage
         if (isDead || isInvincible)
             return;
 
+        if (isShielded)
+        {
+            isShielded = false;
+            return;
+        }
         currentHealth -= damageAmount;
 
         if (currentHealth < 0)
@@ -471,7 +499,7 @@ public class PlayerController : MonoBehaviour, IDamage
         Debug.Log("Player took damage. Current health: " + currentHealth);
 
         StartCoroutine(DamageRoutine());
-
+        GameManager.instance.UpdatePlayerUI();
         if (currentHealth <= 0)
             Die();
     }
@@ -491,7 +519,7 @@ public class PlayerController : MonoBehaviour, IDamage
         {
             currentHealth = maxHealth;
         }
-
+        GameManager.instance.UpdatePlayerUI();
         Debug.Log("Player healed. Current health: " + currentHealth);
     }
 
@@ -499,6 +527,43 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         isDead = true;
         Debug.Log("Player has died.");
+    }
+
+    private void HandleCornerCorrection()
+    {
+        // Only try to correct the player while moving upward
+        if (rb.linearVelocity.y <= 0f)
+        {
+            return;
+        }
+
+        if (ceilingCheck == null)
+        {
+            return;
+        }
+
+        Vector2 middleCheck = ceilingCheck.position;
+        Vector2 leftCheck = new Vector2(ceilingCheck.position.x - cornerCorrectionDistance, ceilingCheck.position.y);
+        Vector2 rightCheck = new Vector2(ceilingCheck.position.x + cornerCorrectionDistance, ceilingCheck.position.y);
+
+        isTouchingCeilingMiddle = Physics2D.OverlapCircle(middleCheck, ceilingCheckRadius, ceilingLayer);
+        isTouchingCeilingLeft = Physics2D.OverlapCircle(leftCheck, ceilingCheckRadius, ceilingLayer);
+        isTouchingCeilingRight = Physics2D.OverlapCircle(rightCheck, ceilingCheckRadius, ceilingLayer);
+
+        // If the middle is blocked, but one side is open, nudge the player sideways
+        if (isTouchingCeilingMiddle)
+        {
+            // Left side blocked, right side open, move right
+            if (isTouchingCeilingLeft && !isTouchingCeilingRight)
+            {
+                transform.position += new Vector3(cornerCorrectionStep, 0f, 0f);
+            }
+            // Right side blocked, left side open, move left
+            else if (isTouchingCeilingRight && !isTouchingCeilingLeft)
+            {
+                transform.position += new Vector3(-cornerCorrectionStep, 0f, 0f);
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -522,6 +587,24 @@ public class PlayerController : MonoBehaviour, IDamage
 
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(leftCheckPosition, wallCheckRadius);
+        }
+
+        if (ceilingCheck != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(ceilingCheck.position, ceilingCheckRadius);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(
+                new Vector2(ceilingCheck.position.x - cornerCorrectionDistance, ceilingCheck.position.y),
+                ceilingCheckRadius
+            );
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(
+                new Vector2(ceilingCheck.position.x + cornerCorrectionDistance, ceilingCheck.position.y),
+                ceilingCheckRadius
+            );
         }
     }
 
@@ -550,5 +633,57 @@ public class PlayerController : MonoBehaviour, IDamage
         spriteRenderer.color = originalColor;
         isStunned = false;
         isInvincible = false;
+    }
+
+    public void SetStunned(bool value)
+    {
+        isStunned = value;
+    }
+
+    public void SetInvincible(bool value)
+    {
+        isInvincible = value;
+    }
+
+    public void ModifySpeed(float multiplier)
+    {
+        moveSpeed = originalMoveSpeed * multiplier;
+    }
+
+    public void ResetSpeed()
+    {
+        moveSpeed = originalMoveSpeed;
+    }
+
+    public void SetShielded(bool value)
+    {
+        isShielded = value;
+    }
+
+    public void ModifyAttack(float multiplier)
+    {
+
+        HB.damage = multiplier * origHBDamage;
+    }
+
+    public void ResetAttack()
+    {
+
+        HB.damage = origHBDamage;
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.maxHealth = data.maxHealth;
+        this.hasDash = data.hasDash;
+        this.hasDoubleJump = data.hasDoubleJump;
+    }
+
+    public void SaveData(GameData data)
+    {
+        data.maxHealth = this.maxHealth;
+        data.hasDash = this.hasDash;
+        data.hasDoubleJump = this.hasDoubleJump;
+
     }
 }
