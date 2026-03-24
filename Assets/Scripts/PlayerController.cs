@@ -496,9 +496,16 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         Debug.Log("Player took damage. Current health: " + currentHealth);
 
         StartCoroutine(DamageRoutine());
-        GameManager.instance.UpdatePlayerUI();
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.UpdatePlayerUI();
+        }
+
         if (currentHealth <= 0)
+        {
             Die();
+        }
     }
 
     public void Heal(int healAmount)
