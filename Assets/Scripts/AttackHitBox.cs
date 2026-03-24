@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class PlayerAttackHitbox : MonoBehaviour
 {
-<<<<<<< HEAD
-    [SerializeField] private float damage;
-=======
-    [SerializeField] public float damage = 1f;
->>>>>>> origin/main
+    [SerializeField] private float damage = 1f;
+
+    public float Damage
+    {
+        get { return damage; }
+        set { damage = value; }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
