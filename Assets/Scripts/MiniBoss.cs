@@ -41,6 +41,7 @@ public class MiniBoss : MonoBehaviour, IDamage
     private float idleTimer;
 
     private bool isAttacking = false;
+    private bool isDead = false;
 
     private Animator anim;
     private Rigidbody2D rb;
@@ -69,6 +70,8 @@ public class MiniBoss : MonoBehaviour, IDamage
 
     private void HandleStateMachine()
     {
+        if (isDead) return;
+
         switch (currentState)
         { // runs the correct state logic every frame
             case State.Idle: HandleIdle(); break;
@@ -227,7 +230,11 @@ public class MiniBoss : MonoBehaviour, IDamage
 
     public void TakeDamage(int amount)
     {
+        if (isDead) return;
+
+        
         currentHealth -= amount;
+        anim?.SetTrigger("Hurt");
         Debug.Log("Mini boss took damage, current health: " + currentHealth);
 
         
@@ -247,8 +254,11 @@ public class MiniBoss : MonoBehaviour, IDamage
 
     private void Die()
     {
+        isDead = true;
+        rb.linearVelocity = Vector2.zero;
         Debug.Log("Mini boss died!");
-        Destroy(gameObject);
+        anim?.SetTrigger("Death");
+        Destroy(gameObject, 2f);
     }
 
     public float AttackSpeedMultiplier => isPhaseTwo ? phaseTwoAttackSpeedMultiplier : 1f;

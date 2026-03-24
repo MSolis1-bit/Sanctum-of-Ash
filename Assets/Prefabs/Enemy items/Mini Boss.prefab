@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 87245102898739397}
-  - component: {fileID: 9070805345295356959}
+  - component: {fileID: 7069178646790854228}
   - component: {fileID: 3402358019088134756}
   m_Layer: 0
   m_Name: Hitbox
@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &87245102898739397
 Transform:
   m_ObjectHideFlags: 0
@@ -33,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1206409936420138327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9070805345295356959
+--- !u!114 &7069178646790854228
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,9 +42,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3167163830949487712}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80c5b6f3c6344604c901f16be320bb5b, type: 3}
+  m_Script: {fileID: 11500000, guid: ee256c83486234a4fbdc28d5ab5118b8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
+  m_EditorClassIdentifier: Assembly-CSharp::MiniBossHitbox
   damage: 5
 --- !u!61 &3402358019088134756
 BoxCollider2D:
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 4360823401815398489}
   m_Layer: 0
   m_Name: Mini Boss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniBoss
   maxHealth: 10
-  phaseTwoAttackSpeedMultiplier: 2
+  phaseTwoAttackSpeedMultiplier: 1
   patrolSpeed: 4
   chaseSpeed: 0.65
   waypointTolerance: 0.25
