@@ -60,7 +60,7 @@ public class MiniBoss : MonoBehaviour, IDamage
     }
 
     private void EnterState(State newState)
-    {
+    {  // resets timers and switches to a new state
         currentState = newState;
         idleTimer = 0f;
         rangedTimer = 0f;
@@ -70,7 +70,7 @@ public class MiniBoss : MonoBehaviour, IDamage
     private void HandleStateMachine()
     {
         switch (currentState)
-        {
+        { // runs the correct state logic every frame
             case State.Idle: HandleIdle(); break;
             case State.Patrol: HandlePatrol(); break;
             case State.Chase: HandleChase(); break;
@@ -85,7 +85,7 @@ public class MiniBoss : MonoBehaviour, IDamage
         anim?.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
     }
     private void HandleIdle()
-    {
+    {   // stands still and waits, then patrols or chases if player is spotted
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
 
         if (CanSeePlayer()) { EnterState(State.Chase); return; }
@@ -96,20 +96,21 @@ public class MiniBoss : MonoBehaviour, IDamage
     }
 
     private void HandlePatrol()
-    {
+    { // walks to points untill player is seen
         if (CanSeePlayer()) { EnterState(State.Chase); return; }
 
         Vector2 target = waypoints[waypointIndex].position;
         MoveTowards(target, patrolSpeed);
 
+        // reached the waypoint, move to the next one and idle for a moment
         if (Mathf.Abs(transform.position.x - target.x) <= waypointTolerance)
-        {
+        { 
             waypointIndex = (waypointIndex + 1) % waypoints.Length;
             EnterState(State.Idle);
         }
     }
     private void HandleChase()
-    {
+    { // follows the player and decides which attack to use based on distance
         if (player == null) { EnterState(State.Idle); return; }
 
         float dist = Vector2.Distance(transform.position, player.position);
@@ -121,7 +122,7 @@ public class MiniBoss : MonoBehaviour, IDamage
         MoveTowards(player.position, chaseSpeed);
     }
     private void HandleMelee()
-    {
+    { // stops and swings at the player when in melee range
         if (player == null) { EnterState(State.Idle); return; }
 
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
@@ -140,7 +141,7 @@ public class MiniBoss : MonoBehaviour, IDamage
     }
    
     private void HandleRanged()
-    {
+    { // stops and casts spell at the player when in range
         if (player == null) { EnterState(State.Idle); return; }
 
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
@@ -163,12 +164,12 @@ public class MiniBoss : MonoBehaviour, IDamage
         anim?.SetTrigger("Attack");
     }
     public void StartMeleeHitbox()
-    {
+    {  // called by animation event when the sword hits
         StartCoroutine(ActivateMeleeHitbox());
     }
 
     private System.Collections.IEnumerator ActivateMeleeHitbox()
-    {
+    {  // turns the hitbox on briefly then off, called by animation event
         isAttacking = true;
 
         yield return new WaitForSeconds(0.2f);
@@ -180,12 +181,12 @@ public class MiniBoss : MonoBehaviour, IDamage
     }
 
     private void PerformRanged()
-    {
+    { // triggers the ranged cast animation, spell spawns from animation event
         anim?.SetTrigger("RangedAttack");
     }
 
     public void SpawnClaw()
-    {
+    { // called by the cast animation event to spawn the spell on the player
         if (spellPrefab == null || player == null) return;
 
         Vector3 spawnPos = new Vector3(player.position.x, player.position.y + spellSpawnOffsetY, 0f);
@@ -193,12 +194,12 @@ public class MiniBoss : MonoBehaviour, IDamage
     }
 
     private void MoveTowards(Vector2 target, float speed)
-    {
+    { // moves the boss to a target position at a given speed
         Vector2 dir = (target - (Vector2)transform.position).normalized;
         rb.linearVelocity = new Vector2(dir.x * speed, rb.linearVelocity.y);
     }
     private bool CanSeePlayer()
-    {
+    { // returns true if the player is within detection range
         if (player == null) return false;
         return Vector2.Distance(transform.position, player.position) <= detectionRange;
     }
