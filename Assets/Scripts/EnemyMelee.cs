@@ -23,7 +23,7 @@ public class EnemyMelee : MonoBehaviour
     [SerializeField] private float attackRange;
 
     [Header("Attack")]
-    [SerializeField] private int damage = 1;
+    [SerializeField] private int damage;
     [SerializeField] private float attackCooldown;
     private float attackTimer;
 
@@ -36,6 +36,13 @@ public class EnemyMelee : MonoBehaviour
     [SerializeField] private float flashDuration;
     [SerializeField] private Color hitFlashColor = Color.red;
     [SerializeField] private float deathDelay;
+
+    [Header("Death FeedBack")]
+    [SerializeField] private float fadeDuration;
+    [SerializeField] private Color deathColor = Color.grey;
+
+    [Header("Death Sprite")]
+    [SerializeField] private Sprite deathSprite;
 
     private Color originalColor;
     private bool facingRight = true;
@@ -269,7 +276,12 @@ public class EnemyMelee : MonoBehaviour
     {
         sr.color = hitFlashColor;
         yield return new WaitForSeconds(flashDuration);
-        sr.color = originalColor;
+
+        // Do not reset back if the enemy is already dying
+        if (!isDying)
+        {
+            sr.color = originalColor;
+        }
     }
 
     private void ApplyKnockback()
@@ -286,12 +298,39 @@ public class EnemyMelee : MonoBehaviour
     private IEnumerator DieRoutine()
     {
         isDying = true;
+
+        // Stop movement
         rb.linearVelocity = Vector2.zero;
-        sr.color = hitFlashColor;
+
+        // Stop animation
+        if (anim != null)
+        {
+            anim.SetFloat("Speed", 0f);
+            anim.enabled = false;
+        }
+
+        // Change to death sprite + grey color
+        sr.color = deathColor;
+
+        if (deathSprite != null)
+        {
+            sr.sprite = deathSprite;
+        }
+
+        // Disable collider
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+
+        // Freeze body
+        rb.simulated = false;
 
         yield return new WaitForSeconds(deathDelay);
 
-        Destroy(gameObject);
+        // Disable script
+        enabled = false;
     }
 
     private void OnDrawGizmos()

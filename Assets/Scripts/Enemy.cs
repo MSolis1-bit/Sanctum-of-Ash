@@ -43,8 +43,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float flashDuration;
     [SerializeField] private Color hitFlashColor = Color.red;
     [SerializeField] private float deathDelay;
-    
 
+    [Header("Death FeedBack")]
+    [SerializeField] private float fadeDuration;
+    [SerializeField] private Color deathColor = Color.grey;
+
+    [Header("Death Sprite")]
+    [SerializeField] private Sprite deathSprite;
 
     [Header("Patrol")]
     [SerializeField] private Transform[] waypoints;
@@ -179,7 +184,6 @@ public class Enemy : MonoBehaviour
         fb.GetComponent<Fireball>().Init(dir);
     }
 
-    // I dont need to put notes for the ones below since It should be self explainatory <--- But if you have a question please Dm me  :3
     private void HandleFlip()  
     {
         if (rb.linearVelocity.x > 0 && !facingRight) Flip();
@@ -215,17 +219,42 @@ public class Enemy : MonoBehaviour
     {
         isDying = true;
 
+        // Stop movement
         rb.linearVelocity = Vector2.zero;
 
-        sr.color = hitFlashColor;
+        // Stop animation
+        if (anim != null)
+        {
+            anim.SetFloat("Speed", 0f);
+            anim.enabled = false;
+        }
+
+        // Change to death sprite + grey color
+        sr.color = deathColor;
+
+        if (deathSprite != null)
+        {
+            sr.sprite = deathSprite;
+        }
+
+        // Disable collider
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+
+        // Freeze body
+        rb.simulated = false;
 
         yield return new WaitForSeconds(deathDelay);
 
-        Destroy(gameObject);
+        // Disable script
+        enabled = false;
     }
 
 
-    private void OnDrawGizmos()  //  <----   THIS JUST CHANGES THE COLOR FOR BOTH RANGES <-- Yellow is Detection Range:  Red <--- red is the fireball range might change this to one later
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
@@ -236,7 +265,12 @@ public class Enemy : MonoBehaviour
     {
         sr.color = hitFlashColor;
         yield return new WaitForSeconds(flashDuration);
-        sr.color = originalColor;
+
+        // Do not reset back if the enemy is already dying
+        if (!isDying)
+        {
+            sr.color = originalColor;
+        }
     }
 
     private void ApplyKnockback()
@@ -247,7 +281,6 @@ public class Enemy : MonoBehaviour
         }
 
         float direction = transform.position.x < player.position.x ? -1f : 1f;
-
         rb.linearVelocity = new Vector2(direction * knockbackForceX, knockbackForceY);
     }
 

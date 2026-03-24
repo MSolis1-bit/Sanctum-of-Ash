@@ -2,9 +2,15 @@ using UnityEngine;
 
 public class PlayerAttackHitbox : MonoBehaviour
 {
-    [SerializeField] public float damage;
 
+    [SerializeField] private float damage;
 
+    public float Damage
+    {
+        get { return damage; }
+        set { damage = value; }
+    }
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Enemy enemy = collision.GetComponentInParent<Enemy>();
