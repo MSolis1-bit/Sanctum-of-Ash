@@ -4,6 +4,9 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager instance;
 
+    [Header("Debugging")]
+    public Item[] itemsToPickup;
+
     public InventorySlot[] inventorySlots;
     public GameObject inventoryItemPrefab;
     public int maxStackedItems = 99;
@@ -24,19 +27,7 @@ public class InventoryManager : MonoBehaviour
 
     private void Start()
     {
-        Item item = new Item();
-        AddItem(item);
-    }
-
-    public void ChangeSelectedSlot(int newValue)
-    {
-        if(selectedSlot >= 0)
-        {
-            inventorySlots[selectedSlot].Deselect();
-        }
-
-        inventorySlots[newValue].Select();
-        selectedSlot = newValue;
+        
     }
 
     public bool AddItem(Item item)
