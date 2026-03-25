@@ -841,11 +841,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 868a580b524b5a84381e8ff578c702a6, type: 3}
---- !u!212 &1126644395 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 6275019282526899646, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-  m_PrefabInstance: {fileID: 1145639347}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1145639347
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -855,28 +850,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-      propertyPath: sr
-      value: 
-      objectReference: {fileID: 1126644395}
-    - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-      propertyPath: attackRange
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-      propertyPath: detectionRange
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-      propertyPath: fireballDamage
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
       propertyPath: hitFlashColor.b
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
       propertyPath: hitFlashColor.g
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
       propertyPath: hitFlashColor.r
@@ -890,14 +869,6 @@ PrefabInstance:
       propertyPath: 'waypoints.Array.data[1]'
       value: 
       objectReference: {fileID: 998113755}
-    - target: {fileID: 1403440135674016045, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1403440135674016045, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7490929274616975038, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
       propertyPath: m_Name
       value: Enemy1
@@ -1902,6 +1873,10 @@ PrefabInstance:
     - target: {fileID: 5508884190272025335, guid: 610354126c74a0e438e959a16d2485c5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6570683692908009330, guid: 610354126c74a0e438e959a16d2485c5, type: 3}
+      propertyPath: maxHealth
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6570683692908009330, guid: 610354126c74a0e438e959a16d2485c5, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
