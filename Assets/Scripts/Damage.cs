@@ -31,7 +31,7 @@ public class damage : MonoBehaviour
             Destroy(gameObject, destroyTime);
         }
 
-        if (GameManager.instance.player)
+        if (GameManager.instance.player && type == damageType.seekingPlayer)
         {
             seekingTarget = GameManager.instance.player.transform;
         }
