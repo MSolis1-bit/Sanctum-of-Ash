@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private float timeScaleOriginal;
 
+    public bool IsPaused => isPaused;
+
     private void Awake()
     {
         if (instance != null)
@@ -131,6 +133,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         this.currentScene = data.currentScene;
+    }
+
+    public void ResetTimeScale()
+    {
+        Time.timeScale = timeScaleOriginal;
     }
 
     public void SaveData(GameData data)

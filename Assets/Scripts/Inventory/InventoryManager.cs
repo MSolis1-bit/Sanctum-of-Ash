@@ -11,8 +11,6 @@ public class InventoryManager : MonoBehaviour
     public GameObject inventoryItemPrefab;
     public int maxStackedItems = 99;
 
-    int selectedSlot = -1;
-
     private void Awake()
     {
         if (instance != null)
@@ -23,11 +21,6 @@ public class InventoryManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(this.gameObject);
-    }
-
-    private void Start()
-    {
-        
     }
 
     public bool AddItem(Item item)
@@ -59,11 +52,6 @@ public class InventoryManager : MonoBehaviour
         }
 
         return false;
-    }
-
-    public void NavigateInventoryMenu()
-    {
-
     }
 
     void SpawnNewItem(Item item, InventorySlot slot)
