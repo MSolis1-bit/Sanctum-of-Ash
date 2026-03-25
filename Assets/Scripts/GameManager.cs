@@ -114,6 +114,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         if(currentScene == "")
         {
+            if (isPaused) { StateUnpause(); }
             SceneManager.LoadSceneAsync("Showcase");
         }
         else
@@ -133,11 +134,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         this.currentScene = data.currentScene;
-    }
-
-    public void ResetTimeScale()
-    {
-        Time.timeScale = timeScaleOriginal;
     }
 
     public void SaveData(GameData data)

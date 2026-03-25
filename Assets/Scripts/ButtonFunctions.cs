@@ -118,14 +118,12 @@ public class ButtonFunctions : MonoBehaviour
     public void ContinueGame()
     {
         DisableMenuButtons();
-        if (GameManager.instance.IsPaused) { GameManager.instance.ResetTimeScale(); }
         GameManager.instance.ContinueGame();
     }
 
     public void QuitToMainMenu()
     {
         DisableMenuButtons();
-        if (GameManager.instance.IsPaused) { GameManager.instance.ResetTimeScale(); }
         SceneManager.LoadScene(0);
     }
 
