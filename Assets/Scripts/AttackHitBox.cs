@@ -13,7 +13,14 @@ public class PlayerAttackHitbox : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Enemy enemy = collision.GetComponentInParent<Enemy>();
+        if (collision.isTrigger)
+        {
+            return; 
+        }
+
+        // Check if what we hit is an enemy
+        Enemy enemy = collision.GetComponent<Enemy>();
+        IDamage dmg = collision.GetComponent<IDamage>();
 
         if (enemy != null)
         {
@@ -26,6 +33,11 @@ public class PlayerAttackHitbox : MonoBehaviour
         if (meleeEnemy != null)
         {
             meleeEnemy.TakeDamage(damage);
+        }
+
+        if(dmg != null)
+        {
+            dmg.TakeDamage((int)damage);
         }
     }
 }
