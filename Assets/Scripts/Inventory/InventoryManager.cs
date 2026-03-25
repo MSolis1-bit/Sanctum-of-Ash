@@ -103,5 +103,9 @@ public class InventoryManager : MonoBehaviour
     public void UseSelectedItem(InventorySlot slot)
     {
         Item receivedItem = GetSelectedItem(slot, true);
+        if(receivedItem.type == ItemType.Potion)
+        {
+            GameManager.instance.playerScript.Heal(5);
+        }
     }
 }
