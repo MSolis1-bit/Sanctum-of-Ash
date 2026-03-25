@@ -72,9 +72,54 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void UpdatePlayerUI()
     {
+        Debug.Log("UI reading from object: " + playerScript.gameObject.name + " | HP: " + playerScript.CurrentHealth + " / " + playerScript.MaxHealth);
+        if (playerScript == null || playerHPBar == null)
+        {
+            FindSceneReferences();
+        }
+
         if (playerScript != null && playerHPBar != null)
         {
             playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+            Debug.Log("HP Bar Updated: " + playerScript.CurrentHealth + " / " + playerScript.MaxHealth);
+        }
+        else
+        {
+            Debug.LogWarning("Player UI could not update because playerScript or playerHPBar is missing.");
+        }
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindSceneReferences();
+        UpdatePlayerUI();
+    }
+
+    private void FindSceneReferences()
+    {
+        player = GameObject.FindWithTag("Player");
+
+        if (player != null)
+        {
+            playerScript = player.GetComponent<PlayerController>();
+        }
+
+        playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
+
+        GameObject hpBarObject = GameObject.Find("PlayerHPBarFill");
+        if (hpBarObject != null)
+        {
+            playerHPBar = hpBarObject.GetComponent<Image>();
         }
     }
 
