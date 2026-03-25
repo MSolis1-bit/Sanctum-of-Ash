@@ -16,7 +16,7 @@ public class GameData
     // What the game starts with when there's no data to load
     public GameData()
     {
-        this.maxHealth = 5;
+        this.maxHealth = 100;
         this.hasDash = false;
         this.hasDoubleJump = false;
         this.currentScene = "";
