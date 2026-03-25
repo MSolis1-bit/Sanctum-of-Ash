@@ -849,17 +849,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-      propertyPath: hitFlashColor.b
+    - target: {fileID: 66635143949667442, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
+      propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-      propertyPath: hitFlashColor.g
+    - target: {fileID: 66635143949667442, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
-      propertyPath: hitFlashColor.r
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1113348927530171613, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
@@ -869,6 +865,14 @@ PrefabInstance:
       propertyPath: 'waypoints.Array.data[1]'
       value: 
       objectReference: {fileID: 998113755}
+    - target: {fileID: 7254337863743867735, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7254337863743867735, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7490929274616975038, guid: 4fc8e464c51d4f14082da9b90b367dca, type: 3}
       propertyPath: m_Name
       value: Enemy1
@@ -1873,10 +1877,6 @@ PrefabInstance:
     - target: {fileID: 5508884190272025335, guid: 610354126c74a0e438e959a16d2485c5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6570683692908009330, guid: 610354126c74a0e438e959a16d2485c5, type: 3}
-      propertyPath: maxHealth
-      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6570683692908009330, guid: 610354126c74a0e438e959a16d2485c5, type: 3}
       propertyPath: 'waypoints.Array.data[0]'

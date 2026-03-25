@@ -200,6 +200,7 @@ public class EnemyMelee : MonoBehaviour
 
     private void AttackPlayer()
     {
+        Debug.Log("Enemy attacking object: " + player.name);
         if (player == null)
         {
             return;

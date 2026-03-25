@@ -49,14 +49,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMelee
   sr: {fileID: 2375905859818020200}
-  maxHealth: 3
+  maxHealth: 15
   patrolSpeed: 2
   chaseSpeed: 3.5
   waypointTolerance: 0.2
   idleDuration: 1
   detectionRange: 6
   attackRange: 2
-  damage: 1
+  damage: 10
   attackCooldown: 0.5
   waypoints:
   - {fileID: 0}
@@ -66,6 +66,9 @@ MonoBehaviour:
   flashDuration: 0.1
   hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
   deathDelay: 0.15
+  fadeDuration: 5
+  deathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  deathSprite: {fileID: 21300000, guid: 879f6d207d2e141bb8cf1f983eeca737, type: 3}
   currentState: 0
 --- !u!212 &2375905859818020200
 SpriteRenderer:
