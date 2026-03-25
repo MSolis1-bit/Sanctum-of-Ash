@@ -2,9 +2,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour, IDropHandler
 {
+    public Image image;
+
+    private void Awake()
+    {
+        
+    }
+
     public void OnDrop(PointerEventData eventData)
     {
         if (transform.childCount == 0)
