@@ -70,21 +70,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void UpdatePlayerUI()
     {
-        Debug.Log("UI reading from object: " + playerScript.gameObject.name + " | HP: " + playerScript.CurrentHealth + " / " + playerScript.MaxHealth);
-        if (playerScript == null || playerHPBar == null)
+        if (playerHPBar == null || playerScript == null)
         {
-            FindSceneReferences();
+            return;
         }
 
-        if (playerScript != null && playerHPBar != null)
-        {
-            playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
-            Debug.Log("HP Bar Updated: " + playerScript.CurrentHealth + " / " + playerScript.MaxHealth);
-        }
-        else
-        {
-            Debug.LogWarning("Player UI could not update because playerScript or playerHPBar is missing.");
-        }
+        playerHPBar.fillAmount = Mathf.Clamp01((float)playerScript.CurrentHealth / playerScript.MaxHealth);
     }
 
     private void OnEnable()
@@ -99,8 +90,17 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        FindSceneReferences();
-        UpdatePlayerUI();
+        player = GameObject.FindWithTag("Player");
+
+        if (player != null)
+        {
+            playerScript = player.GetComponent<PlayerController>();
+            UpdatePlayerUI();
+        }
+        else
+        {
+            playerScript = null;
+        }
     }
 
     private void FindSceneReferences()
@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void NewGame()
     {
         // Create a new game - which will initialize our game data
-        currentScene = "Showcase";
+        currentScene = "Room1";
         DataPersistenceManager.instance.NewGame();
 
         // Load the gameplay scene - which will in turn save the game because of
@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         if(currentScene == "")
         {
-            SceneManager.LoadSceneAsync("Showcase");
+            SceneManager.LoadSceneAsync("Room1");
         }
         else
         {
