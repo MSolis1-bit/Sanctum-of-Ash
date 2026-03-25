@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 4156246214424628810}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.033, y: 0.152, z: 0}
+  m_LocalPosition: {x: 0.01, y: 0.183, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -83,21 +83,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7ae2afeca6cf7e4b958d5f7d49db5d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 10
-  jumpForce: 8
-  acceleration: 15
-  deceleration: 20
-  airControlMultiplier: 0.6
+  moveSpeed: 8
+  jumpForce: 10
+  acceleration: 14
+  deceleration: 18
+  airControlMultiplier: 0.55
   coyoteTime: 0.12
   jumpBufferTime: 0.12
   fallMultiplier: 2.8
-  lowJumpMultiplier: 2.2
+  lowJumpMultiplier: 2.3
   dashSpeed: 14
   dashDuration: 0.15
   dashCooldown: 0.75
   hasDash: 1
   hasDoubleJump: 1
-  maxHealth: 10
+  maxHealth: 100
   groundCheck: {fileID: 5021640786495442829}
   groundCheckRadius: 0.2
   groundLayer:
@@ -109,25 +109,25 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   maxWallJumps: 1
-  wallJumpForceX: 6
-  wallJumpForceY: 10
+  wallJumpForceX: 9
+  wallJumpForceY: 11
   wallSlideSpeed: 2.5
-  wallJumpLockTime: 0.1
+  wallJumpLockTime: 0.2
   attackDuration: 0.2
   attackCooldown: 0.35
   attackPoint: {fileID: 8344416736994268128}
   attackHitbox: {fileID: 5153018698788608276}
-  knockbackForceX: 10
+  knockbackForceX: 6
   knockbackForceY: 6
   invincibilityTime: 1
   flashInterval: 0.1
-  ceilingCheck: {fileID: 0}
+  ceilingCheck: {fileID: 1854767847430359550}
   ceilingCheckRadius: 0.1
   ceilingLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   cornerCorrectionDistance: 0.2
-  cornerCorrectionStep: 0.05
+  cornerCorrectionStep: 0.1
 --- !u!212 &7158640586027432769
 SpriteRenderer:
   serializedVersion: 2
@@ -421,7 +421,7 @@ Transform:
   m_GameObject: {fileID: 6276708869065688445}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.091, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

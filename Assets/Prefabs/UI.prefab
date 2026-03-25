@@ -2956,6 +2956,14 @@ PrefabInstance:
       propertyPath: m_IsOn
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6676485634513355005, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676485634513355005, guid: e1eb4b0ea21305943876ab4588f2814b, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5758,7 +5766,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1209314287896080748, guid: fae6ab3dac208e6408bec6c0d47984dd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875222754655619592, guid: fae6ab3dac208e6408bec6c0d47984dd, type: 3}
+      propertyPath: m_Name
+      value: PlayerHPBarFill
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
