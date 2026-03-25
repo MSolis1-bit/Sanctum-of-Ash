@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public static GameManager instance;
 
     [Header("Player UI: ")]
+    [SerializeField] GameObject playerHUD;
     [SerializeField] Image playerHPBar;
 
     [HideInInspector] public GameObject player;
@@ -50,6 +51,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             UpdatePlayerUI();
         }
+
+        if(SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            playerHUD.SetActive(true);
+        }
+        else
+        {
+            playerHUD.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -60,8 +70,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void UpdatePlayerUI()
     {
-        if(playerHPBar != null)
-       playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+        if (playerScript != null && playerHPBar != null)
+        {
+            playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+        }
     }
 
     public void StatePause()

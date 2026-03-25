@@ -2,8 +2,15 @@ using UnityEngine;
 
 public class PlayerAttackHitbox : MonoBehaviour
 {
-    [SerializeField] public float damage = 1f;
 
+    [SerializeField] private float damage;
+
+    public float Damage
+    {
+        get { return damage; }
+        set { damage = value; }
+    }
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.isTrigger)
@@ -18,6 +25,14 @@ public class PlayerAttackHitbox : MonoBehaviour
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
+            return;
+        }
+
+        EnemyMelee meleeEnemy = collision.GetComponentInParent<EnemyMelee>();
+
+        if (meleeEnemy != null)
+        {
+            meleeEnemy.TakeDamage(damage);
         }
 
         if(dmg != null)

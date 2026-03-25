@@ -113,6 +113,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     private Vector3 attackHitboxStartPosition;
     private Vector3 attackPointStartPosition;
     PlayerAttackHitbox HB;
+    private float origHitBoxDamage;
 
     private bool isTouchingCeilingLeft;
     private bool isTouchingCeilingRight;
@@ -137,7 +138,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         if (attackHitbox != null)
         {
             HB = attackHitbox.GetComponent<PlayerAttackHitbox>();
-            origHBDamage = HB.damage;
+            origHitBoxDamage = HB.Damage;
         }
 
         // Starts the player with full health
@@ -499,9 +500,16 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         Debug.Log("Player took damage. Current health: " + currentHealth);
 
         StartCoroutine(DamageRoutine());
-        GameManager.instance.UpdatePlayerUI();
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.UpdatePlayerUI();
+        }
+
         if (currentHealth <= 0)
+        {
             Die();
+        }
     }
 
     public void Heal(int healAmount)
@@ -662,14 +670,12 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     public void ModifyAttack(float multiplier)
     {
-
-        HB.damage = multiplier * origHBDamage;
+        HB.Damage = multiplier * origHitBoxDamage;
     }
 
     public void ResetAttack()
     {
-
-        HB.damage = origHBDamage;
+        HB.Damage = origHitBoxDamage;
     }
 
     public void LoadData(GameData data)
