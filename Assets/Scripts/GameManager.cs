@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     [HideInInspector] public PlayerController playerScript;
 
-    private string currentScene = "";
+    public int currentScene = 2;
 
     // For Checkpoints
     [Header("Spawn Points: ")]
@@ -142,7 +142,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void NewGame()
     {
         // Create a new game - which will initialize our game data
-        currentScene = "Showcase";
         DataPersistenceManager.instance.NewGame();
 
         // Load the gameplay scene - which will in turn save the game because of
@@ -157,15 +156,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         // Save the game any time before loading a new scene
         DataPersistenceManager.instance.SaveGame();
 
-        if(currentScene == "")
-        {
-            if (isPaused) { StateUnpause(); }
-            SceneManager.LoadSceneAsync("Showcase");
-        }
-        else
-        {
-            SceneManager.LoadSceneAsync(currentScene);
-        }
+        SceneManager.LoadSceneAsync(currentScene);
     }
 
     public void PlayerLoses()
