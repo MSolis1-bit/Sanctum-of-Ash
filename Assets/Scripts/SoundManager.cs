@@ -93,7 +93,13 @@ public class SoundManager : MonoBehaviour
     public void OnSceneLoad()
     {
         int currentSceneNumber = SceneManager.GetActiveScene().buildIndex;
-        if(currentSceneNumber < 0)
+        if(currentSceneNumber <= 0)
+        {
+            audioSourceBGM.clip = musicList[currentSceneNumber];
+            audioSourceBGM.loop = true;
+            audioSourceBGM.Play();
+        }
+        else
         {
             audioSourceBGM.clip = musicList[currentSceneNumber];
             audioSourceBGM.loop = true;

@@ -324,13 +324,13 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         }
 
         // Starts dash if the ability has been unlocked
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && hasDash)
+        if (Input.GetKeyDown("Dash") && canDash && hasDash)
         {
             StartCoroutine(Dash());
         }
 
         // Starts an attack when clicking the mouse
-        if (Input.GetKeyDown(KeyCode.K) && canAttack)
+        if (Input.GetKeyDown("Attack") && canAttack)
         {
             StartCoroutine(Attack());
         }
