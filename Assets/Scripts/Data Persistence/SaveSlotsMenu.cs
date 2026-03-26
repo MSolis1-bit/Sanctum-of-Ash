@@ -41,6 +41,7 @@ public class SaveSlotsMenu : MonoBehaviour
                 {
                     DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
                     DataPersistenceManager.instance.NewGame();
+                    if (GameManager.instance.IsPaused) { GameManager.instance.StateUnpause(); }
                     SaveGameAndLoadScene();
                 },
                 () =>

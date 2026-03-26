@@ -86,6 +86,7 @@ public class MiniBoss : MonoBehaviour, IDamage
         HandleStateMachine();
         HandleFlip();
         anim?.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
+       
     }
     private void HandleIdle()
     {   // stands still and waits, then patrols or chases if player is spotted
