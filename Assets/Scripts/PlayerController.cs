@@ -141,6 +141,8 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
             origHitBoxDamage = HB.Damage;
         }
 
+        // Starts the player with full health
+        currentHealth = maxHealth;
         isDead = false;
 
         // Saves the starting position of the attack point and attack hitbox
@@ -322,13 +324,13 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         }
 
         // Starts dash if the ability has been unlocked
-        if (Input.GetKeyDown("Dash") && canDash && hasDash)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && hasDash)
         {
             StartCoroutine(Dash());
         }
 
         // Starts an attack when clicking the mouse
-        if (Input.GetKeyDown("Attack") && canAttack)
+        if (Input.GetKeyDown(KeyCode.K) && canAttack)
         {
             StartCoroutine(Attack());
         }
@@ -670,7 +672,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     public void LoadData(GameData data)
     {
         this.maxHealth = data.maxHealth;
-        this.currentHealth = data.currentHealth;
+        this.currentHealth = data.maxHealth;
         this.hasDash = data.hasDash;
         this.hasDoubleJump = data.hasDoubleJump;
     }
@@ -678,7 +680,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     public void SaveData(GameData data)
     {
         data.maxHealth = this.maxHealth;
-        data.currentHealth = this.currentHealth;
+        data.maxHealth = this.currentHealth;
         data.hasDash = this.hasDash;
         data.hasDoubleJump = this.hasDoubleJump;
     }

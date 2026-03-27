@@ -167,6 +167,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
+    public void RestartLevel()
+    {
+        DataPersistenceManager.instance.LoadGame();
+        SceneManager.LoadSceneAsync(currentScene);
+    }
+
     public void PlayerLoses()
     {
         if(playerScript.IsDead == true)
