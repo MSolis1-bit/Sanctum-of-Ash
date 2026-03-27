@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     [HideInInspector] public PlayerController playerScript;
 
-    private string currentScene = "";
+    public int currentScene = 2;
 
     // For Checkpoints
     [Header("Spawn Points: ")]
@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     private bool isPaused = false;
 
     private float timeScaleOriginal;
+
+    public bool IsPaused => isPaused;
 
     private void Awake()
     {

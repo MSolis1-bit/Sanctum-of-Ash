@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossSpell
   lifetime: 1
   damage: 3
-  damageDelay: 0.5
+  damageDelay: 0
 --- !u!212 &928058229929176581
 SpriteRenderer:
   serializedVersion: 2
