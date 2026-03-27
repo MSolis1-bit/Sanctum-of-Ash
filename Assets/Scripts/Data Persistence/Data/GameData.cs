@@ -8,6 +8,7 @@ public class GameData
 
     //public Vector2 playerPosition;
     public int maxHealth;
+    public int currentHealth;
     public bool hasDash;
     public bool hasDoubleJump;
     public string currentScene;
@@ -17,6 +18,7 @@ public class GameData
     public GameData()
     {
         this.maxHealth = 100;
+        this.currentHealth = 100;
         this.hasDash = false;
         this.hasDoubleJump = false;
         this.currentScene = "";
