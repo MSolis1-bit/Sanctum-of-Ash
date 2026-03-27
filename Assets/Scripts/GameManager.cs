@@ -185,6 +185,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
+    public void RestartLevel()
+    {
+        StateUnpause();
+        currentScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadSceneAsync(currentScene);
+    }
+
     public void PlayerLoses()
     {
         if (playerScript != null && playerScript.IsDead)
