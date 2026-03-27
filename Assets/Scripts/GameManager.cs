@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     [HideInInspector] public PlayerController playerScript;
 
-    public int currentScene = 2;
+    public string currentScene;
 
     // For Checkpoints
     [Header("Spawn Points: ")]
