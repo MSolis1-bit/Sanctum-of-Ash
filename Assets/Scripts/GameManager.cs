@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     [HideInInspector] public PlayerController playerScript;
 
-    private string currentScene = "";
+    public int currentScene = 2;
 
     // For Checkpoints
     [Header("Spawn Points: ")]
@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     private bool isPaused = false;
 
     private float timeScaleOriginal;
+
+    public bool IsPaused => isPaused;
 
     private void Awake()
     {
@@ -70,9 +72,54 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void UpdatePlayerUI()
     {
-        if (playerScript != null && playerHPBar != null)
+        if (playerHPBar == null || playerScript == null)
         {
-            playerHPBar.fillAmount = (float)playerScript.CurrentHealth / playerScript.MaxHealth;
+            return;
+        }
+
+        playerHPBar.fillAmount = Mathf.Clamp01((float)playerScript.CurrentHealth / playerScript.MaxHealth);
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        player = GameObject.FindWithTag("Player");
+
+        if (player != null)
+        {
+            playerScript = player.GetComponent<PlayerController>();
+            UpdatePlayerUI();
+        }
+        else
+        {
+            playerScript = null;
+        }
+    }
+
+    private void FindSceneReferences()
+    {
+        player = GameObject.FindWithTag("Player");
+
+        if (player != null)
+        {
+            playerScript = player.GetComponent<PlayerController>();
+        }
+
+        playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
+
+        GameObject hpBarObject = GameObject.Find("PlayerHPBarFill");
+        if (hpBarObject != null)
+        {
+            playerHPBar = hpBarObject.GetComponent<Image>();
         }
     }
 
@@ -95,7 +142,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void NewGame()
     {
         // Create a new game - which will initialize our game data
-        currentScene = "Showcase";
+        currentScene = "Room1";
         DataPersistenceManager.instance.NewGame();
 
         // Load the gameplay scene - which will in turn save the game because of
@@ -112,7 +159,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         if(currentScene == "")
         {
-            SceneManager.LoadSceneAsync("Showcase");
+            SceneManager.LoadSceneAsync("Room1");
         }
         else
         {

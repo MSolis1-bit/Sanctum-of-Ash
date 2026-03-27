@@ -41,6 +41,7 @@ public class SaveSlotsMenu : MonoBehaviour
                 {
                     DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
                     DataPersistenceManager.instance.NewGame();
+                    if (GameManager.instance.IsPaused) { GameManager.instance.StateUnpause(); }
                     SaveGameAndLoadScene();
                 },
                 () =>
@@ -66,7 +67,7 @@ public class SaveSlotsMenu : MonoBehaviour
         DataPersistenceManager.instance.SaveGame();
 
         // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
-        SceneManager.LoadSceneAsync("Showcase");
+        SceneManager.LoadSceneAsync("Room1");
     }
 
     public void OnDeleteClick(SaveSlot saveSlot)

@@ -482,33 +482,24 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         canUseDoubleJump = true;
     }
 
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(int amount)
     {
-        if (isDead || isInvincible)
-            return;
+        Debug.Log("TakeDamage on object: " + gameObject.name + " | Health before: " + currentHealth);
+        Debug.Log("TakeDamage called for: " + amount + " | Health before: " + currentHealth);
 
-        if (isShielded)
+        currentHealth -= amount;
+
+        Debug.Log("Health after: " + currentHealth);
+
+        if (currentHealth <= 0)
         {
-            isShielded = false;
-            return;
-        }
-        currentHealth -= damageAmount;
-
-        if (currentHealth < 0)
             currentHealth = 0;
-
-        Debug.Log("Player took damage. Current health: " + currentHealth);
-
-        StartCoroutine(DamageRoutine());
+            Debug.Log("PLAYER DIED");
+        }
 
         if (GameManager.instance != null)
         {
             GameManager.instance.UpdatePlayerUI();
-        }
-
-        if (currentHealth <= 0)
-        {
-            Die();
         }
     }
 
@@ -681,6 +672,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     public void LoadData(GameData data)
     {
         this.maxHealth = data.maxHealth;
+        this.currentHealth = data.maxHealth;
         this.hasDash = data.hasDash;
         this.hasDoubleJump = data.hasDoubleJump;
     }
@@ -688,8 +680,8 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     public void SaveData(GameData data)
     {
         data.maxHealth = this.maxHealth;
+        data.maxHealth = this.currentHealth;
         data.hasDash = this.hasDash;
         data.hasDoubleJump = this.hasDoubleJump;
-
     }
 }
