@@ -124,7 +124,6 @@ public class ButtonFunctions : MonoBehaviour
     public void QuitToMainMenu()
     {
         DisableMenuButtons();
-        DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadScene(0);
     }
 
