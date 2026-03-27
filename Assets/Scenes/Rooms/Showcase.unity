@@ -963,6 +963,10 @@ PrefabInstance:
       propertyPath: playerHPBar
       value: 
       objectReference: {fileID: 1818946900}
+    - target: {fileID: 8706366558751295143, guid: ea191c9982c774643aab7accfba6632e, type: 3}
+      propertyPath: firstGameplayScene
+      value: Showcase
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
