@@ -134,13 +134,15 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         animator = GetComponent<Animator>();
         originalColor = spriteRenderer.color;
 
-        //Sets the OriginalAttack so it can be modified and reset
+        // Sets the OriginalAttack so it can be modified and reset
         if (attackHitbox != null)
         {
             HB = attackHitbox.GetComponent<PlayerAttackHitbox>();
             origHitBoxDamage = HB.Damage;
         }
 
+        // Starts the player alive with full health
+        currentHealth = maxHealth;
         isDead = false;
 
         // Saves the starting position of the attack point and attack hitbox
@@ -669,10 +671,22 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     public void LoadData(GameData data)
     {
+        // Load saved stats
         this.maxHealth = data.maxHealth;
         this.currentHealth = data.currentHealth;
         this.hasDash = data.hasDash;
         this.hasDoubleJump = data.hasDoubleJump;
+
+        // If health is invalid or zero, reset the player to full health
+        if (this.currentHealth <= 0)
+        {
+            this.currentHealth = this.maxHealth;
+            isDead = false;
+        }
+        else
+        {
+            isDead = false;
+        }
     }
 
     public void SaveData(GameData data)
