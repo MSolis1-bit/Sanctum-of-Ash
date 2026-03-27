@@ -718,7 +718,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     {
         // Load saved stats
         this.maxHealth = data.maxHealth;
-        this.currentHealth = data.currentHealth;
+        this.currentHealth = data.maxHealth;
         this.hasDash = data.hasDash;
         this.hasDoubleJump = data.hasDoubleJump;
 
@@ -754,7 +754,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     public void SaveData(GameData data)
     {
         data.maxHealth = this.maxHealth;
-        data.currentHealth = this.currentHealth;
+        data.maxHealth = this.currentHealth;
         data.hasDash = this.hasDash;
         data.hasDoubleJump = this.hasDoubleJump;
     }

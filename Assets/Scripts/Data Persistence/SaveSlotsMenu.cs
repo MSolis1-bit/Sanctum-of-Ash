@@ -67,7 +67,7 @@ public class SaveSlotsMenu : MonoBehaviour
         DataPersistenceManager.instance.SaveGame();
 
         // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
-        SceneManager.LoadSceneAsync("Room1");
+        SceneManager.LoadSceneAsync(GameManager.instance.currentScene);
     }
 
     public void OnDeleteClick(SaveSlot saveSlot)
@@ -89,14 +89,6 @@ public class SaveSlotsMenu : MonoBehaviour
                 isLoadingGame = true;
             }
             );
-    }
-
-    private void Update()
-    {
-        //if(this.gameObject.activeSelf)
-        //{
-        //    ActivateMenu();
-        //}
     }
 
     public void ActivateMenu()

@@ -115,6 +115,12 @@ public class ButtonFunctions : MonoBehaviour
         GameManager.instance.NewGame();
     }
 
+    public void RestartLevel()
+    {
+        DisableMenuButtons();
+        GameManager.instance.RestartLevel();
+    }
+
     public void ContinueGame()
     {
         DisableMenuButtons();
