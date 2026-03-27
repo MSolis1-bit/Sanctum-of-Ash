@@ -141,8 +141,6 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
             origHitBoxDamage = HB.Damage;
         }
 
-        // Starts the player with full health
-        currentHealth = maxHealth;
         isDead = false;
 
         // Saves the starting position of the attack point and attack hitbox
@@ -672,7 +670,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     public void LoadData(GameData data)
     {
         this.maxHealth = data.maxHealth;
-        this.currentHealth = data.maxHealth;
+        this.currentHealth = data.currentHealth;
         this.hasDash = data.hasDash;
         this.hasDoubleJump = data.hasDoubleJump;
     }
@@ -680,7 +678,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     public void SaveData(GameData data)
     {
         data.maxHealth = this.maxHealth;
-        data.maxHealth = this.currentHealth;
+        data.currentHealth = this.currentHealth;
         data.hasDash = this.hasDash;
         data.hasDoubleJump = this.hasDoubleJump;
     }
