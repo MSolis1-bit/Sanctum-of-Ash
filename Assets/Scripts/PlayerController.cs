@@ -338,8 +338,13 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     private void FixedUpdate()
     {
-        // Stops movement if the player is stunned, dead, dashing, or attacking
-        if (isDead || isDashing || isAttacking || isStunned)
+        if (isDead)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        if (isDashing || isAttacking || isStunned)
         {
             return;
         }
@@ -484,17 +489,29 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     public void TakeDamage(int amount)
     {
+        // Ignores damage if the player is already dead
+        if (isDead)
+        {
+            return;
+        }
+
         Debug.Log("TakeDamage on object: " + gameObject.name + " | Health before: " + currentHealth);
         Debug.Log("TakeDamage called for: " + amount + " | Health before: " + currentHealth);
 
         currentHealth -= amount;
 
-        Debug.Log("Health after: " + currentHealth);
-
-        if (currentHealth <= 0)
+        // Stops health from going below 0
+        if (currentHealth < 0)
         {
             currentHealth = 0;
-            Debug.Log("PLAYER DIED");
+        }
+
+        Debug.Log("Health after: " + currentHealth);
+
+        // Triggers the death state once health is gone
+        if (currentHealth <= 0)
+        {
+            Die();
         }
 
         if (GameManager.instance != null)
@@ -524,8 +541,13 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     private void Die()
     {
+        // Marks the player as dead so other code stops running
         isDead = true;
-        Debug.Log("Player has died.");
+
+        // Stops all movement right away
+        rb.linearVelocity = Vector2.zero;
+
+        Debug.Log("PLAYER DIED");
     }
 
     private void HandleCornerCorrection()
@@ -632,7 +654,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         spriteRenderer.color = originalColor;
         isStunned = false;
         isInvincible = false;
-    }
+   }
 
     public void SetStunned(bool value)
     {
