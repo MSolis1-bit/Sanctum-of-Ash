@@ -35,6 +35,7 @@ public class DataPersistenceManager : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
+
         instance = this;
         DontDestroyOnLoad(this.gameObject);
 
