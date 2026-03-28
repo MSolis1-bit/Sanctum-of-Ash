@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FallDetectorDeathZone : MonoBehaviour
@@ -8,6 +9,8 @@ public class FallDetectorDeathZone : MonoBehaviour
         // Only run the respawn logic if the object is the player
         if (!collision.CompareTag("Player"))
         {
+            // Destroy the object that isn't the player
+            Destroy(collision.gameObject);
             return;
         }
 
