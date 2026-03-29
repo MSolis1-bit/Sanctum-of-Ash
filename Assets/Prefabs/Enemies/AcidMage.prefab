@@ -152,7 +152,7 @@ MonoBehaviour:
   detectionRange: 6
   attackRange: 6
   firePoint: {fileID: 2547919057853691783}
-  attackCooldown: 3
+  attackCooldown: 4
   knockbackForceX: 4
   knockbackForceY: 2
   flashDuration: 0.1
@@ -178,7 +178,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 9be21d0cc76a54cb3b1d888b51070247, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
