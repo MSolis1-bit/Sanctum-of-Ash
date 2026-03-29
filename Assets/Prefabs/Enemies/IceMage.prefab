@@ -60,7 +60,7 @@ MonoBehaviour:
   detectionRange: 6
   attackRange: 6
   firePoint: {fileID: 7835412703127716139}
-  attackCooldown: 3
+  attackCooldown: 6
   knockbackForceX: 4
   knockbackForceY: 2
   flashDuration: 0.1

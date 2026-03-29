@@ -51,7 +51,7 @@ MonoBehaviour:
   status: 0
   effectDuration: 1
   rb: {fileID: 8582349811273277468}
-  damageAmount: 1
+  damageAmount: 5
   damageRate: 0
   rotateSpeed: 0
   speed: 10

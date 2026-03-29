@@ -5,7 +5,7 @@ using System.Collections;
 
 //This code was copied from Enemy.cs and edited to avoid conflicts
 
-public class EnemyBase : MonoBehaviour, EDamage
+public class EnemyBase : MonoBehaviour, IDamage
 {
     [SerializeField] public Animator anim;
     private Rigidbody2D rb;
@@ -135,7 +135,7 @@ public class EnemyBase : MonoBehaviour, EDamage
 
         if (player == null) { EnterState(State.Idle); return; }
 
-
+        anim.SetBool("isMoving", false);
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
 
         float dist = Vector2.Distance(transform.position, player.position);
@@ -148,6 +148,8 @@ public class EnemyBase : MonoBehaviour, EDamage
         {
             attackTimer = 0f;
             Attack();
+
+            anim?.SetTrigger("attack");
         }
 
         if (player.position.x > transform.position.x && !facingRight)

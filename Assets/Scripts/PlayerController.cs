@@ -508,6 +508,10 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
         Debug.Log("Health after: " + currentHealth);
 
+        //Applies knockback, makes the player invincible for a short time and makes them flash red
+        StartCoroutine(DamageRoutine());
+
+
         // Triggers the death state once health is gone
         if (currentHealth <= 0)
         {

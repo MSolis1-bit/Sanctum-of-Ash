@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7500776608586305550}
   - component: {fileID: 5476014055926043807}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 3869916183261268224}
   - component: {fileID: 6275019282526899646}
   - component: {fileID: 7870243649745974920}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Animator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 7254337863743867735}
   - component: {fileID: 7189131934141914816}
   - component: {fileID: 680123129021414955}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 577233149650784849}
   - component: {fileID: 1403440135674016045}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shoot pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -379,7 +379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5093475196195275509}
   - component: {fileID: 8906364127571688388}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: EaseHealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -470,7 +470,7 @@ GameObject:
   - component: {fileID: 2480975274056885703}
   - component: {fileID: 6371862867412803367}
   - component: {fileID: 7104270181580079007}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -572,7 +572,7 @@ GameObject:
   - component: {fileID: 9202592650180478571}
   - component: {fileID: 5455612762104989885}
   - component: {fileID: 2578860996195708389}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -647,7 +647,7 @@ GameObject:
   - component: {fileID: 66635143949667442}
   - component: {fileID: 2425771171082869738}
   - component: {fileID: 8911729456372830050}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -722,7 +722,7 @@ GameObject:
   - component: {fileID: 3498221374835812140}
   - component: {fileID: 4242303711137660575}
   - component: {fileID: 8222963212624802065}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -800,7 +800,7 @@ GameObject:
   - component: {fileID: 460687184042573064}
   - component: {fileID: 3641023152004982213}
   - component: {fileID: 4009432279541538926}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

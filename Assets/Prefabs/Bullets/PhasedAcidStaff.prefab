@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8703571700925118367}
-  - component: {fileID: 8676037843341134184}
+  - component: {fileID: 6164450601607536815}
   - component: {fileID: 7807139842177005112}
   - component: {fileID: 1669401289597773848}
   m_Layer: 8
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 2241416838235085740}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 40.106}
---- !u!114 &8676037843341134184
+--- !u!114 &6164450601607536815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -51,7 +51,7 @@ MonoBehaviour:
   status: 1
   effectDuration: 5
   rb: {fileID: 1669401289597773848}
-  damageAmount: 1
+  damageAmount: 5
   damageRate: 0
   rotateSpeed: 0
   speed: 5

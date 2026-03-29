@@ -74,7 +74,7 @@ MonoBehaviour:
   - {fileID: 0}
   facingRight: 0
   currentState: 0
-  regularArrowPrefab: {fileID: 0}
+  regularArrowPrefab: {fileID: 1782390210741266490, guid: 3270adbcd273ffa4285e26e6a3c9cf5d, type: 3}
   stunArrowPrefab: {fileID: 4929087528333755878, guid: 31f7ccdc450a88045abf934145c01d31, type: 3}
   stunArrowChance: 0.25
 --- !u!95 &8490979656891460268
