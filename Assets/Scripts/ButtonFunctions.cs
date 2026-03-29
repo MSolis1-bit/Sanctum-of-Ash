@@ -130,6 +130,16 @@ public class ButtonFunctions : MonoBehaviour
     public void QuitToMainMenu()
     {
         DisableMenuButtons();
+
+        if (DataPersistenceManager.instance != null)
+        {
+            DataPersistenceManager.instance.SaveGame();
+        }
+        else
+        {
+            Debug.LogWarning("DataPersistenceManager instance was null when quitting to main menu.");
+        }
+
         SceneManager.LoadScene(0);
     }
 

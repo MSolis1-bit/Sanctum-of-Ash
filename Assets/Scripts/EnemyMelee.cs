@@ -328,7 +328,9 @@ public class EnemyMelee : MonoBehaviour
         // Freeze body
         rb.simulated = false;
 
+        //Destroys gameObject after a certain amount of time to avoid lag
         yield return new WaitForSeconds(deathDelay);
+        Destroy(gameObject);
 
         // Disable script
         enabled = false;

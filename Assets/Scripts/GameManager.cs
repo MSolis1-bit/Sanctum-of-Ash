@@ -10,11 +10,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] GameObject playerHUD;
     [SerializeField] Image playerHPBar;
 
+    [Header("Scene Settings")]
+    [SerializeField] private string firstGameplayScene = "Room1";
+    [HideInInspector] public string currentScene;
+
     [HideInInspector] public GameObject player;
-
     [HideInInspector] public PlayerController playerScript;
-
-    public int currentScene;
 
     // For Checkpoints
     [Header("Spawn Points: ")]
@@ -38,33 +39,34 @@ public class GameManager : MonoBehaviour, IDataPersistence
         DontDestroyOnLoad(this.gameObject);
 
         timeScaleOriginal = Time.timeScale;
-
-        player = GameObject.FindWithTag("Player");
-        if(player != null )
-        {
-            playerScript = player.GetComponent<PlayerController>();
-        }
-
-        playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
+   
     }
+
     void Start()
     {
-        if(player != null)
+        playerHUD = GameObject.FindWithTag("HUD");
+        player = GameObject.FindWithTag("Player");
+        playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
+
+        if (player != null)
         {
+            playerScript = player.GetComponent<PlayerController>();
             UpdatePlayerUI();
         }
 
-        if(SceneManager.GetActiveScene().name != "MainMenu")
+        if (playerHUD != null)
         {
-            playerHUD.SetActive(true);
-        }
-        else
-        {
-            playerHUD.SetActive(false);
+            if (SceneManager.GetActiveScene().name != null && SceneManager.GetActiveScene().name != "MainMenu")
+            {
+                playerHUD.SetActive(true);
+            }
+            else
+            {
+                playerHUD.SetActive(false);
+            }
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -92,16 +94,23 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        player = GameObject.FindWithTag("Player");
+        FindSceneReferences();
 
-        if (player != null)
+        if (playerScript != null)
         {
-            playerScript = player.GetComponent<PlayerController>();
             UpdatePlayerUI();
         }
-        else
+
+        if (playerHUD != null)
         {
-            playerScript = null;
+            if (scene.name != "MainMenu")
+            {
+                playerHUD.SetActive(true);
+            }
+            else
+            {
+                playerHUD.SetActive(false);
+            }
         }
     }
 
@@ -112,6 +121,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
         if (player != null)
         {
             playerScript = player.GetComponent<PlayerController>();
+        }
+        else
+        {
+            playerScript = null;
         }
 
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
@@ -126,7 +139,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void StatePause()
     {
         isPaused = true;
-        Time.timeScale = 0;
+        Time.timeScale = 0f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
@@ -134,40 +147,55 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void StateUnpause()
     {
         isPaused = false;
-        Time.timeScale = timeScaleOriginal;
+        Time.timeScale = 1f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void NewGame()
     {
-        // Create a new game - which will initialize our game data
-        DataPersistenceManager.instance.NewGame();
+        // Makes sure the game is running normally before loading in
+        StateUnpause();
 
-        // Load the gameplay scene - which will in turn save the game because of
-        // OnSceneUnloaded() in the DataPersistenceManager
+        // Starts a brand new game from the first gameplay scene
+        currentScene = firstGameplayScene;
+
+        if (DataPersistenceManager.instance != null)
+        {
+            DataPersistenceManager.instance.NewGame();
+        }
+
         SceneManager.LoadSceneAsync(currentScene);
     }
 
     public void ContinueGame()
     {
-        // Load the next scene - which will in turn load the game because of
+        // Makes sure the game is running normally before loading in
+        StateUnpause();
 
-        // Save the game any time before loading a new scene
-        DataPersistenceManager.instance.SaveGame();
-        SceneManager.LoadSceneAsync(currentScene);
+        Debug.Log("ContinueGame currentScene is: " + currentScene);
+
+        // Loads the last saved scene if one exists
+        if (string.IsNullOrEmpty(currentScene))
+        {
+            SceneManager.LoadSceneAsync(firstGameplayScene);
+        }
+        else
+        {
+            SceneManager.LoadSceneAsync(currentScene);
+        }
     }
 
     public void RestartLevel()
     {
-        DataPersistenceManager.instance.LoadGame();
         StateUnpause();
+        currentScene = SceneManager.GetActiveScene().name;
         SceneManager.LoadSceneAsync(currentScene);
     }
 
     public void PlayerLoses()
     {
-        if(playerScript.IsDead == true)
+        if (playerScript != null && playerScript.IsDead)
         {
             StatePause();
         }
@@ -176,10 +204,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         this.currentScene = data.currentScene;
+        Debug.Log("GameManager loaded currentScene as: " + this.currentScene);
     }
 
     public void SaveData(GameData data)
     {
+        currentScene = SceneManager.GetActiveScene().name;
         data.currentScene = currentScene;
+        Debug.Log("GameManager saved currentScene as: " + data.currentScene);
     }
 }
