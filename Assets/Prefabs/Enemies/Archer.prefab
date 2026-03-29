@@ -182,7 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8900567638418025486}
   - component: {fileID: 5656045780597215057}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -273,7 +273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8876010499186606204}
   - component: {fileID: 4335098245733603270}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,7 +364,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6921049491256302088}
   - component: {fileID: 3650301716114043737}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Front arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -456,7 +456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2106369191764707096}
   - component: {fileID: 7291183533337070946}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Back arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -548,7 +548,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5422456415994145718}
   - component: {fileID: 925192713113521680}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: bow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -639,7 +639,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8691189315629329008}
   - component: {fileID: 7088166860925823188}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -735,7 +735,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3467196572805525191}
   - component: {fileID: 345884849447041025}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Front leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +826,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2262567343918249784}
   - component: {fileID: 3878786426865356594}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Back leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}

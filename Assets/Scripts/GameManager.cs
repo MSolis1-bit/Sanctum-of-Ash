@@ -50,17 +50,20 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         if (player != null)
         {
-            UpdatePlayerUI();
             playerScript = player.GetComponent<PlayerController>();
+            UpdatePlayerUI();
         }
 
-        if (SceneManager.GetActiveScene().name != "MainMenu")
+        if (playerHUD != null)
         {
-            playerHUD.SetActive(true);
-        }
-        else
-        {
-            playerHUD.SetActive(false);
+            if (SceneManager.GetActiveScene().name != null && SceneManager.GetActiveScene().name != "MainMenu")
+            {
+                playerHUD.SetActive(true);
+            }
+            else
+            {
+                playerHUD.SetActive(false);
+            }
         }
     }
 
