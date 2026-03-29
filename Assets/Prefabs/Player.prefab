@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1854767847430359550}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CeilingCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 4346127395053677045}
   - component: {fileID: 5447898022976436642}
   - component: {fileID: 5559876598759489469}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -118,8 +118,8 @@ MonoBehaviour:
   attackPoint: {fileID: 8344416736994268128}
   attackHitbox: {fileID: 5153018698788608276}
   knockbackForceX: 6
-  knockbackForceY: 6
-  invincibilityTime: 1
+  knockbackForceY: 2
+  invincibilityTime: 0.4
   flashInterval: 0.1
   ceilingCheck: {fileID: 1854767847430359550}
   ceilingCheckRadius: 0.1
@@ -282,7 +282,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4905671250760457964}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 9187312686604761386}
   - component: {fileID: 671789452776045046}
   - component: {fileID: 1963772009955420024}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: AttackHitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,8 +331,8 @@ Transform:
   m_GameObject: {fileID: 5153018698788608276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -0.041, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.42, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8344416736994268128}
@@ -405,7 +405,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8344416736994268128}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,7 +421,7 @@ Transform:
   m_GameObject: {fileID: 6276708869065688445}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.091, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -437,7 +437,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5021640786495442829}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

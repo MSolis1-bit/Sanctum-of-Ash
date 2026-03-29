@@ -65,7 +65,7 @@ MonoBehaviour:
   knockbackForceY: 2
   flashDuration: 0.1
   hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
-  deathDelay: 0.15
+  deathDelay: 10
   fadeDuration: 5
   deathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   deathSprite: {fileID: 21300000, guid: 879f6d207d2e141bb8cf1f983eeca737, type: 3}
@@ -141,7 +141,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 500
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1

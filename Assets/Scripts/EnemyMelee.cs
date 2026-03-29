@@ -318,15 +318,7 @@ public class EnemyMelee : MonoBehaviour
             sr.sprite = deathSprite;
         }
 
-        // Disable collider
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null)
-        {
-            col.enabled = false;
-        }
 
-        // Freeze body
-        rb.simulated = false;
 
         //Destroys gameObject after a certain amount of time to avoid lag
         yield return new WaitForSeconds(deathDelay);
