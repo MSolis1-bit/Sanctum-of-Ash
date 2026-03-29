@@ -5,7 +5,7 @@ using System.Collections;
 
 //This code was copied from Enemy.cs and edited to avoid conflicts
 
-public class EnemyBase : MonoBehaviour, IDamage
+public class EnemyBase : MonoBehaviour, EDamage
 {
     [SerializeField] public Animator anim;
     private Rigidbody2D rb;
