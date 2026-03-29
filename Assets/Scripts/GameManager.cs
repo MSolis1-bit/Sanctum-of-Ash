@@ -11,8 +11,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] Image playerHPBar;
 
     [Header("Scene Settings")]
-    [SerializeField] private string firstGameplayScene = "Room1";
-    [HideInInspector] public string currentScene;
+    [HideInInspector] public int currentScene;
 
     [HideInInspector] public GameObject player;
     [HideInInspector] public PlayerController playerScript;
@@ -157,9 +156,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         // Makes sure the game is running normally before loading in
         StateUnpause();
 
-        // Starts a brand new game from the first gameplay scene
-        currentScene = firstGameplayScene;
-
         if (DataPersistenceManager.instance != null)
         {
             DataPersistenceManager.instance.NewGame();
@@ -175,21 +171,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         Debug.Log("ContinueGame currentScene is: " + currentScene);
 
-        // Loads the last saved scene if one exists
-        if (string.IsNullOrEmpty(currentScene))
-        {
-            SceneManager.LoadSceneAsync(firstGameplayScene);
-        }
-        else
-        {
-            SceneManager.LoadSceneAsync(currentScene);
-        }
+        SceneManager.LoadSceneAsync(currentScene);
+
+        // Call the respawn manager to spawn the player at the spawn point
+        RespawnManager.instance.Respawn(player.transform);
     }
 
     public void RestartLevel()
     {
         StateUnpause();
-        currentScene = SceneManager.GetActiveScene().name;
+        DataPersistenceManager.instance.LoadGame();
         SceneManager.LoadSceneAsync(currentScene);
     }
 
@@ -204,13 +195,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         this.currentScene = data.currentScene;
-        Debug.Log("GameManager loaded currentScene as: " + this.currentScene);
     }
 
     public void SaveData(GameData data)
     {
-        currentScene = SceneManager.GetActiveScene().name;
         data.currentScene = currentScene;
-        Debug.Log("GameManager saved currentScene as: " + data.currentScene);
     }
 }

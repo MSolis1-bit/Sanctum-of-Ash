@@ -61,11 +61,11 @@ public class RespawnManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        throw new System.NotImplementedException();
+        this.respawnPoint = data.respawnPoint;
     }
 
     public void SaveData(GameData data)
     {
-        throw new System.NotImplementedException();
+        data.respawnPoint = this.respawnPoint;
     }
 }

@@ -30,6 +30,7 @@ public class SaveSlotsMenu : MonoBehaviour
         {
             DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
             SaveGameAndLoadScene();
+            RespawnManager.instance.Respawn(GameManager.instance.player.transform);
         }
         // Case - new game, but the save slot has data
         else if(saveSlot.hasData)
