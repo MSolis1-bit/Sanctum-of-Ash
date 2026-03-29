@@ -235,6 +235,38 @@ PrefabInstance:
       propertyPath: volumeSliderSFX
       value: 
       objectReference: {fileID: 1589172378}
+    - target: {fileID: 7845648731065592587, guid: 6469c6b24ecfd494f828903e8a31a3ae, type: 3}
+      propertyPath: sfxList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7845648731065592587, guid: 6469c6b24ecfd494f828903e8a31a3ae, type: 3}
+      propertyPath: musicList.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7845648731065592587, guid: 6469c6b24ecfd494f828903e8a31a3ae, type: 3}
+      propertyPath: 'sfxList.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: d38c38faa416cce438288b24836e87fc, type: 3}
+    - target: {fileID: 7845648731065592587, guid: 6469c6b24ecfd494f828903e8a31a3ae, type: 3}
+      propertyPath: 'musicList.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: fcf4019c42a93ee4b95711d0dc04ab94, type: 3}
+    - target: {fileID: 7845648731065592587, guid: 6469c6b24ecfd494f828903e8a31a3ae, type: 3}
+      propertyPath: 'musicList.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: f2f3fae1733ba6441bc404d0c6678543, type: 3}
+    - target: {fileID: 7845648731065592587, guid: 6469c6b24ecfd494f828903e8a31a3ae, type: 3}
+      propertyPath: 'musicList.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b96ef283e6bebc540bfc7e3da3857313, type: 3}
+    - target: {fileID: 7845648731065592587, guid: 6469c6b24ecfd494f828903e8a31a3ae, type: 3}
+      propertyPath: 'musicList.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 7b81f28b69c99b0498888bd9aa6fbf52, type: 3}
+    - target: {fileID: 7845648731065592587, guid: 6469c6b24ecfd494f828903e8a31a3ae, type: 3}
+      propertyPath: 'musicList.Array.data[5]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 2f4c463924e519a4a85219e9377bbbdf, type: 3}
     - target: {fileID: 8490073075307665185, guid: 6469c6b24ecfd494f828903e8a31a3ae, type: 3}
       propertyPath: m_LocalPosition.x
       value: 960
@@ -1113,10 +1145,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 906682089}
-    - target: {fileID: 5087274527556038187, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5253575127092834278, guid: bb5a0aa201a87c84a9dd8ec6287f9746, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

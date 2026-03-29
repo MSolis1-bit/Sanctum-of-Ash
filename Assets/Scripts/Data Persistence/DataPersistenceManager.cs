@@ -35,6 +35,7 @@ public class DataPersistenceManager : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
+
         instance = this;
         DontDestroyOnLoad(this.gameObject);
 
@@ -92,8 +93,11 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void LoadGame()
     {
+        // Refresh the list of objects before loading
+        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+
         // Return right away if data persistence is disabled
-        if(disableDataPersistence)
+        if (disableDataPersistence)
         {
             return;
         }
@@ -102,20 +106,20 @@ public class DataPersistenceManager : MonoBehaviour
         this.gameData = dataHandler.Load(selectedProfileID);
 
         // Start a new game if the data is null and we're configured to initialize data for debugging purposes
-        if(this.gameData == null && initializeDataIfNull)
+        if (this.gameData == null && initializeDataIfNull)
         {
             NewGame();
         }
 
         // If no data can be loaded, initialize to a new game
-        if(this.gameData == null)
+        if (this.gameData == null)
         {
             Debug.Log("No data was found. A new game needs to be started before data can be loaded.");
-            NewGame(); 
+            NewGame();
         }
 
         // Push the loaded data to all other scripts that need it
-        foreach(IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+        foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
             dataPersistenceObj.LoadData(gameData);
         }
