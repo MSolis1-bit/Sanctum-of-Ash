@@ -118,7 +118,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4929087528333755878}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0050213626, y: 0.048516758, z: -0.0025369397, w: 0.99880654}
+  m_LocalRotation: {x: 0.0050230185, y: 0.04852083, z: -0.0025329813, w: 0.99880636}
   m_LocalPosition: {x: 0.65, y: 1.1, z: -0.15}
   m_LocalScale: {x: 1.2220073, y: 1.3446945, z: 1}
   m_ConstrainProportionsScale: 0
@@ -142,10 +142,10 @@ MonoBehaviour:
   status: 3
   effectDuration: 2
   rb: {fileID: 651806946425422842}
-  damageAmount: 1
+  damageAmount: 5
   damageRate: 0
   rotateSpeed: 0
-  speed: 5
+  speed: 10
   destroyTime: 5
   hitEffect: {fileID: 0}
 --- !u!61 &7311176287428610435
