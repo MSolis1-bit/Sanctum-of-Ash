@@ -14,7 +14,8 @@ public class GameData
     public bool hasDoubleJump;
 
     // Level progression
-    public int currentScene;
+    public int levelStartScene;
+    public int spawnScene;
     public Vector2 respawnPoint;
 
     // The values defined in this constructor will be the default values
@@ -25,7 +26,8 @@ public class GameData
         this.currentHealth = 100;
         this.hasDash = false;
         this.hasDoubleJump = false;
-        this.currentScene = 1;
+        this.levelStartScene = 1;
+        this.spawnScene = 1;
         this.respawnPoint = Vector2.zero;
     }
 }

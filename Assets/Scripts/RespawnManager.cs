@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RespawnManager : MonoBehaviour, IDataPersistence
 {
@@ -10,6 +11,8 @@ public class RespawnManager : MonoBehaviour, IDataPersistence
 
     // Keeps track of whether a respawn point has been saved yet
     private bool hasRespawnPoint = false;
+
+    public bool HasRespawnPoint => hasRespawnPoint;
 
     private void Awake()
     {
@@ -36,6 +39,12 @@ public class RespawnManager : MonoBehaviour, IDataPersistence
         Debug.Log("Player Spawn Set on: " + gameObject.name +
                   " | ID: " + GetInstanceID() +
                   " | Point: " + respawnPoint);
+
+        // Sets variables for the game manager to know where to load the player on load games
+        GameManager.instance.spawnScene = SceneManager.GetActiveScene().buildIndex;
+
+        // Save the game
+        DataPersistenceManager.instance.SaveGame();
     }
 
     // Sends the player back to the saved spawn point
