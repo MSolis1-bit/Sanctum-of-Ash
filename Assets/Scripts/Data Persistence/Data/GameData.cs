@@ -3,13 +3,17 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
+    // Data management
     public string timeStamp;
     public long lastUpdated;
 
+    // Player stats
     public int maxHealth;
     public int currentHealth;
     public bool hasDash;
     public bool hasDoubleJump;
+
+    // level progression
     public int currentScene;
 
     // The values defined in this constructor will be the default values

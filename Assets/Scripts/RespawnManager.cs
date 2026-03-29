@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RespawnManager : MonoBehaviour
+public class RespawnManager : MonoBehaviour, IDataPersistence
 {
     // Lets other scripts access this manager
     public static RespawnManager instance;
@@ -57,5 +57,15 @@ public class RespawnManager : MonoBehaviour
         Debug.Log("Respawning player to: " + respawnPoint);
 
         return true;
+    }
+
+    public void LoadData(GameData data)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void SaveData(GameData data)
+    {
+        throw new System.NotImplementedException();
     }
 }
