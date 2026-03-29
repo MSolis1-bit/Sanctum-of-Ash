@@ -39,21 +39,19 @@ public class GameManager : MonoBehaviour, IDataPersistence
         DontDestroyOnLoad(this.gameObject);
 
         timeScaleOriginal = Time.timeScale;
-
-        player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            playerScript = player.GetComponent<PlayerController>();
-        }
-
-        playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
+   
     }
 
     void Start()
     {
+        playerHUD = GameObject.FindWithTag("HUD");
+        player = GameObject.FindWithTag("Player");
+        playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
+
         if (player != null)
         {
             UpdatePlayerUI();
+            playerScript = player.GetComponent<PlayerController>();
         }
 
         if (SceneManager.GetActiveScene().name != "MainMenu")

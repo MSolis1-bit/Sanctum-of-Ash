@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8234435954838296005}
   - component: {fileID: 2164384429566818130}
   - component: {fileID: 4220448663641971561}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PhasedIceStaff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3844027468469659383}
   - component: {fileID: 246007195872074928}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: IceStaffSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300170, guid: 15b2d2faaecad4bfb9edc6585d94f509, type: 3}
-  m_Color: {r: 0.24705884, g: 0.6810733, b: 0.9764706, a: 1}
+  m_Color: {r: 0.4117647, g: 0.4117647, b: 0.4117647, a: 0.39215687}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 318017912604721277}
   - component: {fileID: 3389080798691924368}
   - component: {fileID: 837387114628776386}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: IceMage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,6 +66,9 @@ MonoBehaviour:
   flashDuration: 0.1
   hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
   deathDelay: 0.15
+  fadeDuration: 0
+  deathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  deathSprite: {fileID: 0}
   waypoints:
   - {fileID: 0}
   - {fileID: 0}

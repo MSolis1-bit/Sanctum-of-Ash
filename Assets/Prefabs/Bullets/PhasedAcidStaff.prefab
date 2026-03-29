@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8676037843341134184}
   - component: {fileID: 7807139842177005112}
   - component: {fileID: 1669401289597773848}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PhasedAcidStaff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2241416838235085740}
   - component: {fileID: 8222378956306767107}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AcidStaffSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300170, guid: 15b2d2faaecad4bfb9edc6585d94f509, type: 3}
-  m_Color: {r: 0.2483089, g: 0.9748427, b: 0.26982567, a: 1}
+  m_Color: {r: 0.2483089, g: 0.9748427, b: 0.26982567, a: 0.39215687}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

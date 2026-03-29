@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8490979656891460268}
   - component: {fileID: 5156200479633352689}
   - component: {fileID: 4469052430074126055}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Archer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ MonoBehaviour:
   - {fileID: 0}
   facingRight: 0
   currentState: 0
-  regularArrowPrefab: {fileID: 1782390210741266490, guid: 3270adbcd273ffa4285e26e6a3c9cf5d, type: 3}
+  regularArrowPrefab: {fileID: 0}
   stunArrowPrefab: {fileID: 4929087528333755878, guid: 31f7ccdc450a88045abf934145c01d31, type: 3}
   stunArrowChance: 0.25
 --- !u!95 &8490979656891460268

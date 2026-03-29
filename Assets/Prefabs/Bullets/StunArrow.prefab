@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2142425514506564144}
   - component: {fileID: 447646888267885338}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: StunArrowSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 4872925032181951896}
   - component: {fileID: 7311176287428610435}
   - component: {fileID: 651806946425422842}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: StunArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
