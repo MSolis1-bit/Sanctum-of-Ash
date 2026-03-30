@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     // For Checkpoints
     [Header("Spawn Points: ")]
     public GameObject playerSpawnPos;
-
+    [SerializeField] public GameObject winArea;
     private bool isPaused = false;
 
     private float timeScaleOriginal;
@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         playerHUD = GameObject.FindWithTag("HUD");
         player = GameObject.FindWithTag("Player");
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
+        winArea = GameObject.FindWithTag("Exit");
 
         if (player != null)
         {
@@ -205,10 +206,19 @@ public class GameManager : MonoBehaviour, IDataPersistence
         UpdatePlayerUI();
     }
 
+    public void PlayerWins()
+    {
+        if (playerScript != null && !playerScript.IsDead)
+        {
+            ButtonFunctions.instance.ActivateWinMenu();
+            StatePause();
+        }
+    }
     public void PlayerLoses()
     {
         if (playerScript != null && playerScript.IsDead)
         {
+            ButtonFunctions.instance.ActivateLoseMenu();
             StatePause();
         }
     }
