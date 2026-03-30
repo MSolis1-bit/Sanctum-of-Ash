@@ -695,7 +695,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         HB.Damage = origHitBoxDamage;
     }
 
-    private void ResetPlayerState()
+    public void ResetPlayerState()
     {
         // Clears temporary states so the player can control the character normally
         isDead = false;
@@ -725,34 +725,6 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         this.currentHealth = data.maxHealth;
         this.hasDash = data.hasDash;
         this.hasDoubleJump = data.hasDoubleJump;
-
-        // If health is invalid or zero, reset the player to full health
-        if (this.currentHealth <= 0)
-        {
-            this.currentHealth = this.maxHealth;
-        }
-
-        // Clears temporary states so the player can move normally after loading
-        isDead = false;
-        isDashing = false;
-        isAttacking = false;
-        isStunned = false;
-        isWallJumping = false;
-        isWallSliding = false;
-
-        // Resets movement and jump-related values
-        rb.linearVelocity = Vector2.zero;
-        jumpBufferCounter = 0f;
-        coyoteTimeCounter = 0f;
-        wallJumpLockCounter = 0f;
-        canUseDoubleJump = hasDoubleJump;
-        remainingWallJumps = maxWallJumps;
-
-        // Updates the player UI after loading
-        if (GameManager.instance != null)
-        {
-            GameManager.instance.UpdatePlayerUI();
-        }
     }
 
     public void SaveData(GameData data)

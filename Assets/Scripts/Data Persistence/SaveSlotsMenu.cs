@@ -28,8 +28,29 @@ public class SaveSlotsMenu : MonoBehaviour
         // Case - loading game
         if(isLoadingGame)
         {
+            // Ready the players data
             DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
-            SaveGameAndLoadScene();
+            DataPersistenceManager.instance.SaveGame();
+
+            if(RespawnManager.instance.HasRespawnPoint)
+            {
+                // If the player has a spawn point, load the scene containing the spawn point
+                SceneManager.LoadSceneAsync(GameManager.instance.spawnScene);
+                // Call the spawn manager to set the players position
+                RespawnManager.instance.Respawn(GameManager.instance.player.transform);
+            }
+            else
+            {
+                // if there is no checkpoint, start the player at the beginning of the level
+                SceneManager.LoadSceneAsync(GameManager.instance.levelStartScene);
+            }
+
+            // Makes sure the player starts in a fresh state
+            GameManager.instance.playerScript.ResetPlayerState();
+            if (GameManager.instance.IsPaused) { GameManager.instance.StateUnpause(); }
+
+            // Update the players UI and position
+            GameManager.instance.UpdatePlayerUI();
         }
         // Case - new game, but the save slot has data
         else if(saveSlot.hasData)
@@ -42,7 +63,11 @@ public class SaveSlotsMenu : MonoBehaviour
                     DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
                     DataPersistenceManager.instance.NewGame();
                     if (GameManager.instance.IsPaused) { GameManager.instance.StateUnpause(); }
-                    SaveGameAndLoadScene();
+                    // Save the game anytime before loading a new scene
+                    DataPersistenceManager.instance.SaveGame();
+
+                    // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
+                    SceneManager.LoadSceneAsync(GameManager.instance.levelStartScene);
                 },
                 () =>
                 // Function to execute if we select 'cancel'
@@ -57,17 +82,13 @@ public class SaveSlotsMenu : MonoBehaviour
             // Case - new game, and the save slot has no data
             DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
             DataPersistenceManager.instance.NewGame();
-            SaveGameAndLoadScene();
+
+            // Save the game anytime before loading a new scene
+            DataPersistenceManager.instance.SaveGame();
+
+            // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
+            SceneManager.LoadSceneAsync(GameManager.instance.levelStartScene);
         }
-    }
-
-    private void SaveGameAndLoadScene()
-    {
-        // Save the game anytime before loading a new scene
-        DataPersistenceManager.instance.SaveGame();
-
-        // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
-        SceneManager.LoadSceneAsync(GameManager.instance.currentScene);
     }
 
     public void OnDeleteClick(SaveSlot saveSlot)

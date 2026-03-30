@@ -11,8 +11,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] Image playerHPBar;
 
     [Header("Scene Settings")]
-    [SerializeField] private string firstGameplayScene = "Room1";
-    [HideInInspector] public string currentScene;
+    [HideInInspector] public int levelStartScene;
+    [HideInInspector] public int spawnScene;
 
     [HideInInspector] public GameObject player;
     [HideInInspector] public PlayerController playerScript;
@@ -157,40 +157,52 @@ public class GameManager : MonoBehaviour, IDataPersistence
         // Makes sure the game is running normally before loading in
         StateUnpause();
 
-        // Starts a brand new game from the first gameplay scene
-        currentScene = firstGameplayScene;
-
         if (DataPersistenceManager.instance != null)
         {
             DataPersistenceManager.instance.NewGame();
         }
 
-        SceneManager.LoadSceneAsync(currentScene);
+        SceneManager.LoadSceneAsync(levelStartScene);
     }
 
     public void ContinueGame()
     {
-        // Makes sure the game is running normally before loading in
-        StateUnpause();
+        Debug.Log("ContinueGame currentScene is: " + levelStartScene);
 
-        Debug.Log("ContinueGame currentScene is: " + currentScene);
-
-        // Loads the last saved scene if one exists
-        if (string.IsNullOrEmpty(currentScene))
+        if(RespawnManager.instance.HasRespawnPoint)
         {
-            SceneManager.LoadSceneAsync(firstGameplayScene);
+            // If the player has a checkpoint, loads the scene with the checkpoint
+            SceneManager.LoadSceneAsync(spawnScene);
+
+            // Call the respawn manager to spawn the player at the spawn point if a spawn point has been saved
+            RespawnManager.instance.Respawn(player.transform);
         }
         else
         {
-            SceneManager.LoadSceneAsync(currentScene);
+            // If the player does not have a checkpoint, starts the player at the beginning of the level
+            SceneManager.LoadSceneAsync(levelStartScene);
         }
+
+        // Starts the player in a fresh state after loading
+        StateUnpause();
+        playerScript.ResetPlayerState();
+        UpdatePlayerUI();
     }
 
     public void RestartLevel()
     {
+        // TO DO: save player stats at the beginning of the level so they can be reset
+
+        // Resets the players stats from data
+        DataPersistenceManager.instance.LoadGame();
+
+        // Starts the player at the beginning of the level
+        SceneManager.LoadSceneAsync(levelStartScene);
+
+        // Starts the player in a fresh state
         StateUnpause();
-        currentScene = SceneManager.GetActiveScene().name;
-        SceneManager.LoadSceneAsync(currentScene);
+        playerScript.ResetPlayerState();
+        UpdatePlayerUI();
     }
 
     public void PlayerLoses()
@@ -203,14 +215,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        this.currentScene = data.currentScene;
-        Debug.Log("GameManager loaded currentScene as: " + this.currentScene);
+        this.levelStartScene = data.levelStartScene;
     }
 
     public void SaveData(GameData data)
     {
-        currentScene = SceneManager.GetActiveScene().name;
-        data.currentScene = currentScene;
-        Debug.Log("GameManager saved currentScene as: " + data.currentScene);
+        data.levelStartScene = levelStartScene;
     }
 }
