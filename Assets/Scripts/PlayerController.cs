@@ -722,15 +722,28 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
     {
         // Load saved stats
         this.maxHealth = data.maxHealth;
-        this.currentHealth = data.maxHealth;
+        this.currentHealth = data.currentHealth;
         this.hasDash = data.hasDash;
         this.hasDoubleJump = data.hasDoubleJump;
+
+        if (this.currentHealth <= 0)
+        {
+            this.currentHealth = this.maxHealth;
+        }
+
+        // DO NOT REMOVE fixes player control after loading
+        ResetPlayerState();
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.UpdatePlayerUI();
+        }
     }
 
     public void SaveData(GameData data)
     {
         data.maxHealth = this.maxHealth;
-        data.maxHealth = this.currentHealth;
+        data.currentHealth = this.currentHealth;
         data.hasDash = this.hasDash;
         data.hasDoubleJump = this.hasDoubleJump;
     }

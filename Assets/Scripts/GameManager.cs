@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
 {
     public static GameManager instance;
 
+    [Header("Player Setup")]
+    [SerializeField] private GameObject playerPrefab;
+
     [Header("Player UI: ")]
     [SerializeField] private GameObject playerHUD;
     [SerializeField] private Image playerHPBar;
@@ -70,8 +73,42 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Refreshes references after scene change
+        // Refresh references after scene change
         FindSceneReferences();
+
+        // Keeps track of the last gameplay scene the player entered
+        // DO NOT REMOVE Continue system depends on this
+        if (scene.name != "MainMenu")
+        {
+            currentScene = scene.name;
+        }
+
+        Debug.Log("Scene loaded: " + scene.name);
+        Debug.Log("Player found after scene load: " + (player != null));
+        Debug.Log("Player prefab assigned: " + (playerPrefab != null));
+        Debug.Log("Player spawn point found: " + (playerSpawnPos != null));
+
+        if (scene.name != "MainMenu" && player == null && playerPrefab != null)
+        {
+            Vector3 spawnPosition = Vector3.zero;
+
+            if (playerSpawnPos != null)
+            {
+                spawnPosition = playerSpawnPos.transform.position;
+            }
+
+            player = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+            playerScript = player.GetComponent<PlayerController>();
+
+            Debug.Log("Player spawned in scene: " + scene.name + " at " + spawnPosition);
+        }
+
+        CameraFlow cameraFlow = FindObjectOfType<CameraFlow>();
+
+        if (cameraFlow != null && player != null)
+        {
+            cameraFlow.SetTarget(player.transform);
+        }
 
         if (playerScript != null)
         {
@@ -139,7 +176,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void StateUnpause()
     {
-        // ?? DO NOT REMOVE — THIS FIXES "PLAYER CANNOT MOVE" BUG
+        // DO NOT REMOVE THIS FIXES "PLAYER CANNOT MOVE" BUG
         isPaused = false;
         Time.timeScale = 1f;
 
@@ -168,6 +205,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         // CRITICAL FIX — DO NOT REMOVE
         // Ensures game is not frozen from pause
         StateUnpause();
+
+        Debug.Log("ContinueGame currentScene is: " + currentScene);
 
         // CRITICAL FIX — LOAD SAVE DATA BEFORE USING currentScene
         if (DataPersistenceManager.instance != null)
@@ -208,13 +247,23 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         // Loads saved scene name
         this.currentScene = data.currentScene;
+        Debug.Log("GameManager loaded currentScene as: " + this.currentScene);
     }
 
     public void SaveData(GameData data)
     {
-        // DO NOT CHANGE — THIS IS REQUIRED FOR CONTINUE TO WORK
-        // Saves the CURRENT scene name before quitting or switching scenes
-        currentScene = SceneManager.GetActiveScene().name;
+        // DO NOT CHANGE THIS IS REQUIRED FOR CONTINUE TO WORK
+        // Saves the last gameplay scene the player entered
         data.currentScene = currentScene;
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        // DO NOT REMOVE
+        // This ensures the current scene is saved whenever the player leaves a scene
+        if (DataPersistenceManager.instance != null)
+        {
+            DataPersistenceManager.instance.SaveGame();
+        }
     }
 }
