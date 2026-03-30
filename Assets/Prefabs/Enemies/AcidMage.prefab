@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6597389533330131492}
   - component: {fileID: 6594413584370492423}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Front arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 107600665205141683}
   - component: {fileID: 6704443046830651719}
   - component: {fileID: 2058511407871002225}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AcidMage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,16 +152,20 @@ MonoBehaviour:
   detectionRange: 6
   attackRange: 6
   firePoint: {fileID: 2547919057853691783}
-  attackCooldown: 3
+  attackCooldown: 4
   knockbackForceX: 4
   knockbackForceY: 2
   flashDuration: 0.1
   hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
   deathDelay: 0.15
+  fadeDuration: 0
+  deathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  deathSprite: {fileID: 0}
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
-  facingRight: 0
+  dropTable: {fileID: 1849313148126109548, guid: cd0a5d28b90194b418f11cbda9527266, type: 3}
+  facingRight: 1
   currentState: 0
   staffProjectile: {fileID: 4643723722109723883, guid: 885024028ca59d140a36001c35a26824, type: 3}
 --- !u!95 &107600665205141683
@@ -175,7 +179,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 9be21d0cc76a54cb3b1d888b51070247, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -269,7 +273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1012652113781569541}
   - component: {fileID: 6702040506221666617}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,7 +369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8733055243279301519}
   - component: {fileID: 233654417066863666}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -456,7 +460,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2547919057853691783}
   - component: {fileID: 5707354779201415390}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Back arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2485107086771402462}
   - component: {fileID: 2930531903019559988}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Back leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -638,7 +642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6818543098100501213}
   - component: {fileID: 5027319367086851287}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -729,7 +733,7 @@ GameObject:
   m_Component:
   - component: {fileID: 479397632341682935}
   - component: {fileID: 7946006990820409225}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Front leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}

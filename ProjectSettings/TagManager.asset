@@ -8,17 +8,18 @@ TagManager:
   - Player Spawn Pos
   - Ground
   - Enemy
+  - HUD
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Ground
   - Wall
-  - 
-  - 
+  - EnemyBullet
+  - Enemy
   - 
   - 
   - 

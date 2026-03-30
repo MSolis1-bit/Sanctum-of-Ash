@@ -43,7 +43,7 @@ public class MiniBoss : MonoBehaviour, IDamage
     private bool isAttacking = false;
     private bool isDead = false;
 
-    private Animator anim;
+    [SerializeField] Animator anim;
     private Rigidbody2D rb;
     private Transform player;
 
@@ -52,13 +52,14 @@ public class MiniBoss : MonoBehaviour, IDamage
 
 
 
-    private void Awake()
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         currentHealth = maxHealth;
     }
+
 
     private void EnterState(State newState)
     {  // resets timers and switches to a new state

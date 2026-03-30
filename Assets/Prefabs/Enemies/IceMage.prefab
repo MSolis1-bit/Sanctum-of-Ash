@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 318017912604721277}
   - component: {fileID: 3389080798691924368}
   - component: {fileID: 837387114628776386}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: IceMage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,15 +60,19 @@ MonoBehaviour:
   detectionRange: 6
   attackRange: 6
   firePoint: {fileID: 7835412703127716139}
-  attackCooldown: 3
+  attackCooldown: 6
   knockbackForceX: 4
   knockbackForceY: 2
   flashDuration: 0.1
   hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
   deathDelay: 0.15
+  fadeDuration: 0
+  deathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  deathSprite: {fileID: 0}
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
+  dropTable: {fileID: 1849313148126109548, guid: cd0a5d28b90194b418f11cbda9527266, type: 3}
   facingRight: 0
   currentState: 0
   staffProjectile: {fileID: 906788043661918864, guid: dd7bdadf877eddd4287746f55a6cf076, type: 3}
@@ -83,7 +87,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 9be21d0cc76a54cb3b1d888b51070247, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -177,7 +181,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1402351239155869295}
   - component: {fileID: 3536278086905081964}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Front arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4311052164770236339}
   - component: {fileID: 3934576026271602008}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,7 +369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7835412703127716139}
   - component: {fileID: 3889392301622342704}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Back arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -456,7 +460,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6011258830261080622}
   - component: {fileID: 840289551476281976}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2428196421927082962}
   - component: {fileID: 1462895140958719309}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Back leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -638,7 +642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 516633435574421766}
   - component: {fileID: 5121572535423510547}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -729,7 +733,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7793356219285942236}
   - component: {fileID: 1925087165875807829}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Front leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
