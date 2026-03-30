@@ -47,6 +47,7 @@ MonoBehaviour:
   playerHUD: {fileID: 0}
   playerHPBar: {fileID: 0}
   firstGameplayScene: Room1
+  playerPrefab: {fileID: 0}
   player: {fileID: 4176842050411020851, guid: 90da2c01cb365614fb5c2a3b528d4806, type: 3}
   playerScript: {fileID: 0}
   currentScene: 

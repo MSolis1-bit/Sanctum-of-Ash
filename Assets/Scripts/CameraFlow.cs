@@ -28,4 +28,15 @@ public class CameraFlow : MonoBehaviour
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
         transform.position = smoothedPosition;
     }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+
+        // Snaps the camera to the new target right away
+        if (target != null)
+        {
+            transform.position = target.position + offset;
+        }
+    }
 }
