@@ -57,7 +57,7 @@ MonoBehaviour:
   detectionRange: 6
   attackRange: 2
   damage: 10
-  attackCooldown: 0.5
+  attackCooldown: 3
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -69,6 +69,7 @@ MonoBehaviour:
   fadeDuration: 5
   deathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   deathSprite: {fileID: 21300000, guid: 879f6d207d2e141bb8cf1f983eeca737, type: 3}
+  dropTable: {fileID: 1849313148126109548, guid: cd0a5d28b90194b418f11cbda9527266, type: 3}
   currentState: 0
 --- !u!212 &2375905859818020200
 SpriteRenderer:

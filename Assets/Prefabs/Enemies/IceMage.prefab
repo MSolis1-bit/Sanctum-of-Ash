@@ -72,6 +72,7 @@ MonoBehaviour:
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
+  dropTable: {fileID: 1849313148126109548, guid: cd0a5d28b90194b418f11cbda9527266, type: 3}
   facingRight: 0
   currentState: 0
   staffProjectile: {fileID: 906788043661918864, guid: dd7bdadf877eddd4287746f55a6cf076, type: 3}

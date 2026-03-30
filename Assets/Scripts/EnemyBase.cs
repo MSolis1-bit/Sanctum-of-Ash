@@ -50,6 +50,10 @@ public class EnemyBase : MonoBehaviour, IDamage
     [Header("Patrol")]
     [SerializeField] private Transform[] waypoints;
 
+    [Header("Drops")]
+    [SerializeField] GameObject dropTable;
+
+
     public bool facingRight;
     private int waypointIndex;
     private float idleTimer;
@@ -217,6 +221,10 @@ public class EnemyBase : MonoBehaviour, IDamage
         {
             anim.SetTrigger("death");
             StartCoroutine(DieRoutine());
+            if (dropTable != null)
+            {
+                Instantiate(dropTable, transform);
+            }
         }
     }
 
@@ -242,18 +250,10 @@ public class EnemyBase : MonoBehaviour, IDamage
             sr.sprite = deathSprite;
         }
 
-        // Disable collider
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null)
-        {
-            col.enabled = false;
-        }
-
-        // Freeze body
-        rb.simulated = false;
+       
 
         yield return new WaitForSeconds(deathDelay);
-
+        Destroy(gameObject);
         // Disable script
         enabled = false;
     }

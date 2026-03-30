@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     private Transform player;
 
     [Header("UI")]
+    [SerializeField] GameObject canvas;
     [SerializeField] private Slider enemyHPBar;
     [SerializeField] private float enemyHPBarFadeTime = 1f;
     [SerializeField] private Slider enemyEaseHPBar;
@@ -50,6 +51,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Death Sprite")]
     [SerializeField] private Sprite deathSprite;
+    [SerializeField] GameObject dropTable;
 
     [Header("Patrol")]
     [SerializeField] private Transform[] waypoints;
@@ -73,7 +75,7 @@ public class Enemy : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         currentHealth = maxHealth;
-
+        canvas.SetActive(true);
         originalColor = sr.color;
     }
 
@@ -212,12 +214,17 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0)
         {
             StartCoroutine(DieRoutine());
+            if (dropTable != null)
+            {
+                Instantiate(dropTable, transform);
+            }
         }
     }
 
     private IEnumerator DieRoutine()
     {
         isDying = true;
+        canvas.SetActive(false);
 
         // Stop movement
         rb.linearVelocity = Vector2.zero;

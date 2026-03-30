@@ -72,6 +72,7 @@ MonoBehaviour:
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
+  dropTable: {fileID: 1849313148126109548, guid: cd0a5d28b90194b418f11cbda9527266, type: 3}
   facingRight: 0
   currentState: 0
   regularArrowPrefab: {fileID: 1782390210741266490, guid: 3270adbcd273ffa4285e26e6a3c9cf5d, type: 3}
