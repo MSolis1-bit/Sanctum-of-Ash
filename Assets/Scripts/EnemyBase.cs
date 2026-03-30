@@ -40,10 +40,19 @@ public class EnemyBase : MonoBehaviour, IDamage
     [SerializeField] private Color hitFlashColor = Color.red;
     [SerializeField] private float deathDelay;
 
+    [Header("Death FeedBack")]
+    [SerializeField] private float fadeDuration;
+    [SerializeField] private Color deathColor = Color.grey;
 
+    [Header("Death Sprite")]
+    [SerializeField] private Sprite deathSprite;
 
     [Header("Patrol")]
     [SerializeField] private Transform[] waypoints;
+
+    [Header("Drops")]
+    [SerializeField] GameObject dropTable;
+
 
     public bool facingRight;
     private int waypointIndex;
@@ -130,7 +139,7 @@ public class EnemyBase : MonoBehaviour, IDamage
 
         if (player == null) { EnterState(State.Idle); return; }
 
-
+        anim.SetBool("isMoving", false);
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
 
         float dist = Vector2.Distance(transform.position, player.position);
@@ -143,6 +152,8 @@ public class EnemyBase : MonoBehaviour, IDamage
         {
             attackTimer = 0f;
             Attack();
+
+            anim?.SetTrigger("attack");
         }
 
         if (player.position.x > transform.position.x && !facingRight)
@@ -210,6 +221,10 @@ public class EnemyBase : MonoBehaviour, IDamage
         {
             anim.SetTrigger("death");
             StartCoroutine(DieRoutine());
+            if (dropTable != null)
+            {
+                Instantiate(dropTable, transform);
+            }
         }
     }
 
@@ -217,13 +232,30 @@ public class EnemyBase : MonoBehaviour, IDamage
     {
         isDying = true;
 
+        // Stop movement
         rb.linearVelocity = Vector2.zero;
 
-        sr.color = hitFlashColor;
+        // Stop animation
+        if (anim != null)
+        {
+            anim.SetFloat("Speed", 0f);
+            anim.enabled = false;
+        }
+
+        // Change to death sprite + grey color
+        sr.color = deathColor;
+
+        if (deathSprite != null)
+        {
+            sr.sprite = deathSprite;
+        }
+
+       
 
         yield return new WaitForSeconds(deathDelay);
-
         Destroy(gameObject);
+        // Disable script
+        enabled = false;
     }
 
 

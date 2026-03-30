@@ -134,14 +134,14 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         animator = GetComponent<Animator>();
         originalColor = spriteRenderer.color;
 
-        //Sets the OriginalAttack so it can be modified and reset
+        // Sets the OriginalAttack so it can be modified and reset
         if (attackHitbox != null)
         {
             HB = attackHitbox.GetComponent<PlayerAttackHitbox>();
             origHitBoxDamage = HB.Damage;
         }
 
-        // Starts the player with full health
+        // Starts the player alive with full health
         currentHealth = maxHealth;
         isDead = false;
 
@@ -338,8 +338,13 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     private void FixedUpdate()
     {
-        // Stops movement if the player is stunned, dead, dashing, or attacking
-        if (isDead || isDashing || isAttacking || isStunned)
+        if (isDead)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        if (isDashing || isAttacking || isStunned)
         {
             return;
         }
@@ -484,17 +489,33 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     public void TakeDamage(int amount)
     {
+        // Ignores damage if the player is already dead
+        if (isDead)
+        {
+            return;
+        }
+
         Debug.Log("TakeDamage on object: " + gameObject.name + " | Health before: " + currentHealth);
         Debug.Log("TakeDamage called for: " + amount + " | Health before: " + currentHealth);
 
         currentHealth -= amount;
 
-        Debug.Log("Health after: " + currentHealth);
-
-        if (currentHealth <= 0)
+        // Stops health from going below 0
+        if (currentHealth < 0)
         {
             currentHealth = 0;
-            Debug.Log("PLAYER DIED");
+        }
+
+        Debug.Log("Health after: " + currentHealth);
+
+        //Applies knockback, makes the player invincible for a short time and makes them flash red
+        StartCoroutine(DamageRoutine());
+
+
+        // Triggers the death state once health is gone
+        if (currentHealth <= 0)
+        {
+            Die();
         }
 
         if (GameManager.instance != null)
@@ -524,8 +545,14 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
 
     private void Die()
     {
+        // Marks the player as dead so other code stops running
         isDead = true;
-        Debug.Log("Player has died.");
+
+        // Stops all movement right away
+        rb.linearVelocity = Vector2.zero;
+
+        GameManager.instance.PlayerLoses();
+        Debug.Log("PLAYER DIED");
     }
 
     private void HandleCornerCorrection()
@@ -632,7 +659,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         spriteRenderer.color = originalColor;
         isStunned = false;
         isInvincible = false;
-    }
+   }
 
     public void SetStunned(bool value)
     {
@@ -669,18 +696,55 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         HB.Damage = origHitBoxDamage;
     }
 
+    public void ResetPlayerState()
+    {
+        // Clears temporary states so the player can control the character normally
+        isDead = false;
+        isDashing = false;
+        isAttacking = false;
+        isStunned = false;
+        isWallJumping = false;
+        isWallSliding = false;
+
+        // Stops leftover movement from carrying over
+        rb.linearVelocity = Vector2.zero;
+
+        // Resets jump timing values
+        jumpBufferCounter = 0f;
+        coyoteTimeCounter = 0f;
+        wallJumpLockCounter = 0f;
+
+        // Resets jump counts
+        canUseDoubleJump = hasDoubleJump;
+        remainingWallJumps = maxWallJumps;
+    }
+
     public void LoadData(GameData data)
     {
+        // Load saved stats
         this.maxHealth = data.maxHealth;
-        this.currentHealth = data.maxHealth;
+        this.currentHealth = data.currentHealth;
         this.hasDash = data.hasDash;
         this.hasDoubleJump = data.hasDoubleJump;
+
+        if (this.currentHealth <= 0)
+        {
+            this.currentHealth = this.maxHealth;
+        }
+
+        // DO NOT REMOVE fixes player control after loading
+        ResetPlayerState();
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.UpdatePlayerUI();
+        }
     }
 
     public void SaveData(GameData data)
     {
         data.maxHealth = this.maxHealth;
-        data.maxHealth = this.currentHealth;
+        data.currentHealth = this.currentHealth;
         data.hasDash = this.hasDash;
         data.hasDoubleJump = this.hasDoubleJump;
     }

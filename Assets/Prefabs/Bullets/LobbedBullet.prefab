@@ -153,9 +153,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::damage
   type: 0
+  status: 0
+  effectDuration: 0
   rb: {fileID: 8239286472327317125}
   damageAmount: 1
   damageRate: 1
+  rotateSpeed: 0
   speed: 10
   destroyTime: 3
   hitEffect: {fileID: 0}
@@ -174,7 +177,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

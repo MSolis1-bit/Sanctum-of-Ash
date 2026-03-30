@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 
 public class ButtonFunctions : MonoBehaviour
 {
+    public static ButtonFunctions instance;
     [Header("Menu Objects: ")]
     [SerializeField] GameObject mainMenu;
     [SerializeField] GameObject mainMenuBackground;
@@ -36,6 +37,7 @@ public class ButtonFunctions : MonoBehaviour
 
     void Start()
     {
+        instance = this;
         saveSlotsMenuScript = saveSlots.GetComponent<SaveSlotsMenu>();
 
         if (SceneManager.GetActiveScene().name == "MainMenu")
@@ -115,6 +117,12 @@ public class ButtonFunctions : MonoBehaviour
         GameManager.instance.NewGame();
     }
 
+    public void RestartLevel()
+    {
+        DisableMenuButtons();
+        GameManager.instance.RestartLevel();
+    }
+
     public void ContinueGame()
     {
         DisableMenuButtons();
@@ -124,12 +132,28 @@ public class ButtonFunctions : MonoBehaviour
     public void QuitToMainMenu()
     {
         DisableMenuButtons();
+
+        if (DataPersistenceManager.instance != null)
+        {
+            DataPersistenceManager.instance.SaveGame();
+        }
+        else
+        {
+            Debug.LogWarning("DataPersistenceManager instance was null when quitting to main menu.");
+        }
+
         SceneManager.LoadScene(0);
     }
 
     public void ActivateLoseMenu()
     {
         menuActive = loseMenu;
+        menuActive.SetActive(true);
+    }
+
+    public void ActivateWinMenu()
+    {
+        menuActive = winMenu;
         menuActive.SetActive(true);
     }
 

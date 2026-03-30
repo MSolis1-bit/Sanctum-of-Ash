@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7500776608586305550}
   - component: {fileID: 5476014055926043807}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 3869916183261268224}
   - component: {fileID: 6275019282526899646}
   - component: {fileID: 7870243649745974920}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Animator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 9e19d833804f4f3418d1704188c3e7f3, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 7254337863743867735}
   - component: {fileID: 7189131934141914816}
   - component: {fileID: 680123129021414955}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 577233149650784849}
   - component: {fileID: 1403440135674016045}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shoot pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -379,7 +379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5093475196195275509}
   - component: {fileID: 8906364127571688388}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: EaseHealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -470,7 +470,7 @@ GameObject:
   - component: {fileID: 2480975274056885703}
   - component: {fileID: 6371862867412803367}
   - component: {fileID: 7104270181580079007}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -572,7 +572,7 @@ GameObject:
   - component: {fileID: 9202592650180478571}
   - component: {fileID: 5455612762104989885}
   - component: {fileID: 2578860996195708389}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -647,7 +647,7 @@ GameObject:
   - component: {fileID: 66635143949667442}
   - component: {fileID: 2425771171082869738}
   - component: {fileID: 8911729456372830050}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -722,7 +722,7 @@ GameObject:
   - component: {fileID: 3498221374835812140}
   - component: {fileID: 4242303711137660575}
   - component: {fileID: 8222963212624802065}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -800,7 +800,7 @@ GameObject:
   - component: {fileID: 460687184042573064}
   - component: {fileID: 3641023152004982213}
   - component: {fileID: 4009432279541538926}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -838,6 +838,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   sr: {fileID: 6275019282526899646}
+  canvas: {fileID: 5430757595863860953}
   enemyHPBar: {fileID: 5476014055926043807}
   enemyHPBarFadeTime: 1
   enemyEaseHPBar: {fileID: 8906364127571688388}
@@ -857,7 +858,11 @@ MonoBehaviour:
   knockbackForceY: 2
   flashDuration: 0.1
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
-  deathDelay: 0.15
+  deathDelay: 10
+  fadeDuration: 0
+  deathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  deathSprite: {fileID: 21300000, guid: c81d4f5e629154ef9bf7c5b3cad8f9d8, type: 3}
+  dropTable: {fileID: 1849313148126109548, guid: cd0a5d28b90194b418f11cbda9527266, type: 3}
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -874,7 +879,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 500
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1

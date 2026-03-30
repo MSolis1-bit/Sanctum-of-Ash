@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c497658231186714ab4f04613f080e98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HPPickUp
-  healAmount: 1
+  healAmount: 50
   playerInTrigger: 0
 --- !u!61 &2206170905802361038
 BoxCollider2D:

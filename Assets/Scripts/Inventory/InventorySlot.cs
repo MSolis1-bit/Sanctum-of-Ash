@@ -8,11 +8,6 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 {
     public Image image;
 
-    private void Awake()
-    {
-        
-    }
-
     public void OnDrop(PointerEventData eventData)
     {
         if (transform.childCount == 0)

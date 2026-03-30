@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4098977932293278355}
   - component: {fileID: 5324691205981600527}
   - component: {fileID: 1445995860109615249}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ClawMagic
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -3,13 +3,18 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
+    // Data management
     public string timeStamp;
     public long lastUpdated;
 
-    //public Vector2 playerPosition;
+    // Player stats
     public int maxHealth;
+    public int currentHealth;
     public bool hasDash;
     public bool hasDoubleJump;
+
+    // DO NOT CHANGE THIS TO INT OR REMOVE
+    // This stores the last saved scene name for Continue Game
     public string currentScene;
 
     // The values defined in this constructor will be the default values
@@ -17,6 +22,7 @@ public class GameData
     public GameData()
     {
         this.maxHealth = 100;
+        this.currentHealth = 100;
         this.hasDash = false;
         this.hasDoubleJump = false;
         this.currentScene = "";
