@@ -7,23 +7,25 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public static GameManager instance;
 
     [Header("Player UI: ")]
-    [SerializeField] GameObject playerHUD;
-    [SerializeField] Image playerHPBar;
+    [SerializeField] private GameObject playerHUD;
+    [SerializeField] private Image playerHPBar;
 
     [Header("Scene Settings")]
-    [HideInInspector] public int levelStartScene;
-    [HideInInspector] public int spawnScene;
+    // DO NOT CHANGE THIS TO INT OR REMOVE
+    // This stores the FIRST gameplay scene (used only for New Game or fallback)
+    [SerializeField] private string firstGameplayScene = "Room1";
 
     [HideInInspector] public GameObject player;
     [HideInInspector] public PlayerController playerScript;
 
-    // For Checkpoints
+    // DO NOT MODIFY TYPE OR REMOVE
+    // This stores the LAST saved scene for Continue Game
+    [SerializeField] private string currentScene = "";
+
     [Header("Spawn Points: ")]
     public GameObject playerSpawnPos;
 
     private bool isPaused = false;
-
-    private float timeScaleOriginal;
 
     public bool IsPaused => isPaused;
 
@@ -37,49 +39,23 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         instance = this;
         DontDestroyOnLoad(this.gameObject);
-
-        timeScaleOriginal = Time.timeScale;
-   
     }
 
-    void Start()
+    private void Start()
     {
-        playerHUD = GameObject.FindWithTag("HUD");
-        player = GameObject.FindWithTag("Player");
-        playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
+        // Finds player + UI when the game first starts
+        FindSceneReferences();
 
-        if (player != null)
+        if (playerScript != null)
         {
-            playerScript = player.GetComponent<PlayerController>();
             UpdatePlayerUI();
         }
 
+        // Shows HUD only if NOT in main menu
         if (playerHUD != null)
         {
-            if (SceneManager.GetActiveScene().name != null && SceneManager.GetActiveScene().name != "MainMenu")
-            {
-                playerHUD.SetActive(true);
-            }
-            else
-            {
-                playerHUD.SetActive(false);
-            }
+            playerHUD.SetActive(SceneManager.GetActiveScene().name != "MainMenu");
         }
-    }
-
-    void Update()
-    {
-
-    }
-
-    public void UpdatePlayerUI()
-    {
-        if (playerHPBar == null || playerScript == null)
-        {
-            return;
-        }
-
-        playerHPBar.fillAmount = Mathf.Clamp01((float)playerScript.CurrentHealth / playerScript.MaxHealth);
     }
 
     private void OnEnable()
@@ -94,6 +70,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // Refreshes references after scene change
         FindSceneReferences();
 
         if (playerScript != null)
@@ -103,19 +80,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         if (playerHUD != null)
         {
-            if (scene.name != "MainMenu")
-            {
-                playerHUD.SetActive(true);
-            }
-            else
-            {
-                playerHUD.SetActive(false);
-            }
+            playerHUD.SetActive(scene.name != "MainMenu");
         }
     }
 
     private void FindSceneReferences()
     {
+        // Finds player in scene
         player = GameObject.FindWithTag("Player");
 
         if (player != null)
@@ -127,86 +98,106 @@ public class GameManager : MonoBehaviour, IDataPersistence
             playerScript = null;
         }
 
+        // Finds spawn point
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
 
+        // Finds health bar UI
         GameObject hpBarObject = GameObject.Find("PlayerHPBarFill");
         if (hpBarObject != null)
         {
             playerHPBar = hpBarObject.GetComponent<Image>();
         }
+
+        // Finds HUD
+        GameObject hudObject = GameObject.FindWithTag("HUD");
+        if (hudObject != null)
+        {
+            playerHUD = hudObject;
+        }
+    }
+
+    public void UpdatePlayerUI()
+    {
+        // Updates health bar based on actual player health
+        if (playerHPBar == null || playerScript == null)
+        {
+            return;
+        }
+
+        playerHPBar.fillAmount = Mathf.Clamp01((float)playerScript.CurrentHealth / playerScript.MaxHealth);
     }
 
     public void StatePause()
     {
         isPaused = true;
         Time.timeScale = 0f;
+
+        // Shows mouse cursor for menu navigation
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
     public void StateUnpause()
     {
+        // ?? DO NOT REMOVE — THIS FIXES "PLAYER CANNOT MOVE" BUG
         isPaused = false;
         Time.timeScale = 1f;
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void NewGame()
     {
-        // Makes sure the game is running normally before loading in
+        // Ensures game is not frozen before starting
         StateUnpause();
+
+        // Starts fresh game at first scene
+        currentScene = firstGameplayScene;
 
         if (DataPersistenceManager.instance != null)
         {
             DataPersistenceManager.instance.NewGame();
         }
 
-        SceneManager.LoadSceneAsync(levelStartScene);
+        SceneManager.LoadSceneAsync(currentScene);
     }
 
     public void ContinueGame()
     {
-        Debug.Log("ContinueGame currentScene is: " + levelStartScene);
+        // CRITICAL FIX — DO NOT REMOVE
+        // Ensures game is not frozen from pause
+        StateUnpause();
 
-        if(RespawnManager.instance.HasRespawnPoint)
+        // CRITICAL FIX — LOAD SAVE DATA BEFORE USING currentScene
+        if (DataPersistenceManager.instance != null)
         {
-            // If the player has a checkpoint, loads the scene with the checkpoint
-            SceneManager.LoadSceneAsync(spawnScene);
+            DataPersistenceManager.instance.LoadGame();
+        }
 
-            // Call the respawn manager to spawn the player at the spawn point if a spawn point has been saved
-            RespawnManager.instance.Respawn(player.transform);
+        // Loads last saved scene, or fallback if empty
+        if (string.IsNullOrEmpty(currentScene))
+        {
+            SceneManager.LoadSceneAsync(firstGameplayScene);
         }
         else
         {
-            // If the player does not have a checkpoint, starts the player at the beginning of the level
-            SceneManager.LoadSceneAsync(levelStartScene);
+            SceneManager.LoadSceneAsync(currentScene);
         }
-
-        // Starts the player in a fresh state after loading
-        StateUnpause();
-        playerScript.ResetPlayerState();
-        UpdatePlayerUI();
     }
 
     public void RestartLevel()
     {
-        // TO DO: save player stats at the beginning of the level so they can be reset
-
-        // Resets the players stats from data
-        DataPersistenceManager.instance.LoadGame();
-
-        // Starts the player at the beginning of the level
-        SceneManager.LoadSceneAsync(levelStartScene);
-
-        // Starts the player in a fresh state
+        // Reloads current scene cleanly
         StateUnpause();
-        playerScript.ResetPlayerState();
-        UpdatePlayerUI();
+
+        currentScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadSceneAsync(currentScene);
     }
 
     public void PlayerLoses()
     {
+        // Pauses game when player dies
         if (playerScript != null && playerScript.IsDead)
         {
             StatePause();
@@ -215,11 +206,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        this.levelStartScene = data.levelStartScene;
+        // Loads saved scene name
+        this.currentScene = data.currentScene;
     }
 
     public void SaveData(GameData data)
     {
-        data.levelStartScene = levelStartScene;
+        // DO NOT CHANGE — THIS IS REQUIRED FOR CONTINUE TO WORK
+        // Saves the CURRENT scene name before quitting or switching scenes
+        currentScene = SceneManager.GetActiveScene().name;
+        data.currentScene = currentScene;
     }
 }
