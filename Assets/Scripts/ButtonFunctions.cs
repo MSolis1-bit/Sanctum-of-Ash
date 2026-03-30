@@ -87,7 +87,8 @@ public class ButtonFunctions : MonoBehaviour
 
         if (button.name == "CreditsButton") {menuActive = creditsMenu;}
         else if (button.name == "LoadButton") { menuActive = saveMenu; saveSlotsMenuScript.isLoadingGame = true; }
-        else if(button.name == "NewGameButton" || button.name == "SaveButton") { menuActive = saveMenu; saveSlotsMenuScript.isLoadingGame = false; }
+        else if (button.name == "SaveButton") { menuActive = saveMenu; saveSlotsMenuScript.isLoadingGame = false; }
+        else if (button.name == "NewGameButton" || button.name == "SaveButton") { menuActive = saveMenu; saveSlotsMenuScript.isLoadingGame = false; }
         else if(button.name == "OptionsButton") {menuActive = optionsMenu; EventSystem.current.SetSelectedGameObject(optionsFirstButton); }
         else if(button.name == "BackButton") 
         {
