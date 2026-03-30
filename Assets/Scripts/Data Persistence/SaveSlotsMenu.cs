@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SaveSlotsMenu : MonoBehaviour
@@ -13,81 +12,60 @@ public class SaveSlotsMenu : MonoBehaviour
 
     private SaveSlot[] saveSlots;
 
+    // Determines whether we are loading a game or starting a new one
     public bool isLoadingGame = false;
 
     private void Awake()
     {
+        // Gets all save slot UI elements under this object
         saveSlots = this.GetComponentsInChildren<SaveSlot>();
     }
 
     public void OnSaveSlotClick(SaveSlot saveSlot)
     {
-        // Disable all buttons
+        // Prevents double-clicking or spamming buttons
         DisableMenuButtons();
 
-        // Case - loading game
-        if(isLoadingGame)
+        if (isLoadingGame)
         {
-            // Ready the players data
+            // Switch to the selected save profile
             DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
-            DataPersistenceManager.instance.SaveGame();
 
-            if(RespawnManager.instance.HasRespawnPoint)
-            {
-                // If the player has a spawn point, load the scene containing the spawn point
-                SceneManager.LoadSceneAsync(GameManager.instance.spawnScene);
-                // Call the spawn manager to set the players position
-                RespawnManager.instance.Respawn(GameManager.instance.player.transform);
-            }
-            else
-            {
-                // if there is no checkpoint, start the player at the beginning of the level
-                SceneManager.LoadSceneAsync(GameManager.instance.levelStartScene);
-            }
-
-            // Makes sure the player starts in a fresh state
-            GameManager.instance.playerScript.ResetPlayerState();
-            if (GameManager.instance.IsPaused) { GameManager.instance.StateUnpause(); }
-
-            // Update the players UI and position
-            GameManager.instance.UpdatePlayerUI();
+            // DO NOT LOAD SCENES HERE
+            // GameManager is responsible for loading scenes correctly
+            GameManager.instance.ContinueGame();
         }
-        // Case - new game, but the save slot has data
-        else if(saveSlot.hasData)
+
+        else if (saveSlot.hasData)
         {
             confirmationPopupMenu.ActivateMenu(
                 "Starting a new game with this slot will override the currently saved data. Are you sure?",
-                // Function to execute if we select 'confirm'
+
+                // If player confirms overwrite
                 () =>
                 {
                     DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
-                    DataPersistenceManager.instance.NewGame();
-                    if (GameManager.instance.IsPaused) { GameManager.instance.StateUnpause(); }
-                    // Save the game anytime before loading a new scene
-                    DataPersistenceManager.instance.SaveGame();
 
-                    // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
-                    SceneManager.LoadSceneAsync(GameManager.instance.levelStartScene);
+                    // DO NOT LOAD SCENES HERE
+                    // GameManager handles proper scene flow
+                    GameManager.instance.NewGame();
                 },
+
+                // If player cancels
                 () =>
-                // Function to execute if we select 'cancel'
                 {
                     this.ActivateMenu();
                     isLoadingGame = true;
                 }
-                );
+            );
         }
+
         else
         {
-            // Case - new game, and the save slot has no data
             DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
-            DataPersistenceManager.instance.NewGame();
 
-            // Save the game anytime before loading a new scene
-            DataPersistenceManager.instance.SaveGame();
-
-            // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
-            SceneManager.LoadSceneAsync(GameManager.instance.levelStartScene);
+            // DO NOT LOAD SCENES HERE
+            GameManager.instance.NewGame();
         }
     }
 
@@ -97,37 +75,42 @@ public class SaveSlotsMenu : MonoBehaviour
 
         confirmationPopupMenu.ActivateMenu(
             "Are you sure you want to delete this saved data?",
-            // Function to execute if we select 'confirm'
+
+            // Confirm delete
             () =>
             {
                 DataPersistenceManager.instance.DeleteProfileData(saveSlot.GetProfileID());
                 ActivateMenu();
             },
-            // Function to execute if we select 'cancel'
+
+            // Cancel delete
             () =>
             {
                 ActivateMenu();
                 isLoadingGame = true;
             }
-            );
+        );
     }
 
     public void ActivateMenu()
     {
-        // Load all of the profiles that exist
+        // Gets all saved profiles from disk
         Dictionary<string, GameData> profilesGameData = DataPersistenceManager.instance.GetAllProfilesGameData();
 
-        // Ensure the back button is enabled when we activate the menu
+        // Makes sure back button works
         backButton.interactable = true;
 
-        // Loop through each save slot in the UI and get the content appropriately
-        foreach(SaveSlot saveSlot in saveSlots) 
+        // Updates each save slot UI
+        foreach (SaveSlot saveSlot in saveSlots)
         {
             GameData profileData = null;
             profilesGameData.TryGetValue(saveSlot.GetProfileID(), out profileData);
+
+            // Displays save data info
             saveSlot.SetData(profileData);
 
-            if(profileData == null && isLoadingGame)
+            // Disable empty slots if trying to load
+            if (profileData == null && isLoadingGame)
             {
                 saveSlot.SetInteractable(false);
             }
@@ -140,10 +123,12 @@ public class SaveSlotsMenu : MonoBehaviour
 
     private void DisableMenuButtons()
     {
-        foreach(SaveSlot saveSlot in saveSlots)
+        // Disables all save slot buttons temporarily
+        foreach (SaveSlot saveSlot in saveSlots)
         {
             saveSlot.SetInteractable(false);
         }
+
         backButton.interactable = false;
     }
 }

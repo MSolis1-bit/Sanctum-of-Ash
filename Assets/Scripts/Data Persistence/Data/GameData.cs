@@ -13,10 +13,9 @@ public class GameData
     public bool hasDash;
     public bool hasDoubleJump;
 
-    // Level progression
-    public int levelStartScene;
-    public int spawnScene;
-    public Vector2 respawnPoint;
+    // DO NOT CHANGE THIS TO INT OR REMOVE
+    // This stores the last saved scene name for Continue Game
+    public string currentScene;
 
     // The values defined in this constructor will be the default values
     // What the game starts with when there's no data to load
@@ -26,8 +25,6 @@ public class GameData
         this.currentHealth = 100;
         this.hasDash = false;
         this.hasDoubleJump = false;
-        this.levelStartScene = 1;
-        this.spawnScene = 1;
-        this.respawnPoint = Vector2.zero;
+        this.currentScene = "";
     }
 }
