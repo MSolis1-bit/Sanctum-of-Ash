@@ -551,6 +551,7 @@ public class PlayerController : MonoBehaviour, IDamage, IHeal, IDataPersistence
         // Stops all movement right away
         rb.linearVelocity = Vector2.zero;
 
+        GameManager.instance.PlayerLoses();
         Debug.Log("PLAYER DIED");
     }
 

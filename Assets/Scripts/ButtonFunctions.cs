@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 
 public class ButtonFunctions : MonoBehaviour
 {
+    public static ButtonFunctions instance;
     [Header("Menu Objects: ")]
     [SerializeField] GameObject mainMenu;
     [SerializeField] GameObject mainMenuBackground;
@@ -36,6 +37,7 @@ public class ButtonFunctions : MonoBehaviour
 
     void Start()
     {
+        instance = this;
         saveSlotsMenuScript = saveSlots.GetComponent<SaveSlotsMenu>();
 
         if (SceneManager.GetActiveScene().name == "MainMenu")
@@ -146,6 +148,12 @@ public class ButtonFunctions : MonoBehaviour
     public void ActivateLoseMenu()
     {
         menuActive = loseMenu;
+        menuActive.SetActive(true);
+    }
+
+    public void ActivateWinMenu()
+    {
+        menuActive = winMenu;
         menuActive.SetActive(true);
     }
 

@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     [Header("Spawn Points: ")]
     public GameObject playerSpawnPos;
-
+    [SerializeField] public GameObject winArea;
     private bool isPaused = false;
 
     public bool IsPaused => isPaused;
@@ -202,13 +202,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void ContinueGame()
     {
-        // CRITICAL FIX — DO NOT REMOVE
+        // CRITICAL FIX â€” DO NOT REMOVE
         // Ensures game is not frozen from pause
         StateUnpause();
 
         Debug.Log("ContinueGame currentScene is: " + currentScene);
 
-        // CRITICAL FIX — LOAD SAVE DATA BEFORE USING currentScene
+        // CRITICAL FIX â€” LOAD SAVE DATA BEFORE USING currentScene
         if (DataPersistenceManager.instance != null)
         {
             DataPersistenceManager.instance.LoadGame();
@@ -234,11 +234,20 @@ public class GameManager : MonoBehaviour, IDataPersistence
         SceneManager.LoadSceneAsync(currentScene);
     }
 
+    public void PlayerWins()
+    {
+        if (playerScript != null && !playerScript.IsDead)
+        {
+            ButtonFunctions.instance.ActivateWinMenu();
+            StatePause();
+        }
+    }
     public void PlayerLoses()
     {
         // Pauses game when player dies
         if (playerScript != null && playerScript.IsDead)
         {
+            ButtonFunctions.instance.ActivateLoseMenu();
             StatePause();
         }
     }

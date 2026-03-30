@@ -261,6 +261,10 @@ public class MiniBoss : MonoBehaviour, IDamage
         Debug.Log("Mini boss died!");
         anim?.SetTrigger("Death");
         Destroy(gameObject, 2f);
+        if (GameManager.instance.winArea != null)
+        {
+            winArea.instance.OpenExitDoor();
+        }
     }
 
     public float AttackSpeedMultiplier => isPhaseTwo ? phaseTwoAttackSpeedMultiplier : 1f;
