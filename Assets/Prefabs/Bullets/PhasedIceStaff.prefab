@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7329317331438713266}
+  - component: {fileID: 8234435954838296005}
   - component: {fileID: 2164384429566818130}
   - component: {fileID: 4220448663641971561}
-  - component: {fileID: 2702611063840323567}
   m_Layer: 8
   m_Name: PhasedIceStaff
   m_TagString: Untagged
@@ -27,14 +27,36 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 906788043661918864}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: 0, w: -1}
+  m_LocalRotation: {x: -0, y: 0, z: 0, w: -1}
   m_LocalPosition: {x: 2.49, y: 2.07, z: -0.10000001}
   m_LocalScale: {x: 1, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3844027468469659383}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 360}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 399.708}
+--- !u!114 &8234435954838296005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906788043661918864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6a57174d8597d47b1d21466c8bde6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::damage
+  type: 0
+  status: 2
+  effectDuration: 3
+  rb: {fileID: 4220448663641971561}
+  damageAmount: 5
+  damageRate: 0
+  rotateSpeed: 0
+  speed: 5
+  destroyTime: 5
+  hitEffect: {fileID: 0}
 --- !u!61 &2164384429566818130
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -108,28 +130,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2702611063840323567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 906788043661918864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6a57174d8597d47b1d21466c8bde6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::damage
-  type: 0
-  status: 2
-  effectDuration: 3
-  rb: {fileID: 4220448663641971561}
-  damageAmount: 5
-  damageRate: 0
-  rotateSpeed: 0
-  speed: 5
-  destroyTime: 5
-  hitEffect: {fileID: 0}
 --- !u!1 &6094992844647727818
 GameObject:
   m_ObjectHideFlags: 0

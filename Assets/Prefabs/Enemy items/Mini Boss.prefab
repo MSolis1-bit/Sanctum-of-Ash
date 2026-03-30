@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71902bf3d64c5404c9a26da9e69016e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniBoss
-  maxHealth: 50
+  maxHealth: 10
   phaseTwoAttackSpeedMultiplier: 1
   patrolSpeed: 4
   chaseSpeed: 0.65
@@ -157,7 +157,6 @@ MonoBehaviour:
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
-  anim: {fileID: 0}
   currentState: 1
 --- !u!70 &4006037396942923320
 CapsuleCollider2D:
@@ -327,7 +326,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ccee253ff083e9e45ac8d4d553de6318, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0

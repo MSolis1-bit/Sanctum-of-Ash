@@ -43,14 +43,12 @@ public class EnemyMelee : MonoBehaviour
 
     [Header("Death Sprite")]
     [SerializeField] private Sprite deathSprite;
-    [SerializeField] GameObject dropTable;
 
     private Color originalColor;
     private bool facingRight = true;
     private int waypointIndex;
     private float idleTimer;
     private bool isDying;
-    private float speedValue;
 
     public enum State
     {
@@ -69,13 +67,8 @@ public class EnemyMelee : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         facingRight = false;
-        
-        originalColor = sr.color;
-    }
-
-    private void Start()
-    {
         currentHealth = maxHealth;
+        originalColor = sr.color;
     }
 
     private void Update()
@@ -87,14 +80,6 @@ public class EnemyMelee : MonoBehaviour
 
         HandleStateMachine();
         HandleFlip();
-
-
-        speedValue = rb.linearVelocity.x;
-        if (speedValue < 0)
-        {
-            speedValue *= -1;
-        }
-        anim.SetFloat("Speed", speedValue);
     }
 
     private void HandleStateMachine()
@@ -122,7 +107,7 @@ public class EnemyMelee : MonoBehaviour
     private void HandleIdle()
     {
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-        anim?.SetBool("isMoving", false);
+
         if (CanSeePlayer())
         {
             EnterState(State.Chase);
@@ -139,8 +124,6 @@ public class EnemyMelee : MonoBehaviour
 
     private void HandlePatrol()
     {
-
-        anim?.SetBool("isMoving", true);
         if (CanSeePlayer())
         {
             EnterState(State.Chase);
@@ -152,8 +135,6 @@ public class EnemyMelee : MonoBehaviour
             EnterState(State.Idle);
             return;
         }
-
-        
 
         Vector2 target = waypoints[waypointIndex].position;
         MoveTowards(target, patrolSpeed);
@@ -172,7 +153,7 @@ public class EnemyMelee : MonoBehaviour
             EnterState(State.Idle);
             return;
         }
-        anim?.SetBool("isMoving", true);
+
         float distance = Vector2.Distance(transform.position, player.position);
 
         if (distance > detectionRange * 1.5f)
@@ -197,7 +178,7 @@ public class EnemyMelee : MonoBehaviour
             EnterState(State.Idle);
             return;
         }
-        anim?.SetBool("isMoving", false);
+
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
         float distance = Vector2.Distance(transform.position, player.position);
@@ -213,7 +194,6 @@ public class EnemyMelee : MonoBehaviour
         if (attackTimer >= attackCooldown)
         {
             attackTimer = 0f;
-            anim?.SetTrigger("Attack");
             AttackPlayer();
         }
     }
@@ -290,10 +270,6 @@ public class EnemyMelee : MonoBehaviour
         if (currentHealth <= 0f)
         {
             StartCoroutine(DieRoutine());
-            if (dropTable != null)
-            {
-                Instantiate(dropTable, transform);
-            }
         }
     }
 
@@ -342,7 +318,15 @@ public class EnemyMelee : MonoBehaviour
             sr.sprite = deathSprite;
         }
 
+        // Disable collider
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
 
+        // Freeze body
+        rb.simulated = false;
 
         //Destroys gameObject after a certain amount of time to avoid lag
         yield return new WaitForSeconds(deathDelay);

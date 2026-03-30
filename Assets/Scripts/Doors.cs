@@ -5,50 +5,25 @@ public class Door : MonoBehaviour
 {
     [SerializeField] private string sceneToLoad;
     [SerializeField] private bool isAdditive;
-    [SerializeField] private string spawnPointID;
 
-    private bool isTransitioning = false;
+    [SerializeField] private string spawnPointID;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isTransitioning)
-        {
-            return;
-        }
-
         if (collision.CompareTag("Player"))
         {
-            isTransitioning = true;
-
             // Tells spawn system where player should appear
             SpawnManager.nextSpawnPoint = spawnPointID;
 
-            // If using additive loading, only load the scene if it is not already loaded
-            if (isAdditive)
+            // Check if the scene isn't already active
+            if (sceneToLoad != UnityEngine.SceneManagement.SceneManager.GetActiveScene().name)
             {
-                Scene targetScene = SceneManager.GetSceneByName(sceneToLoad);
-
-                if (!targetScene.isLoaded)
-                {
-                    SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Additive);
-                }
-            }
-            else
-            {
-                // For normal loading, only load if it is not already the active scene
-                if (sceneToLoad != SceneManager.GetActiveScene().name)
-                {
+                // Load new scene
+                if (isAdditive)
+                    SceneManager.LoadScene(sceneToLoad, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+                else
                     SceneManager.LoadScene(sceneToLoad);
-                }
             }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            isTransitioning = false;
         }
     }
 }

@@ -1,21 +1,22 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RespawnManager : MonoBehaviour, IDataPersistence
 {
-    // Singleton reference so other scripts can access this easily
+    // Lets other scripts access this manager
     public static RespawnManager instance;
 
-    // Stores the current respawn position during gameplay
+    // Stores the current respawn point
     private Vector2 respawnPoint;
 
-    // Tracks whether a checkpoint has been set yet
+    // Keeps track of whether a respawn point has been saved yet
     private bool hasRespawnPoint = false;
 
     public bool HasRespawnPoint => hasRespawnPoint;
 
     private void Awake()
     {
-        // Ensures only ONE RespawnManager exists
+        // Makes sure only one RespawnManager exists
         if (instance == null)
         {
             instance = this;
@@ -29,9 +30,9 @@ public class RespawnManager : MonoBehaviour, IDataPersistence
         }
     }
 
+    // Saves a new respawn point
     public void SetRespawnPoint(Vector2 newRespawnPoint)
     {
-        // Saves a checkpoint position during gameplay
         respawnPoint = newRespawnPoint;
         hasRespawnPoint = true;
 
@@ -39,29 +40,29 @@ public class RespawnManager : MonoBehaviour, IDataPersistence
                   " | ID: " + GetInstanceID() +
                   " | Point: " + respawnPoint);
 
-        // Saves the game after updating checkpoint
-        if (DataPersistenceManager.instance != null)
-        {
-            DataPersistenceManager.instance.SaveGame();
-        }
+        // Sets variables for the game manager to know where to load the player on load games
+        GameManager.instance.spawnScene = SceneManager.GetActiveScene().buildIndex;
+
+        // Save the game
+        DataPersistenceManager.instance.SaveGame();
     }
 
+    // Sends the player back to the saved spawn point
     public bool Respawn(Transform playerTransform)
     {
         Debug.Log("Respawn called on: " + gameObject.name +
                   " | ID: " + GetInstanceID() +
                   " | hasRespawnPoint: " + hasRespawnPoint);
 
-        // Prevents respawn if no checkpoint has been set
+        // Stops the game from trying to respawn before a checkpoint is reached
         if (!hasRespawnPoint)
         {
             Debug.LogWarning("No respawn point has been set yet");
             return false;
         }
 
-        // Moves player to checkpoint position
+        // Moves the player back to the saved position
         playerTransform.position = respawnPoint;
-
         Debug.Log("Respawning player to: " + respawnPoint);
 
         return true;
@@ -69,13 +70,11 @@ public class RespawnManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        // DO NOT LOAD RESPAWN FROM SAVE FILE
-        // Respawn is handled during gameplay only
+        this.respawnPoint = data.respawnPoint;
     }
 
     public void SaveData(GameData data)
     {
-        // DO NOT SAVE RESPAWN TO SAVE FILE
-        // This prevents conflicts with scene loading system
+        data.respawnPoint = this.respawnPoint;
     }
 }

@@ -43,7 +43,7 @@ public class MiniBoss : MonoBehaviour, IDamage
     private bool isAttacking = false;
     private bool isDead = false;
 
-    [SerializeField] Animator anim;
+    private Animator anim;
     private Rigidbody2D rb;
     private Transform player;
 
@@ -52,14 +52,13 @@ public class MiniBoss : MonoBehaviour, IDamage
 
 
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         currentHealth = maxHealth;
     }
-
 
     private void EnterState(State newState)
     {  // resets timers and switches to a new state
@@ -261,10 +260,6 @@ public class MiniBoss : MonoBehaviour, IDamage
         Debug.Log("Mini boss died!");
         anim?.SetTrigger("Death");
         Destroy(gameObject, 2f);
-        if (GameManager.instance.winArea != null)
-        {
-            winArea.instance.OpenExitDoor();
-        }
     }
 
     public float AttackSpeedMultiplier => isPhaseTwo ? phaseTwoAttackSpeedMultiplier : 1f;

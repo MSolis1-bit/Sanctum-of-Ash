@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3782420621754287719}
+  - component: {fileID: 1446506751391310009}
   - component: {fileID: 2565184567677047343}
   - component: {fileID: 8582349811273277468}
-  - component: {fileID: 7805839892151967744}
   m_Layer: 8
   m_Name: Arrow
   m_TagString: Untagged
@@ -27,14 +27,36 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1782390210741266490}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 0.9999968}
   m_LocalPosition: {x: 15.636553, y: 2.367515, z: -0.20000002}
   m_LocalScale: {x: 1.2220073, y: 1.3446945, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 955452633968359407}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.589, y: 5.561, z: -0.262}
+--- !u!114 &1446506751391310009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782390210741266490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6a57174d8597d47b1d21466c8bde6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::damage
+  type: 0
+  status: 0
+  effectDuration: 1
+  rb: {fileID: 8582349811273277468}
+  damageAmount: 5
+  damageRate: 0
+  rotateSpeed: 0
+  speed: 10
+  destroyTime: 5
+  hitEffect: {fileID: 0}
 --- !u!61 &2565184567677047343
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -108,28 +130,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &7805839892151967744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1782390210741266490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6a57174d8597d47b1d21466c8bde6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::damage
-  type: 0
-  status: 0
-  effectDuration: 0
-  rb: {fileID: 8582349811273277468}
-  damageAmount: 5
-  damageRate: 0
-  rotateSpeed: 0
-  speed: 10
-  destroyTime: 5
-  hitEffect: {fileID: 0}
 --- !u!1 &8542116067608604826
 GameObject:
   m_ObjectHideFlags: 0

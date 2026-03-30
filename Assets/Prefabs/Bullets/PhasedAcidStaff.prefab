@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8703571700925118367}
+  - component: {fileID: 6164450601607536815}
   - component: {fileID: 7807139842177005112}
   - component: {fileID: 1669401289597773848}
-  - component: {fileID: 3288976064790518852}
   m_Layer: 8
   m_Name: PhasedAcidStaff
   m_TagString: Untagged
@@ -27,14 +27,36 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4643723722109723883}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0, w: 1}
   m_LocalPosition: {x: 5.5, y: 2.2, z: -0.10000001}
   m_LocalScale: {x: 1, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2241416838235085740}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 40.106}
+--- !u!114 &6164450601607536815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4643723722109723883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6a57174d8597d47b1d21466c8bde6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::damage
+  type: 0
+  status: 1
+  effectDuration: 5
+  rb: {fileID: 1669401289597773848}
+  damageAmount: 5
+  damageRate: 0
+  rotateSpeed: 0
+  speed: 5
+  destroyTime: 5
+  hitEffect: {fileID: 0}
 --- !u!61 &7807139842177005112
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -108,28 +130,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &3288976064790518852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4643723722109723883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6a57174d8597d47b1d21466c8bde6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::damage
-  type: 0
-  status: 1
-  effectDuration: 10
-  rb: {fileID: 1669401289597773848}
-  damageAmount: 5
-  damageRate: 0
-  rotateSpeed: 0
-  speed: 5
-  destroyTime: 5
-  hitEffect: {fileID: 0}
 --- !u!1 &8815915005321201256
 GameObject:
   m_ObjectHideFlags: 0

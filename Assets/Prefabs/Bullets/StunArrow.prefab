@@ -100,9 +100,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2821881879113311901}
+  - component: {fileID: 4872925032181951896}
   - component: {fileID: 7311176287428610435}
   - component: {fileID: 651806946425422842}
-  - component: {fileID: 3828949890489166692}
   m_Layer: 8
   m_Name: StunArrow
   m_TagString: Untagged
@@ -126,6 +126,28 @@ Transform:
   - {fileID: 2142425514506564144}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0.589, y: 5.561, z: -0.262}
+--- !u!114 &4872925032181951896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4929087528333755878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6a57174d8597d47b1d21466c8bde6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::damage
+  type: 0
+  status: 3
+  effectDuration: 2
+  rb: {fileID: 651806946425422842}
+  damageAmount: 5
+  damageRate: 0
+  rotateSpeed: 0
+  speed: 10
+  destroyTime: 5
+  hitEffect: {fileID: 0}
 --- !u!61 &7311176287428610435
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -199,25 +221,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &3828949890489166692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4929087528333755878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6a57174d8597d47b1d21466c8bde6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::damage
-  type: 0
-  status: 3
-  effectDuration: 3
-  rb: {fileID: 651806946425422842}
-  damageAmount: 5
-  damageRate: 0
-  rotateSpeed: 0
-  speed: 10
-  destroyTime: 5
-  hitEffect: {fileID: 0}
