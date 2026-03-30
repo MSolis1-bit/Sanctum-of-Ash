@@ -32,7 +32,7 @@ public class SaveSlotsMenu : MonoBehaviour
             DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
             DataPersistenceManager.instance.SaveGame();
 
-            if(RespawnManager.instance != null && RespawnManager.instance.HasRespawnPoint)
+            if(RespawnManager.instance.HasRespawnPoint)
             {
                 // If the player has a spawn point, load the scene containing the spawn point
                 SceneManager.LoadSceneAsync(GameManager.instance.spawnScene);
@@ -60,21 +60,14 @@ public class SaveSlotsMenu : MonoBehaviour
                 // Function to execute if we select 'confirm'
                 () =>
                 {
-                    // Change current data to the selected profile
                     DataPersistenceManager.instance.ChangeSelectedProfileID(saveSlot.GetProfileID());
-                    // Initializes a new game
                     DataPersistenceManager.instance.NewGame();
-
+                    if (GameManager.instance.IsPaused) { GameManager.instance.StateUnpause(); }
                     // Save the game anytime before loading a new scene
                     DataPersistenceManager.instance.SaveGame();
 
-                    // Load the scene
+                    // Load the scene - which will in turn save the game because of OnSceneUnloaded() in the DataPersistenceManager
                     SceneManager.LoadSceneAsync(GameManager.instance.levelStartScene);
-                    
-                    // Resets the players state
-                    if (GameManager.instance.IsPaused) { GameManager.instance.StateUnpause(); }
-                    GameManager.instance.playerScript.ResetPlayerState();
-                    GameManager.instance.UpdatePlayerUI();
                 },
                 () =>
                 // Function to execute if we select 'cancel'
